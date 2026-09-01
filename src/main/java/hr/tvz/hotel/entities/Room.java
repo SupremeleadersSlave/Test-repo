@@ -62,7 +62,7 @@ public class Room implements Reservable {
     /**
      * Postavlja id sobe.
      *
-     * @param id novi id sobe*
+     * @param id novi id sobe
      */
     public void setId(Long id) {
         this.id = id;

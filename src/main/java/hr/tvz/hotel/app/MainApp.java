@@ -6,6 +6,8 @@ import hr.tvz.hotel.db.InvoiceDao;
 import hr.tvz.hotel.db.ReservationDao;
 import hr.tvz.hotel.db.RoomDao;
 import hr.tvz.hotel.db.UserDao;
+import hr.tvz.hotel.entities.User;
+import hr.tvz.hotel.exceptions.CredentialsFileException;
 import hr.tvz.hotel.persistence.ChangeLogManager;
 import hr.tvz.hotel.persistence.CredentialsFileManager;
 import hr.tvz.hotel.service.AuthService;
@@ -30,7 +32,8 @@ import java.sql.SQLException;
  * Starter klasa aplikacije.
  * <p>
  * Inicijalizira slojeve aplikacije: bazu podataka, usluge, upravitelje
- * datoteka, prikaz početnog ekrana za prijavu.
+ * datoteka, prikaz početnog ekrana za prijavu. Prilikom prvog
+ * pokretanja puni tablicu korisnika iz tekstualne datoteke.
  */
 public class MainApp extends Application {
 
@@ -41,7 +44,7 @@ public class MainApp extends Application {
      * za prijavu.
      *
      * @param primaryStage glavni prozor, dodjeljuje JavaFX runtime
-     * @throws Exception: ekran za prijavu se ne učitava
+     * @throws Exception ako se ekran za prijavu ne učita
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -61,7 +64,7 @@ public class MainApp extends Application {
     /**
      * Izgrađuje kontekst usluga aplikacije: uspostavlja konekciju prema
      * bazi, inicijalizira shemu, kreira DAO objekte, usluge i
-     * upravitelje datotekama.
+     * upravitelje datotekama, puni korisnike prilikom prvog pokretanja.
      *
      * @return izgrađeni kontekst usluga
      */
@@ -82,7 +85,8 @@ public class MainApp extends Application {
         InvoiceDao invoiceDao = new InvoiceDao(databaseConnection, reservationDao);
 
         ChangeLogManager changeLogManager = new ChangeLogManager(Path.of("data", "changelog.dat"));
-        CredentialsFileManager credentialsFileManager = new CredentialsFileManager(Path.of("data", "credentials.txt"));
+
+        seedUsersIfEmpty(userDao);
 
         return new ServiceContext(
                 databaseConnection,
@@ -91,8 +95,33 @@ public class MainApp extends Application {
                 new ReservationService(reservationDao, changeLogManager),
                 new InvoiceService(invoiceDao, changeLogManager),
                 new UserService(userDao, changeLogManager),
-                new AuthService(credentialsFileManager),
+                new AuthService(userDao),
                 changeLogManager);
+    }
+
+    /**
+     * Puni tablicu korisnika iz {@code data/credentials.txt} ako je
+     * prazna, npr. prilikom prvog pokretanja aplikacije na praznoj
+     * bazi. Na sljedećim pokretanjima tablica više nije prazna, pa se
+     * datoteka uopće ne čita.
+     *
+     * @param userDao DAO za pristup korisnicima u bazi podataka
+     */
+    private void seedUsersIfEmpty(UserDao userDao) {
+        if (!userDao.findAll().isEmpty()) {
+            return;
+        }
+        CredentialsFileManager credentialsFileManager = new CredentialsFileManager(Path.of("data", "credentials.txt"));
+        try {
+            credentialsFileManager.loadCredentials().values().forEach(entry -> {
+                User user = new User(null, entry.username(), "(uvezeno)", null, null,
+                        entry.username(), entry.passwordHash(), entry.role());
+                userDao.insert(user);
+                LOGGER.info("Korisnik uvezen iz datoteke: {}", entry.username());
+            });
+        } catch (CredentialsFileException e) {
+            LOGGER.warn("Punjenje korisnika iz datoteke preskočeno.", e);
+        }
     }
 
     /**

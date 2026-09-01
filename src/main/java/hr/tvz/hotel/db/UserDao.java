@@ -5,7 +5,7 @@ import hr.tvz.hotel.entities.User;
 import hr.tvz.hotel.exceptions.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.util.Optional;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -59,6 +59,22 @@ public class UserDao {
         } catch (SQLException e) {
             LOGGER.error("Dohvat korisnika {} neuspio.", id, e);
             throw new EntityNotFoundException("Korisnik s identifikatorom " + id + " ne postoji.", e);
+        }
+    }
+
+    /**
+     * Dohvaća korisnika prema korisničkom imenu.
+     *
+     * @param username korisničko ime
+     * @return korisnik s zadanim korisničkim imenom, ili prazan {@link Optional} ako ne postoji
+     */
+    public Optional<User> findByUsername(String username) {
+        try {
+            List<User> results = databaseConnection.executeQuery("SELECT * FROM users WHERE username = ?", UserDao::mapRow, username);
+            return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+        } catch (SQLException e) {
+            LOGGER.error("Dohvat korisnika prema korisničkom imenu {} neuspio.", username, e);
+            return Optional.empty();
         }
     }
 

@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 
 /**
  * Implementira poslovnu logiku upravljanja rezervacijama, uključujući
- * provjeru raspoloživosti sobe za zadano razdoblje.
+ * provjeru raspoloživosti sobe za zadano razdoblje pomoću sučelja
  * {@link Schedulable}.
  */
 public class ReservationService {
@@ -84,8 +84,8 @@ public class ReservationService {
     }
 
     /**
-     * Kreira novu rezervaciju nakon provjere raspoloživosti sobe za
-     * zadano razdoblje.
+     * Kreira novu rezervaciju nakon provjere je li soba u ponudi i
+     * raspoloživa za zadano razdoblje.
      *
      * @param guest gost rezervacije
      * @param room soba koja se rezervira
@@ -93,10 +93,15 @@ public class ReservationService {
      * @param checkOut datum odlaska
      * @param changedBy uloga korisnika koji kreira rezervaciju
      * @return kreirana rezervacija
-     * @throws ReservationNotAvailableException ako je soba već rezervirana za dio zadanog razdoblja
+     * @throws ReservationNotAvailableException ako soba nije u ponudi ili je već rezervirana za dio zadanog razdoblja
      */
     public Reservation createReservation(Guest guest, Room room, LocalDate checkIn, LocalDate checkOut, Role changedBy)
             throws ReservationNotAvailableException {
+        if (!room.isAvailableFor(checkIn, checkOut)) {
+            LOGGER.warn("Soba {} nije u ponudi ili razdoblje nije valjano: {} - {}.", room.getRoomNumber(), checkIn, checkOut);
+            throw new ReservationNotAvailableException(
+                    "Soba " + room.getRoomNumber() + " nije u ponudi ili razdoblje " + checkIn + " - " + checkOut + " nije valjano.");
+        }
         Schedulable requestedPeriod = new Schedulable() {
             @Override
             public LocalDate getStartDate() {

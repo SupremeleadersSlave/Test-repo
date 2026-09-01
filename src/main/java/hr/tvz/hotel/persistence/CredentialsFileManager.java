@@ -2,7 +2,6 @@ package hr.tvz.hotel.persistence;
 
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.exceptions.CredentialsFileException;
-import hr.tvz.hotel.util.PasswordHasher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,11 +12,11 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
- * Čita korisnička imena i hashirane lozinke iz tekstualne datoteke i
- * provjerava podatke pri prijavi.
+ * Čita korisnička imena i hashirane lozinke iz tekstualne datoteke,
+ * koristi se za jednokratno punjenje baze podataka korisnicima
+ * prilikom prvog pokretanja aplikacije.
  * <p>
  * Očekivani format svakog retka datoteke je
  * {@code korisnickoIme;hashLozinke;ROLA}.
@@ -80,28 +79,6 @@ public class CredentialsFileManager {
         } catch (IllegalArgumentException e) {
             throw new CredentialsFileException("Nepoznata rola: " + line, e);
         }
-    }
-
-    /**
-     * Pokušava autentificirati korisnika prema korisničkom imenu i lozinci.
-     *
-     * @param username korisničko ime
-     * @param plainPassword lozinka u čitljivom obliku
-     * @return rola prijavljenog korisnika ili prazan {@link Optional} ako prijava ne uspije
-     * @throws CredentialsFileException ako se datoteka za prijavu ne može pročitati
-     */
-    public Optional<Role> authenticate(String username, String plainPassword) throws CredentialsFileException {
-        CredentialEntry entry = loadCredentials().get(username);
-        if (entry == null) {
-            LOGGER.warn("Nepostojeće korisničko ime: {}", username);
-            return Optional.empty();
-        }
-        if (!PasswordHasher.matches(plainPassword, entry.passwordHash())) {
-            LOGGER.warn("Neuspješna prijava: {}", username);
-            return Optional.empty();
-        }
-        LOGGER.info("Prijava uspjela: {} ({})", username, entry.role());
-        return Optional.of(entry.role());
     }
 
     /**
