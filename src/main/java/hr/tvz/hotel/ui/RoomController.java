@@ -25,10 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Kontroler JavaFX ekrana za upravljanje sobama, uključujući
- * pretragu, dodavanje, uređivanje i brisanje soba.
- * <p>
- * Uređivanje i brisanje zahtijevaju potvrdu korisnika.
+ * Kontroler JavaFX ekrana za upravljanje sobama: pretraga, dodavanje,
+ * uređivanje i brisanje soba uz potvrdu korisnika.
  */
 public class RoomController {
 
@@ -172,6 +170,6 @@ public class RoomController {
                 return null;
             }
         });
-        return dialog.showAndWait();
+        return DialogUtils.showAndWait(dialog);
     }
 }

@@ -23,10 +23,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Kontroler JavaFX ekrana za upravljanje gostima, uključujući
- * pretragu, dodavanje, uređivanje i brisanje gostiju.
- * <p>
- * Uređivanje i brisanje zahtijevaju potvrdu korisnika.
+ * Kontroler JavaFX ekrana za upravljanje gostima: pretraga, dodavanje,
+ * uređivanje i brisanje gostiju uz potvrdu korisnika.
  */
 public class GuestController {
 
@@ -177,6 +175,6 @@ public class GuestController {
             return new Guest(existing != null ? existing.getId() : null, firstNameField.getText(), lastNameField.getText(),
                     emailField.getText(), phoneField.getText(), documentField.getText(), newAddress);
         });
-        return dialog.showAndWait();
+        return DialogUtils.showAndWait(dialog);
     }
 }

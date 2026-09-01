@@ -37,11 +37,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Kontroler JavaFX ekrana za upravljanje rezervacijama, uključujući
- * pretragu, kreiranje, promjenu statusa i brisanje rezervacija.
- * <p>
- * Prilikom kreiranja provjerava raspoloživost sobe, a promjena statusa
- * i brisanje zahtijevaju potvrdu korisnika.
+ * Kontroler JavaFX ekrana za upravljanje rezervacijama: pretraga,
+ * kreiranje, promjena statusa i brisanje rezervacija.
  */
 public class ReservationController {
 
@@ -145,7 +142,7 @@ public class ReservationController {
         dialog.setTitle("Promjena statusa rezervacije");
         dialog.setHeaderText(null);
         dialog.setContentText("Novi status:");
-        dialog.showAndWait().ifPresent(newStatus -> {
+        DialogUtils.showAndWait(dialog).ifPresent(newStatus -> {
             reservationService.changeStatus(selected, newStatus, currentRole);
             reload();
         });
@@ -200,7 +197,7 @@ public class ReservationController {
             }
             return new NewReservationRequest(guestBox.getValue(), roomBox.getValue(), checkInPicker.getValue(), checkOutPicker.getValue());
         });
-        return dialog.showAndWait();
+        return DialogUtils.showAndWait(dialog);
     }
 
     /**

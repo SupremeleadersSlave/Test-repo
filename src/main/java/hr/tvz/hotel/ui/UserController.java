@@ -24,10 +24,7 @@ import java.util.Optional;
 
 /**
  * Kontroler JavaFX ekrana za upravljanje korisnicima sustava, dostupan
- * samo administratoru, uključujući pretragu, dodavanje, uređivanje i
- * brisanje korisnika.
- * <p>
- * Uređivanje i brisanje zahtijevaju potvrdu korisnika.
+ * samo administratoru: pretraga, dodavanje, uređivanje i brisanje.
  */
 public class UserController {
 
@@ -183,6 +180,6 @@ public class UserController {
                     emailField.getText(), phoneField.getText(), usernameField.getText(), null, roleBox.getValue());
             return new DialogResult(user, passwordField.getText());
         });
-        return dialog.showAndWait();
+        return DialogUtils.showAndWait(dialog);
     }
 }

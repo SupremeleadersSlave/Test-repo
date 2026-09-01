@@ -5,10 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Pomoćna klasa za hashiranje lozinki korištenjem SHA-256 algoritma.
- * <p>
- * Lozinke se ne pohranjuju niti uspoređuju u čitljivom obliku, već
- * isključivo kao heksadecimalni prikaz njihovog hasha.
+ * Pomoćna klasa za hashiranje lozinki SHA-256 algoritmom. Lozinke se
+ * pohranjuju i uspoređuju isključivo kao heksadecimalni hash.
  */
 public final class PasswordHasher {
 

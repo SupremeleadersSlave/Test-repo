@@ -17,11 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * Kontroler glavnog ekrana aplikacije s navigacijom između pojedinih
- * ekrana entiteta putem kartica.
- * <p>
- * Pokreće pozadinske niti za periodičko osvježavanje podataka i nadzor
- * povijesti promjena te ih zaustavlja prilikom zatvaranja aplikacije.
+ * Kontroler glavnog ekrana s navigacijom putem kartica. Pokreće i
+ * zaustavlja pozadinske niti za osvježavanje i nadzor promjena.
  */
 public class MainController {
 

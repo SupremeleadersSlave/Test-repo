@@ -33,10 +33,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Kontroler JavaFX ekrana za upravljanje računima, uključujući
- * pretragu, izdavanje i brisanje računa.
- * <p>
- * Brisanje zahtijeva potvrdu korisnika.
+ * Kontroler JavaFX ekrana za upravljanje računima: pretraga, izdavanje
+ * i brisanje računa uz potvrdu korisnika.
  */
 public class InvoiceController {
 
@@ -175,7 +173,7 @@ public class InvoiceController {
                 return null;
             }
         });
-        return dialog.showAndWait();
+        return DialogUtils.showAndWait(dialog);
     }
 
     /**

@@ -20,9 +20,6 @@ import java.util.Optional;
 
 /**
  * Kontroler JavaFX ekrana za prijavu korisnika u aplikaciju.
- * <p>
- * Podržava prijavu korisnika s ulogama {@link Role#ADMIN} i
- * {@link Role#RECEPTIONIST}.
  */
 public class LoginController {
 
