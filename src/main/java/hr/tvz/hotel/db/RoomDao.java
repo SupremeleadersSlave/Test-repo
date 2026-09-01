@@ -38,7 +38,7 @@ public class RoomDao {
         try {
             return database.executeQuery("SELECT * FROM rooms ORDER BY room_number", RoomDao::mapRow);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat soba neuspio.", e);
+            LOGGER.error("sobe nisu dohvacene", e);
             return List.of();
         }
     }
@@ -54,12 +54,12 @@ public class RoomDao {
         try {
             List<Room> results = database.executeQuery("SELECT * FROM rooms WHERE id = ?", RoomDao::mapRow, id);
             if (results.isEmpty()) {
-                LOGGER.warn("Soba {} ne postoji.", id);
+                LOGGER.warn("soba {} ne postoji", id);
                 throw new EntityNotFoundException("Soba s identifikatorom " + id + " ne postoji.");
             }
             return results.get(0);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat sobe {} neuspio.", id, e);
+            LOGGER.error("soba {} nije dohvacena", id, e);
             throw new EntityNotFoundException("Soba s identifikatorom " + id + " ne postoji.", e);
         }
     }
@@ -76,7 +76,7 @@ public class RoomDao {
                     "INSERT INTO rooms (room_number, type, price_per_night, capacity, active) VALUES (?, ?, ?, ?, ?)",
                     room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity(), room.isActive());
         } catch (SQLException e) {
-            LOGGER.error("Spremanje sobe neuspjelo.", e);
+            LOGGER.error("soba: spremanje palo", e);
             throw new IllegalStateException("Soba se ne sprema.", e);
         }
     }
@@ -92,7 +92,7 @@ public class RoomDao {
                     "UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, capacity = ?, active = ? WHERE id = ?",
                     room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity(), room.isActive(), room.getId());
         } catch (SQLException e) {
-            LOGGER.error("Ažuriranje sobe {} neuspjelo.", room.getId(), e);
+            LOGGER.error("soba {} update pao", room.getId(), e);
             throw new IllegalStateException("Soba se ne ažurira.", e);
         }
     }
@@ -106,7 +106,7 @@ public class RoomDao {
         try {
             database.executeUpdate("DELETE FROM rooms WHERE id = ?", id);
         } catch (SQLException e) {
-            LOGGER.error("Brisanje sobe {} neuspjelo.", id, e);
+            LOGGER.error("soba {} se ne brise", id, e);
             throw new IllegalStateException("Soba se ne briše.", e);
         }
     }

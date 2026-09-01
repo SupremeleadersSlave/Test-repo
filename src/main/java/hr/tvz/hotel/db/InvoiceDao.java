@@ -46,7 +46,7 @@ public class InvoiceDao {
         try {
             return database.executeQuery("SELECT * FROM invoices ORDER BY issue_date DESC", this::mapRow);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat računa neuspio.", e);
+            LOGGER.error("racuni nisu dohvaceni", e);
             return List.of();
         }
     }
@@ -70,7 +70,7 @@ public class InvoiceDao {
                     invoice.getReservation().getId(), invoice.getAmount(), type, cashReceived, cardNumber, authCode,
                     Timestamp.valueOf(invoice.getIssueDate()));
         } catch (SQLException e) {
-            LOGGER.error("Spremanje računa neuspjelo.", e);
+            LOGGER.error("racun: spremanje palo", e);
             throw new IllegalStateException("Račun se ne sprema.", e);
         }
     }
@@ -84,7 +84,7 @@ public class InvoiceDao {
         try {
             database.executeUpdate("DELETE FROM invoices WHERE id = ?", id);
         } catch (SQLException e) {
-            LOGGER.error("Brisanje računa {} neuspjelo.", id, e);
+            LOGGER.error("racun {} se ne brise", id, e);
             throw new IllegalStateException("Račun se ne briše.", e);
         }
     }

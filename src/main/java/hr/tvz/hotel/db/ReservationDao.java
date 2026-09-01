@@ -47,7 +47,7 @@ public class ReservationDao {
         try {
             return database.executeQuery("SELECT * FROM reservations ORDER BY check_in", this::mapRow);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat rezervacija neuspio.", e);
+            LOGGER.error("rezervacije nisu dohvacene", e);
             return List.of();
         }
     }
@@ -63,12 +63,12 @@ public class ReservationDao {
         try {
             List<Reservation> results = database.executeQuery("SELECT * FROM reservations WHERE id = ?", this::mapRow, id);
             if (results.isEmpty()) {
-                LOGGER.warn("Rezervacija {} ne postoji.", id);
+                LOGGER.warn("rezervacija {} ne postoji", id);
                 throw new EntityNotFoundException("Rezervacija s identifikatorom " + id + " ne postoji.");
             }
             return results.get(0);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat rezervacije {} neuspio.", id, e);
+            LOGGER.error("rezervacija {} nije dohvacena", id, e);
             throw new EntityNotFoundException("Rezervacija s identifikatorom " + id + " ne postoji.", e);
         }
     }
@@ -86,7 +86,7 @@ public class ReservationDao {
                     reservation.getGuest().getId(), reservation.getRoom().getId(), reservation.getCheckInDate(),
                     reservation.getCheckOutDate(), reservation.getStatus().name(), reservation.getTotalPrice());
         } catch (SQLException e) {
-            LOGGER.error("Spremanje rezervacije neuspjelo.", e);
+            LOGGER.error("rezervacija: spremanje palo", e);
             throw new IllegalStateException("Rezervacija se ne sprema.", e);
         }
     }
@@ -101,7 +101,7 @@ public class ReservationDao {
             database.executeUpdate("UPDATE reservations SET status = ? WHERE id = ?",
                     reservation.getStatus().name(), reservation.getId());
         } catch (SQLException e) {
-            LOGGER.error("Ažuriranje rezervacije {} neuspjelo.", reservation.getId(), e);
+            LOGGER.error("rezervacija {} update pao", reservation.getId(), e);
             throw new IllegalStateException("Rezervacija se ne ažurira.", e);
         }
     }
@@ -115,7 +115,7 @@ public class ReservationDao {
         try {
             database.executeUpdate("DELETE FROM reservations WHERE id = ?", id);
         } catch (SQLException e) {
-            LOGGER.error("Brisanje rezervacije {} neuspjelo.", id, e);
+            LOGGER.error("rezervacija {} se ne brise", id, e);
             throw new IllegalStateException("Rezervacija se ne briše.", e);
         }
     }

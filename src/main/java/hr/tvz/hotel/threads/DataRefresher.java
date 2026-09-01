@@ -30,7 +30,7 @@ public class DataRefresher implements Runnable {
 
     @Override
     public void run() {
-        LOGGER.info("Nit pokrenuta.");
+        LOGGER.info("NIT RADI");
         while (running) {
             try {
                 Platform.runLater(refreshAction);
@@ -38,10 +38,10 @@ public class DataRefresher implements Runnable {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 running = false;
-                LOGGER.warn("Nit prekinuta.", e);
+                LOGGER.warn("nit prekinuta", e);
             }
         }
-        LOGGER.info("Nit zaustavljena.");
+        LOGGER.info("NIT STOP");
     }
 
     /**

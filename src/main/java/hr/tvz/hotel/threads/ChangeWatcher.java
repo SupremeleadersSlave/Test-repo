@@ -33,22 +33,22 @@ public class ChangeWatcher implements Runnable {
 
     @Override
     public void run() {
-        LOGGER.info("Nit pokrenuta.");
+        LOGGER.info("NIT RADI");
         while (running) {
             try {
                 ChangeRecord lastChange = changeLog.getLastChange();
                 if (lastChange != null && !lastChange.equals(lastSeenRecord)) {
                     lastSeenRecord = lastChange;
-                    LOGGER.info("Nova promjena zabilježena: {}", lastChange);
+                    LOGGER.info("Promjena: {}", lastChange);
                 }
                 Thread.sleep(intervalMillis);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 running = false;
-                LOGGER.warn("Nit prekinuta.", e);
+                LOGGER.warn("nit prekinuta", e);
             }
         }
-        LOGGER.info("Nit zaustavljena.");
+        LOGGER.info("NIT STOP");
     }
 
     /**

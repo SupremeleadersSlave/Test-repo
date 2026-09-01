@@ -134,7 +134,7 @@ public class ReservationController {
                 reservationService.createReservation(request.guest(), request.room(), request.checkIn(), request.checkOut(), currentRole);
                 reload();
             } catch (ReservationNotAvailableException | InvalidReservationDateException e) {
-                LOGGER.warn("Rezervacija odbijena: {}", e.getMessage());
+                LOGGER.warn("rezervacija odbijena: {}", e.getMessage());
                 DialogUtils.showError("Rezervacija nije moguća", e.getMessage());
             }
         });

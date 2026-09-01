@@ -109,7 +109,7 @@ public class RoomService {
         room.setId(id);
         rooms.add(room);
         logChange(id, "sve", null, room.toString(), changedBy);
-        LOGGER.info("Dodana nova soba: {}", room);
+        LOGGER.info("Dodana Soba: {}", room);
     }
 
     /**
@@ -124,7 +124,7 @@ public class RoomService {
         rooms.remove(oldRoom);
         rooms.add(newRoom);
         logChange(newRoom.getId(), "sve", oldRoom.toString(), newRoom.toString(), changedBy);
-        LOGGER.info("Ažurirana soba: {}", newRoom);
+        LOGGER.info("Soba Update: {}", newRoom);
     }
 
     /**
@@ -140,7 +140,7 @@ public class RoomService {
         roomDao.delete(room.getId());
         rooms.remove(room);
         logChange(room.getId(), "sve", room.toString(), null, changedBy);
-        LOGGER.info("Obrisana soba: {}", room);
+        LOGGER.info("Soba Obrisana: {}", room);
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {

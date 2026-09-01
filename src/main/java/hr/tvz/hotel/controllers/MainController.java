@@ -84,7 +84,7 @@ public class MainController {
             historyController = new HistoryController(context);
             addTab("Povijest promjena", "/fxml/history.fxml", historyController);
         } catch (IOException e) {
-            LOGGER.error("Učitavanje ekrana entiteta propalo.", e);
+            LOGGER.error("ekran entiteta se ne ucitava", e);
         }
 
         dataRefresher = new DataRefresher(this::refreshAllTabs, 5000);
@@ -94,7 +94,7 @@ public class MainController {
 
         userLabel.setText("Prijavljen: " + username + " (" + currentRole + ")");
         stage.setOnCloseRequest(event -> shutdown());
-        LOGGER.info("Prijavljen korisnik {}, rola {}.", username, currentRole);
+        LOGGER.info("USER PRIJAVA: {} ({})", username, currentRole);
     }
 
     private void startDaemonThread(Runnable task, String threadName) {
@@ -161,7 +161,7 @@ public class MainController {
             stage.setTitle("Sustav za rezervaciju hotela - Prijava");
             stage.setScene(new Scene(root, 400, 260));
         } catch (IOException e) {
-            LOGGER.error("Vraćanje na ekran za prijavu propalo.", e);
+            LOGGER.error("logout FAILED successfully", e);
             DialogUtils.showError("Greška", "Ekran za prijavu se ne može učitati.");
         }
     }
@@ -171,7 +171,7 @@ public class MainController {
      * prilikom zatvaranja aplikacije.
      */
     private void shutdown() {
-        LOGGER.info("Zatvaranje - zaustavljanje niti.");
+        LOGGER.info("GASENJE");
         dataRefresher.stop();
         changeWatcher.stop();
         context.database().close();

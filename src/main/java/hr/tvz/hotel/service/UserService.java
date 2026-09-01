@@ -99,7 +99,7 @@ public class UserService {
         users.add(user);
         syncCredentialsFile();
         logChange(id, "sve", null, user.toString(), changedBy);
-        LOGGER.info("Dodan novi korisnik: {}", user);
+        LOGGER.info("Dodan Korisnik: {}", user);
     }
 
     /**
@@ -116,7 +116,7 @@ public class UserService {
         users.add(newUser);
         syncCredentialsFile();
         logChange(newUser.getId(), "sve", oldUser.toString(), newUser.toString(), changedBy);
-        LOGGER.info("Ažuriran korisnik: {}", newUser);
+        LOGGER.info("Korisnik Update: {}", newUser);
     }
 
     /**
@@ -130,7 +130,7 @@ public class UserService {
         users.remove(user);
         syncCredentialsFile();
         logChange(user.getId(), "sve", user.toString(), null, changedBy);
-        LOGGER.info("Obrisan korisnik: {}", user);
+        LOGGER.info("Korisnik Obrisan: {}", user);
     }
 
     private void syncCredentialsFile() {
@@ -141,7 +141,7 @@ public class UserService {
         try {
             credentialsFile.saveCredentials(entries);
         } catch (CredentialsFileException e) {
-            LOGGER.error("Sinkronizacija datoteke za prijavu neuspjela.", e);
+            LOGGER.error("sync prijava datoteke pao", e);
         }
     }
 

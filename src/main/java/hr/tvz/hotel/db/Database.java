@@ -35,7 +35,7 @@ public class Database {
     public Connection connect() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            LOGGER.info("Konekcija uspostavljena: {}", URL);
+            LOGGER.info("BAZA RADI: {}", URL);
         }
         return connection;
     }
@@ -100,7 +100,7 @@ public class Database {
                     card_authorization_code VARCHAR(30),
                     issue_date TIMESTAMP NOT NULL
                 )""");
-        LOGGER.info("Tablice provjerene/kreirane.");
+        LOGGER.info("TABLICE SPREMNE");
     }
 
     /**
@@ -174,9 +174,9 @@ public class Database {
         if (connection != null) {
             try {
                 connection.close();
-                LOGGER.info("Konekcija zatvorena.");
+                LOGGER.info("BAZA ZATVORENA");
             } catch (SQLException e) {
-                LOGGER.error("Zatvaranje konekcije neuspjelo.", e);
+                LOGGER.error("connection se nije zatvorio...", e);
             }
         }
     }

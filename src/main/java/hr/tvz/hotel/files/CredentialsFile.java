@@ -60,7 +60,7 @@ public class CredentialsFile {
                 credentials.put(entry.username(), entry);
             }
         } catch (IOException e) {
-            LOGGER.error("Čitanje datoteke za prijavu neuspjelo: {}", credentialsFilePath, e);
+            LOGGER.error("prijave: citanje palo {}", credentialsFilePath, e);
             throw new CredentialsFileException("Datoteka za prijavu se ne čita.", e);
         }
         return credentials;
@@ -79,9 +79,9 @@ public class CredentialsFile {
                 .toList();
         try {
             Files.write(credentialsFilePath, lines, StandardCharsets.UTF_8);
-            LOGGER.info("Datoteka za prijavu spremljena: {} zapisa.", lines.size());
+            LOGGER.info("PRIJAVE SPREMLJENE: {}", lines.size());
         } catch (IOException e) {
-            LOGGER.error("Spremanje datoteke za prijavu neuspjelo: {}", credentialsFilePath, e);
+            LOGGER.error("prijave: spremanje palo {}", credentialsFilePath, e);
             throw new CredentialsFileException("Datoteka za prijavu se ne sprema.", e);
         }
     }
@@ -97,14 +97,14 @@ public class CredentialsFile {
     public Optional<Role> authenticate(String username, String plainPassword) throws CredentialsFileException {
         CredentialEntry entry = loadCredentials().get(username);
         if (entry == null) {
-            LOGGER.warn("Nepostojeće korisničko ime: {}", username);
+            LOGGER.warn("nepoznat user: {}", username);
             return Optional.empty();
         }
         if (!PasswordHasher.matches(plainPassword, entry.passwordHash())) {
-            LOGGER.warn("Neuspješna prijava: {}", username);
+            LOGGER.warn("login pao: {}", username);
             return Optional.empty();
         }
-        LOGGER.info("Prijava uspjela: {} ({})", username, entry.role());
+        LOGGER.info("LOGIN OK: {} ({})", username, entry.role());
         return Optional.of(entry.role());
     }
 

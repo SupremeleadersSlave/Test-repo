@@ -44,7 +44,7 @@ public class MainApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        LOGGER.info("APP POKRENUT.");
+        LOGGER.info("APP POKRENUT");
 
         ServiceContext context = buildServiceContext();
 
@@ -70,7 +70,7 @@ public class MainApp extends Application {
             database.connect();
             database.initializeSchema();
         } catch (SQLException e) {
-            LOGGER.error("Inicijalizacija baze propala.", e);
+            LOGGER.error("baza: init pao", e);
             throw new IllegalStateException("Baza nedostupna.", e);
         }
 
@@ -121,10 +121,10 @@ public class MainApp extends Application {
                 User user = new User(null, entry.username(), "(uvezeno)", null, null,
                         entry.username(), entry.passwordHash(), entry.role());
                 userDao.insert(user);
-                LOGGER.info("Korisnik uvezen iz datoteke: {}", entry.username());
+                LOGGER.info("KORISNIK PORTED: {}", entry.username());
             });
         } catch (CredentialsFileException e) {
-            LOGGER.warn("Punjenje korisnika iz datoteke preskočeno.", e);
+            LOGGER.warn("punjenje usera preskoceno", e);
         }
     }
 

@@ -38,7 +38,7 @@ public class AuthService {
         try {
             return credentialsFile.authenticate(username, password);
         } catch (CredentialsFileException e) {
-            LOGGER.error("Prijava neuspjela: greška datoteke.", e);
+            LOGGER.error("login pao: greska datoteke", e);
             return Optional.empty();
         }
     }

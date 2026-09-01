@@ -88,7 +88,7 @@ public class ChangeLog {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             return (List<ChangeRecord>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            LOGGER.error("Čitanje povijesti promjena neuspjelo: {}", changeLogFilePath, e);
+            LOGGER.error("povijest: citanje palo {}", changeLogFilePath, e);
             return new ArrayList<>();
         }
     }
@@ -100,7 +100,7 @@ public class ChangeLog {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(changeLogFilePath.toFile()))) {
             oos.writeObject(history);
         } catch (IOException e) {
-            LOGGER.error("Spremanje povijesti promjena neuspjelo: {}", changeLogFilePath, e);
+            LOGGER.error("povijest: spremanje palo {}", changeLogFilePath, e);
         }
     }
 }

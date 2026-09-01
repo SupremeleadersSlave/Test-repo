@@ -51,7 +51,7 @@ public class InvoiceService {
         try {
             invoiceDao.findAll().forEach(invoices::add);
         } catch (EntityNotFoundException e) {
-            LOGGER.error("Učitavanje računa neuspjelo: rezervacija ne postoji.", e);
+            LOGGER.error("racuni: rezervacija fali", e);
         }
     }
 
@@ -105,7 +105,7 @@ public class InvoiceService {
         invoice.setId(id);
         invoices.add(invoice);
         logChange(id, "sve", null, invoice.toString(), changedBy);
-        LOGGER.info("Izdan novi račun: {}", invoice);
+        LOGGER.info("Novi Račun: {}", invoice);
     }
 
     /**
@@ -118,7 +118,7 @@ public class InvoiceService {
         invoiceDao.delete(invoice.getId());
         invoices.remove(invoice);
         logChange(invoice.getId(), "sve", invoice.toString(), null, changedBy);
-        LOGGER.info("Obrisan račun: {}", invoice);
+        LOGGER.info("Račun Obrisan: {}", invoice);
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {

@@ -38,7 +38,7 @@ public class GuestDao {
         try {
             return database.executeQuery("SELECT * FROM guests ORDER BY last_name", GuestDao::mapRow);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat gostiju neuspio.", e);
+            LOGGER.error("gosti nisu dohvaceni", e);
             return List.of();
         }
     }
@@ -54,12 +54,12 @@ public class GuestDao {
         try {
             List<Guest> results = database.executeQuery("SELECT * FROM guests WHERE id = ?", GuestDao::mapRow, id);
             if (results.isEmpty()) {
-                LOGGER.warn("Gost {} ne postoji.", id);
+                LOGGER.warn("gost {} ne postoji", id);
                 throw new EntityNotFoundException("Gost s identifikatorom " + id + " ne postoji.");
             }
             return results.get(0);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat gosta {} neuspio.", id, e);
+            LOGGER.error("gost {} nije dohvacen", id, e);
             throw new EntityNotFoundException("Gost s identifikatorom " + id + " ne postoji.", e);
         }
     }
@@ -79,7 +79,7 @@ public class GuestDao {
                     guest.getFirstName(), guest.getLastName(), guest.getEmail(), guest.getPhone(), guest.getDocumentNumber(),
                     address.street(), address.city(), address.postalCode(), address.country());
         } catch (SQLException e) {
-            LOGGER.error("Spremanje gosta neuspjelo.", e);
+            LOGGER.error("gost: spremanje palo", e);
             throw new IllegalStateException("Gost se ne sprema.", e);
         }
     }
@@ -98,7 +98,7 @@ public class GuestDao {
                     guest.getFirstName(), guest.getLastName(), guest.getEmail(), guest.getPhone(), guest.getDocumentNumber(),
                     address.street(), address.city(), address.postalCode(), address.country(), guest.getId());
         } catch (SQLException e) {
-            LOGGER.error("Ažuriranje gosta {} neuspjelo.", guest.getId(), e);
+            LOGGER.error("gost {} update pao", guest.getId(), e);
             throw new IllegalStateException("Gost se ne ažurira.", e);
         }
     }
@@ -112,7 +112,7 @@ public class GuestDao {
         try {
             database.executeUpdate("DELETE FROM guests WHERE id = ?", id);
         } catch (SQLException e) {
-            LOGGER.error("Brisanje gosta {} neuspjelo.", id, e);
+            LOGGER.error("nemoguce ukloniti gosta {} iz hotela", id, e);
             throw new IllegalStateException("Gost se ne briše.", e);
         }
     }

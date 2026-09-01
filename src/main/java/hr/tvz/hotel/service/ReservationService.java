@@ -91,7 +91,7 @@ public class ReservationService {
         try {
             reservationDao.findAll().forEach(reservations::add);
         } catch (EntityNotFoundException e) {
-            LOGGER.error("Učitavanje rezervacija neuspjelo: gost ili soba ne postoji.", e);
+            LOGGER.error("rezervacije: gost ili soba fali", e);
         }
     }
 
@@ -150,7 +150,7 @@ public class ReservationService {
     public Reservation createReservation(Guest guest, Room room, LocalDate checkIn, LocalDate checkOut, Role changedBy)
             throws ReservationNotAvailableException {
         if (!room.isAvailableFor(checkIn, checkOut)) {
-            LOGGER.warn("Soba {} nije u ponudi ili razdoblje nije valjano: {} - {}.", room.getRoomNumber(), checkIn, checkOut);
+            LOGGER.warn("soba {} neaktivna ili lose datumi: {} - {}", room.getRoomNumber(), checkIn, checkOut);
             throw new ReservationNotAvailableException(
                     "Soba " + room.getRoomNumber() + " nije u ponudi ili razdoblje " + checkIn + " - " + checkOut + " nije valjano.");
         }
@@ -169,7 +169,7 @@ public class ReservationService {
                 .stream()
                 .anyMatch(r -> r.overlaps(period));
         if (overlapping) {
-            LOGGER.warn("Soba {} nedostupna za {} - {}.", room.getRoomNumber(), checkIn, checkOut);
+            LOGGER.warn("soba {} zauzeta: {} - {}", room.getRoomNumber(), checkIn, checkOut);
             throw new ReservationNotAvailableException(
                     "Soba " + room.getRoomNumber() + " nije raspoloživa za razdoblje " + checkIn + " - " + checkOut + ".");
         }
@@ -181,7 +181,7 @@ public class ReservationService {
                 .status(reservation.getStatus()).totalPrice(reservation.getTotalPrice()).build();
         reservations.add(saved);
         logChange(id, "sve", null, saved.toString(), changedBy);
-        LOGGER.info("Kreirana nova rezervacija: {}", saved);
+        LOGGER.info("Nova Rezervacija: {}", saved);
         return saved;
     }
 
@@ -198,7 +198,7 @@ public class ReservationService {
         reservation.setStatus(newStatus);
         reservationDao.updateStatus(reservation);
         logChange(reservation.getId(), "status", oldStatus.name(), newStatus.name(), changedBy);
-        LOGGER.info("Status rezervacije {}: {} -> {}", reservation.getId(), oldStatus, newStatus);
+        LOGGER.info("Status {}: {} -> {}", reservation.getId(), oldStatus, newStatus);
     }
 
     /**
@@ -214,7 +214,7 @@ public class ReservationService {
         reservationDao.delete(reservation.getId());
         reservations.remove(reservation);
         logChange(reservation.getId(), "sve", reservation.toString(), null, changedBy);
-        LOGGER.info("Obrisana rezervacija: {}", reservation);
+        LOGGER.info("Rezervacija Obrisana: {}", reservation);
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {

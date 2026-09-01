@@ -37,7 +37,7 @@ public class UserDao {
         try {
             return database.executeQuery("SELECT * FROM users ORDER BY username", UserDao::mapRow);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat korisnika neuspio.", e);
+            LOGGER.error("useri nisu dohvaceni", e);
             return List.of();
         }
     }
@@ -53,12 +53,12 @@ public class UserDao {
         try {
             List<User> results = database.executeQuery("SELECT * FROM users WHERE id = ?", UserDao::mapRow, id);
             if (results.isEmpty()) {
-                LOGGER.warn("Korisnik {} ne postoji.", id);
+                LOGGER.warn("user {} ne postoji", id);
                 throw new EntityNotFoundException("Korisnik s identifikatorom " + id + " ne postoji.");
             }
             return results.get(0);
         } catch (SQLException e) {
-            LOGGER.error("Dohvat korisnika {} neuspio.", id, e);
+            LOGGER.error("user {} nije dohvacen", id, e);
             throw new EntityNotFoundException("Korisnik s identifikatorom " + id + " ne postoji.", e);
         }
     }
@@ -76,7 +76,7 @@ public class UserDao {
                     user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(),
                     user.getUsername(), user.getPasswordHash(), user.getRole().name());
         } catch (SQLException e) {
-            LOGGER.error("Spremanje korisnika neuspjelo.", e);
+            LOGGER.error("user: spremanje palo", e);
             throw new IllegalStateException("Korisnik se ne sprema.", e);
         }
     }
@@ -93,7 +93,7 @@ public class UserDao {
                     user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(),
                     user.getUsername(), user.getPasswordHash(), user.getRole().name(), user.getId());
         } catch (SQLException e) {
-            LOGGER.error("Ažuriranje korisnika {} neuspjelo.", user.getId(), e);
+            LOGGER.error("user {} update pao", user.getId(), e);
             throw new IllegalStateException("Korisnik se ne ažurira.", e);
         }
     }
@@ -107,7 +107,7 @@ public class UserDao {
         try {
             database.executeUpdate("DELETE FROM users WHERE id = ?", id);
         } catch (SQLException e) {
-            LOGGER.error("Brisanje korisnika {} neuspjelo.", id, e);
+            LOGGER.error("user {} se ne brise", id, e);
             throw new IllegalStateException("Korisnik se ne briše.", e);
         }
     }

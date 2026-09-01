@@ -109,7 +109,7 @@ public class GuestService {
         guest.setId(id);
         guests.add(guest);
         logChange(id, "sve", null, guest.toString(), changedBy);
-        LOGGER.info("Dodan novi gost: {}", guest);
+        LOGGER.info("Dodan Gost: {}", guest);
     }
 
     /**
@@ -124,7 +124,7 @@ public class GuestService {
         guests.remove(oldGuest);
         guests.add(newGuest);
         logChange(newGuest.getId(), "sve", oldGuest.toString(), newGuest.toString(), changedBy);
-        LOGGER.info("Ažuriran gost: {}", newGuest);
+        LOGGER.info("Guest Update: {}", newGuest);
     }
 
     /**
@@ -140,7 +140,7 @@ public class GuestService {
         guestDao.delete(guest.getId());
         guests.remove(guest);
         logChange(guest.getId(), "sve", guest.toString(), null, changedBy);
-        LOGGER.info("Obrisan gost: {}", guest);
+        LOGGER.info("Gost Obrisan: {}", guest);
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {

@@ -62,7 +62,7 @@ public class LoginController {
         try {
             showMainScreen(role.get(), username);
         } catch (IOException e) {
-            LOGGER.error("Učitavanje glavnog ekrana propalo.", e);
+            LOGGER.error("glavni ekran se ne ucitava", e);
             DialogUtils.showError("Greška", "Glavni ekran se ne može učitati.");
         }
     }
