@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <TextField fx:id="searchField" promptText="Pretraga po gostu ili sobi"/>
+            <Button onAction="#handleSearch" text="Pretraži"/>
+            <Button fx:id="addButton" onAction="#handleAdd" text="Nova rezervacija"/>
+            <Button fx:id="editButton" onAction="#handleEdit" text="Promijeni status"/>
+            <Button fx:id="deleteButton" onAction="#handleDelete" text="Obriši"/>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="tableView">
+            <columns>
+                <TableColumn fx:id="guestColumn" prefWidth="140" text="Gost"/>
+                <TableColumn fx:id="roomColumn" prefWidth="100" text="Soba"/>
+                <TableColumn fx:id="checkInColumn" prefWidth="100" text="Dolazak"/>
+                <TableColumn fx:id="checkOutColumn" prefWidth="100" text="Odlazak"/>
+                <TableColumn fx:id="statusColumn" prefWidth="100" text="Status"/>
+                <TableColumn fx:id="priceColumn" prefWidth="100" text="Cijena"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button fx:id="refreshButton" onAction="#reload" text="Osvježi"/>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="tableView">
+            <columns>
+                <TableColumn fx:id="entityNameColumn" prefWidth="100" text="Entitet"/>
+                <TableColumn fx:id="entityIdColumn" prefWidth="80" text="ID"/>
+                <TableColumn fx:id="fieldNameColumn" prefWidth="100" text="Polje"/>
+                <TableColumn fx:id="oldValueColumn" prefWidth="180" text="Stara vrijednost"/>
+                <TableColumn fx:id="newValueColumn" prefWidth="180" text="Nova vrijednost"/>
+                <TableColumn fx:id="roleColumn" prefWidth="100" text="Rola"/>
+                <TableColumn fx:id="timestampColumn" prefWidth="150" text="Vrijeme"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

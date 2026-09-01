@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <TextField fx:id="searchField" promptText="Pretraga po gostu ili sobi"/>
+            <Button onAction="#handleSearch" text="Pretraži"/>
+            <Button fx:id="addButton" onAction="#handleAdd" text="Novi račun"/>
+            <Button fx:id="deleteButton" onAction="#handleDelete" text="Obriši"/>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="tableView">
+            <columns>
+                <TableColumn fx:id="reservationColumn" prefWidth="180" text="Rezervacija"/>
+                <TableColumn fx:id="amountColumn" prefWidth="100" text="Iznos"/>
+                <TableColumn fx:id="paymentColumn" prefWidth="180" text="Način plaćanja"/>
+                <TableColumn fx:id="issueDateColumn" prefWidth="150" text="Datum izdavanja"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
