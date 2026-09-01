@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
  * provjeru raspoloživosti sobe za zadano razdoblje pomoću sučelja
  * {@link Schedulable}.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class ReservationService {

@@ -5,7 +5,6 @@ import java.util.Objects;
 /**
  * Zajednička svojstva korisnika sustava i gostiju hotela.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public abstract class Person {

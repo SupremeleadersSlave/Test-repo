@@ -13,7 +13,6 @@ import java.util.function.Predicate;
  *
  * @param <T> tip entiteta
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class EntityCollection<T> {

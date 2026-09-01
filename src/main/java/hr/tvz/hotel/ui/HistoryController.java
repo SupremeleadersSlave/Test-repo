@@ -14,7 +14,6 @@ import javafx.scene.control.TableView;
  * Prikazuje povijest promjena podataka: entitet, izmijenjeno polje,
  * staru i novu vrijednost, ulogu korisnika i vrijeme promjene.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class HistoryController {

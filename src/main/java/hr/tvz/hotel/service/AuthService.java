@@ -11,7 +11,6 @@ import java.util.Optional;
 /**
  * Logika prijave korisnika, provjerava podatke iz tekstualne datoteke.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class AuthService {

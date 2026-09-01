@@ -21,7 +21,6 @@ import java.util.Optional;
  * datoteku te provjerava podatke pri prijavi. Format retka je
  * {@code korisnickoIme;hashLozinke;ROLA}.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class CredentialsFileManager {

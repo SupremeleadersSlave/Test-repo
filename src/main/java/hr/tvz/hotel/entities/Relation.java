@@ -10,7 +10,6 @@ import java.util.Objects;
  * @param <A> tip izvornog entiteta
  * @param <B> tip ciljnog entiteta
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class Relation<A, B> {

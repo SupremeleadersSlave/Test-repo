@@ -33,7 +33,6 @@ import java.sql.SQLException;
  * datotekama te prilikom prvog pokretanja puni tablicu korisnika iz
  * tekstualne datoteke.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class MainApp extends Application {

@@ -20,7 +20,6 @@ import java.util.function.Predicate;
  * Implementira poslovnu logiku upravljanja računima izdanima za
  * rezervacije.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class InvoiceService {

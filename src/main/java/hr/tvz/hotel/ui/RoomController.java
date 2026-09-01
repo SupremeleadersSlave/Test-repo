@@ -29,7 +29,6 @@ import java.util.Optional;
  * Kontroler JavaFX ekrana za upravljanje sobama: pretraga, dodavanje,
  * uređivanje i brisanje soba uz potvrdu korisnika.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class RoomController {

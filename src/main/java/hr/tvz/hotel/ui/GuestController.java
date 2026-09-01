@@ -27,7 +27,6 @@ import java.util.Optional;
  * Kontroler JavaFX ekrana za upravljanje gostima: pretraga, dodavanje,
  * uređivanje i brisanje gostiju uz potvrdu korisnika.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class GuestController {

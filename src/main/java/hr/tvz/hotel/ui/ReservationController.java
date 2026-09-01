@@ -43,7 +43,6 @@ import java.util.function.Function;
  * Kontroler JavaFX ekrana za upravljanje rezervacijama: pretraga,
  * kreiranje, promjena statusa i brisanje rezervacija.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class ReservationController {

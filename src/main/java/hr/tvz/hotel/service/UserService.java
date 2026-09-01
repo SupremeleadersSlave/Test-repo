@@ -21,7 +21,6 @@ import java.util.function.Predicate;
  * Implementira poslovnu logiku upravljanja korisnicima sustava i
  * održava tekstualnu datoteku za prijavu usklađenom s bazom.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class UserService {

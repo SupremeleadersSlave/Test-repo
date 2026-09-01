@@ -8,7 +8,6 @@ import java.math.BigDecimal;
  *
  * @param amountReceived iznos primljene gotovine
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public record CashPayment(BigDecimal amountReceived) implements PaymentMethod, Serializable {

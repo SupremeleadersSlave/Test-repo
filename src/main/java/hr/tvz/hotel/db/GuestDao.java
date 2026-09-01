@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * DAO klasa za entitet {@link Guest}.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class GuestDao {

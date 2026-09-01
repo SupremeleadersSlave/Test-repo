@@ -27,7 +27,6 @@ import java.util.Optional;
  * Kontroler JavaFX ekrana za upravljanje korisnicima sustava, dostupan
  * samo administratoru: pretraga, dodavanje, uređivanje i brisanje.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class UserController {

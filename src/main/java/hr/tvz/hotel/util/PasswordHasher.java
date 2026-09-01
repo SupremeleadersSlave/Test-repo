@@ -8,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
  * Pomoćna klasa za hashiranje lozinki SHA-256 algoritmom. Lozinke se
  * pohranjuju i uspoređuju isključivo kao heksadecimalni hash.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public final class PasswordHasher {

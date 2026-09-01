@@ -3,7 +3,6 @@ package hr.tvz.hotel.exceptions;
 /**
  * Iznimka koja se baca kada su datumi rezervacije neispravni.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class InvalidReservationDateException extends RuntimeException {

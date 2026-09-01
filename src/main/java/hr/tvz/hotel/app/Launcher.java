@@ -5,7 +5,6 @@ package hr.tvz.hotel.app;
  * Time se izbjegava provjera modula JavaFX runtimea pri pokretanju
  * aplikacije izravno iz razvojnog okruženja.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public final class Launcher {

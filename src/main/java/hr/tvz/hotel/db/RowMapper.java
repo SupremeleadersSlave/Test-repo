@@ -8,7 +8,6 @@ import java.sql.SQLException;
  *
  * @param <T> tip mapiranog objekta
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 @FunctionalInterface

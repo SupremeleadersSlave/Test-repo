@@ -37,7 +37,6 @@ import java.util.function.Function;
  * Kontroler JavaFX ekrana za upravljanje računima: pretraga, izdavanje
  * i brisanje računa uz potvrdu korisnika.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class InvoiceController {

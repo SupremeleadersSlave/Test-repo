@@ -6,7 +6,6 @@ import java.time.LocalDate;
 /**
  * Sučelje za entitete koji se mogu rezervirati.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public interface Reservable {

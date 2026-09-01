@@ -3,7 +3,6 @@ package hr.tvz.hotel.exceptions;
 /**
  * Iznimka koja se baca kada soba nije raspoloživa za traženo razdoblje.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class ReservationNotAvailableException extends Exception {

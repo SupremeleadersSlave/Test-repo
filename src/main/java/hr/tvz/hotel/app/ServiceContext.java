@@ -21,7 +21,6 @@ import hr.tvz.hotel.service.UserService;
  * @param authService        usluga za prijavu usera
  * @param changeLogManager   upravitelj loga
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public record ServiceContext(

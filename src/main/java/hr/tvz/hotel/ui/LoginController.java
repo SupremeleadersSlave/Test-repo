@@ -21,7 +21,6 @@ import java.util.Optional;
 /**
  * Kontroler JavaFX ekrana za prijavu korisnika u aplikaciju.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class LoginController {

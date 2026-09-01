@@ -17,7 +17,6 @@ import java.util.function.Predicate;
 /**
  * Implementira poslovnu logiku upravljanja sobama.
  *
- * @author Viktor Barešić
  * @version 1.0
  */
 public class RoomService {
