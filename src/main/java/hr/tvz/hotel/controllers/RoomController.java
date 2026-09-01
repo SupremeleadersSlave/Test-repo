@@ -1,9 +1,11 @@
 package hr.tvz.hotel.controllers;
 
 import hr.tvz.hotel.app.ServiceContext;
+import hr.tvz.hotel.entities.Capacity;
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.entities.Room;
 import hr.tvz.hotel.entities.RoomType;
+import hr.tvz.hotel.exceptions.InvalidRoomException;
 import hr.tvz.hotel.service.RoomService;
 import hr.tvz.hotel.util.DialogUtils;
 import javafx.collections.FXCollections;
@@ -19,6 +21,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.util.StringConverter;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -45,7 +48,7 @@ public class RoomController {
     @FXML
     private TableColumn<Room, BigDecimal> priceColumn;
     @FXML
-    private TableColumn<Room, Integer> capacityColumn;
+    private TableColumn<Room, Capacity> capacityColumn;
     @FXML
     private TableColumn<Room, Boolean> activeColumn;
     @FXML
@@ -99,6 +102,10 @@ public class RoomController {
     @FXML
     private void handleAdd() {
         showRoomDialog(null).ifPresent(room -> {
+            if (roomService.roomNumberExists(room.getRoomNumber(), null)) {
+                DialogUtils.showError("Neispravan broj sobe", "Soba " + room.getRoomNumber() + " već postoji.");
+                return;
+            }
             roomService.addRoom(room, currentRole);
             reload();
         });
@@ -114,6 +121,10 @@ public class RoomController {
             return;
         }
         showRoomDialog(selected).ifPresent(updated -> {
+            if (roomService.roomNumberExists(updated.getRoomNumber(), selected.getId())) {
+                DialogUtils.showError("Neispravan broj sobe", "Soba " + updated.getRoomNumber() + " već postoji.");
+                return;
+            }
             roomService.updateRoom(selected, updated, currentRole);
             reload();
         });
@@ -139,7 +150,9 @@ public class RoomController {
     }
 
     /**
-     * Prikazuje dijalog za unos ili uređivanje podataka o sobi.
+     * Prikazuje dijalog za unos ili uređivanje podataka o sobi. Kat
+     * određuje vrstu sobe, a broj sobe se sastavlja od kata i rednog
+     * broja sobe (01 - 20).
      *
      * @param existing soba za uređivanje ili {@code null} za novu sobu
      * @return izgrađena soba ako je unos potvrđen, inače prazan {@link Optional}
@@ -149,21 +162,37 @@ public class RoomController {
         dialog.setTitle(existing == null ? "Nova soba" : "Uređivanje sobe");
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        TextField roomNumberField = new TextField(existing != null ? existing.getRoomNumber() : "");
-        ComboBox<RoomType> typeBox = new ComboBox<>(FXCollections.observableArrayList(RoomType.values()));
-        typeBox.setValue(existing != null ? existing.getType() : RoomType.SINGLE);
+        ComboBox<RoomType> floorBox = new ComboBox<>(FXCollections.observableArrayList(RoomType.values()));
+        floorBox.setValue(existing != null ? existing.getType() : RoomType.SINGLE);
+        Label typeLabel = new Label();
+        floorBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(RoomType t) {
+                return t == null ? "" : t.getFloor() + ". kat (" + t + ")";
+            }
+
+            @Override
+            public RoomType fromString(String string) {
+                return null;
+            }
+        });
+
+        TextField roomNumberField = new TextField(
+                existing != null ? existing.getRoomNumber().substring(1) : "");
+        roomNumberField.setPromptText("01 - 20");
+        ComboBox<Capacity> capacityBox = new ComboBox<>(FXCollections.observableArrayList(Capacity.values()));
+        capacityBox.setValue(existing != null ? existing.getCapacity() : Capacity.SINGLE);
         TextField priceField = new TextField(existing != null ? existing.getPricePerNight().toString() : "");
-        TextField capacityField = new TextField(existing != null ? String.valueOf(existing.getCapacity()) : "");
         CheckBox activeBox = new CheckBox("Aktivna");
         activeBox.setSelected(existing == null || existing.isActive());
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.addRow(0, new Label("Broj sobe:"), roomNumberField);
-        grid.addRow(1, new Label("Vrsta:"), typeBox);
-        grid.addRow(2, new Label("Cijena/noć:"), priceField);
-        grid.addRow(3, new Label("Kapacitet:"), capacityField);
+        grid.addRow(0, new Label("Kat / vrsta:"), floorBox);
+        grid.addRow(1, new Label("Broj sobe:"), roomNumberField);
+        grid.addRow(2, new Label("Kapacitet:"), capacityBox);
+        grid.addRow(3, new Label("Cijena/noć:"), priceField);
         grid.addRow(4, activeBox);
         dialog.getDialogPane().setContent(grid);
 
@@ -171,11 +200,17 @@ public class RoomController {
             if (buttonType != ButtonType.OK) {
                 return null;
             }
+            RoomType type = floorBox.getValue();
+            String roomNumber = type.getFloor() + roomNumberField.getText().trim();
             try {
-                return new Room(existing != null ? existing.getId() : null, roomNumberField.getText(), typeBox.getValue(),
-                        new BigDecimal(priceField.getText()), Integer.parseInt(capacityField.getText()), activeBox.isSelected());
+                Room.validateRoomNumber(roomNumber);
+                return new Room(existing != null ? existing.getId() : null, roomNumber, type,
+                        new BigDecimal(priceField.getText()), capacityBox.getValue(), activeBox.isSelected());
             } catch (NumberFormatException e) {
-                DialogUtils.showError("Neispravan unos", "Cijena i kapacitet moraju biti brojevi.");
+                DialogUtils.showError("Neispravan unos", "Cijena mora biti broj.");
+                return null;
+            } catch (InvalidRoomException e) {
+                DialogUtils.showError("Neispravan broj sobe", e.getMessage());
                 return null;
             }
         });

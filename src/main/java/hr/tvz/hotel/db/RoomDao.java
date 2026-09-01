@@ -1,5 +1,6 @@
 package hr.tvz.hotel.db;
 
+import hr.tvz.hotel.entities.Capacity;
 import hr.tvz.hotel.entities.Room;
 import hr.tvz.hotel.entities.RoomType;
 import hr.tvz.hotel.exceptions.EntityNotFoundException;
@@ -74,7 +75,7 @@ public class RoomDao {
         try {
             return database.executeInsert(
                     "INSERT INTO rooms (room_number, type, price_per_night, capacity, active) VALUES (?, ?, ?, ?, ?)",
-                    room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity(), room.isActive());
+                    room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity().name(), room.isActive());
         } catch (SQLException e) {
             LOGGER.error("soba: spremanje palo", e);
             throw new IllegalStateException("Soba se ne sprema.", e);
@@ -90,7 +91,7 @@ public class RoomDao {
         try {
             database.executeUpdate(
                     "UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, capacity = ?, active = ? WHERE id = ?",
-                    room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity(), room.isActive(), room.getId());
+                    room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity().name(), room.isActive(), room.getId());
         } catch (SQLException e) {
             LOGGER.error("soba {} update pao", room.getId(), e);
             throw new IllegalStateException("Soba se ne ažurira.", e);
@@ -117,7 +118,7 @@ public class RoomDao {
                 rs.getString("room_number"),
                 RoomType.valueOf(rs.getString("type")),
                 rs.getBigDecimal("price_per_night"),
-                rs.getInt("capacity"),
+                Capacity.valueOf(rs.getString("capacity")),
                 rs.getBoolean("active")
         );
     }

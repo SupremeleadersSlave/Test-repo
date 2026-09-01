@@ -1,5 +1,7 @@
 package hr.tvz.hotel.entities;
 
+import hr.tvz.hotel.exceptions.InvalidRoomException;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -16,7 +18,7 @@ public class Room implements Reservable {
     private String roomNumber;
     private RoomType type;
     private BigDecimal pricePerNight;
-    private int capacity;
+    private Capacity capacity;
     private boolean active;
 
     /**
@@ -26,10 +28,10 @@ public class Room implements Reservable {
      * @param roomNumber    oznaka sobe
      * @param type          vrsta sobe
      * @param pricePerNight cijena po noćenju
-     * @param capacity      najveći broj gostiju u sobi
+     * @param capacity      kapacitet sobe
      * @param active        označava je li soba u ponudi
      */
-    public Room(Long id, String roomNumber, RoomType type, BigDecimal pricePerNight, int capacity, boolean active) {
+    public Room(Long id, String roomNumber, RoomType type, BigDecimal pricePerNight, Capacity capacity, boolean active) {
         this.id = id;
         this.roomNumber = roomNumber;
         this.type = type;
@@ -129,7 +131,7 @@ public class Room implements Reservable {
      *
      * @return kapacitet sobe
      */
-    public int getCapacity() {
+    public Capacity getCapacity() {
         return capacity;
     }
 
@@ -138,8 +140,26 @@ public class Room implements Reservable {
      *
      * @param capacity novi kapacitet sobe
      */
-    public void setCapacity(int capacity) {
+    public void setCapacity(Capacity capacity) {
         this.capacity = capacity;
+    }
+
+    /**
+     * Provjerava je li broj sobe valjan: mora imati oblik kat + redni
+     * broj, gdje je kat znamenka od 1 do 5, a redni broj dvoznamenkasti
+     * od 01 do 20 (npr. 101 - 120, 201 - 220, ... 501 - 520).
+     *
+     * @param roomNumber broj sobe za provjeru
+     * @throws InvalidRoomException ako broj sobe nije u ispravnom formatu ili rasponu
+     */
+    public static void validateRoomNumber(String roomNumber) throws InvalidRoomException {
+        if (roomNumber == null || !roomNumber.matches("[1-5]\\d{2}")) {
+            throw new InvalidRoomException("Broj sobe mora biti oblika kat (1-5) + soba (01-20): " + roomNumber);
+        }
+        int room = Integer.parseInt(roomNumber.substring(1));
+        if (room < 1 || room > 20) {
+            throw new InvalidRoomException("Redni broj sobe mora biti između 01 i 20: " + roomNumber);
+        }
     }
 
     /**

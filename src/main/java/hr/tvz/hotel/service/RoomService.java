@@ -99,6 +99,20 @@ public class RoomService {
     }
 
     /**
+     * Provjerava postoji li već soba sa zadanim brojem, ne računajući
+     * sobu koja se trenutno uređuje.
+     *
+     * @param roomNumber broj sobe za provjeru
+     * @param excludeId id sobe koja se preskače (npr. pri uređivanju), može biti {@code null}
+     * @return {@code true} ako druga soba već koristi taj broj
+     */
+    public boolean roomNumberExists(String roomNumber, Long excludeId) {
+        return rooms.getAll().stream()
+                .anyMatch(r -> r.getRoomNumber().equals(roomNumber)
+                        && !r.getId().equals(excludeId));
+    }
+
+    /**
      * Dodaje novu sobu, bilježi promjenu u log.
      *
      * @param room      nova soba

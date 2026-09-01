@@ -52,7 +52,7 @@ public class Database {
                     room_number VARCHAR(20) NOT NULL,
                     type VARCHAR(20) NOT NULL,
                     price_per_night DECIMAL(10,2) NOT NULL,
-                    capacity INT NOT NULL,
+                    capacity VARCHAR(10) NOT NULL,
                     active BOOLEAN NOT NULL
                 )""");
         executeUpdate("""
