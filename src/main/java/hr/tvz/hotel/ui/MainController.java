@@ -4,6 +4,7 @@ import hr.tvz.hotel.app.ServiceContext;
 import hr.tvz.hotel.concurrency.ChangeLogWatcherTask;
 import hr.tvz.hotel.concurrency.DataRefreshTask;
 import hr.tvz.hotel.entities.Role;
+import hr.tvz.hotel.util.DialogUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -113,9 +114,13 @@ public class MainController {
 
     /**
      * Ponovno učitava podatke svih usluga i osvježava prikaz u svim
-     * karticama glavnog ekrana.
+     * karticama glavnog ekrana. Preskače se dok je otvoren dijalog kako
+     * se odabir u tablicama ne bi gubio.
      */
     private void refreshAllTabs() {
+        if (DialogUtils.isDialogOpen()) {
+            return;
+        }
         context.roomService().refresh();
         context.guestService().refresh();
         context.reservationService().refresh();
