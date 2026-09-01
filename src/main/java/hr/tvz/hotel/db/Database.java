@@ -17,9 +17,9 @@ import java.util.List;
  *
  * @version 1.0
  */
-public class DatabaseConnection {
+public class Database {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseConnection.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Database.class);
     private static final String URL = "jdbc:h2:./data/hoteldb";
     private static final String USERNAME = "sa";
     private static final String PASSWORD = "";

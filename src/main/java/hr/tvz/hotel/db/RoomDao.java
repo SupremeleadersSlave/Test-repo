@@ -18,15 +18,15 @@ import java.util.List;
 public class RoomDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomDao.class);
-    private final DatabaseConnection databaseConnection;
+    private final Database database;
 
     /**
      * Kreira DAO za sobe.
      *
-     * @param databaseConnection konekcija prema bazi
+     * @param database konekcija prema bazi
      */
-    public RoomDao(DatabaseConnection databaseConnection) {
-        this.databaseConnection = databaseConnection;
+    public RoomDao(Database database) {
+        this.database = database;
     }
 
     /**
@@ -36,7 +36,7 @@ public class RoomDao {
      */
     public List<Room> findAll() {
         try {
-            return databaseConnection.executeQuery("SELECT * FROM rooms ORDER BY room_number", RoomDao::mapRow);
+            return database.executeQuery("SELECT * FROM rooms ORDER BY room_number", RoomDao::mapRow);
         } catch (SQLException e) {
             LOGGER.error("Dohvat soba neuspio.", e);
             return List.of();
@@ -52,7 +52,7 @@ public class RoomDao {
      */
     public Room findById(Long id) {
         try {
-            List<Room> results = databaseConnection.executeQuery("SELECT * FROM rooms WHERE id = ?", RoomDao::mapRow, id);
+            List<Room> results = database.executeQuery("SELECT * FROM rooms WHERE id = ?", RoomDao::mapRow, id);
             if (results.isEmpty()) {
                 LOGGER.warn("Soba {} ne postoji.", id);
                 throw new EntityNotFoundException("Soba s identifikatorom " + id + " ne postoji.");
@@ -72,7 +72,7 @@ public class RoomDao {
      */
     public Long insert(Room room) {
         try {
-            return databaseConnection.executeInsert(
+            return database.executeInsert(
                     "INSERT INTO rooms (room_number, type, price_per_night, capacity, active) VALUES (?, ?, ?, ?, ?)",
                     room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity(), room.isActive());
         } catch (SQLException e) {
@@ -88,7 +88,7 @@ public class RoomDao {
      */
     public void update(Room room) {
         try {
-            databaseConnection.executeUpdate(
+            database.executeUpdate(
                     "UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, capacity = ?, active = ? WHERE id = ?",
                     room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity(), room.isActive(), room.getId());
         } catch (SQLException e) {
@@ -104,7 +104,7 @@ public class RoomDao {
      */
     public void delete(Long id) {
         try {
-            databaseConnection.executeUpdate("DELETE FROM rooms WHERE id = ?", id);
+            database.executeUpdate("DELETE FROM rooms WHERE id = ?", id);
         } catch (SQLException e) {
             LOGGER.error("Brisanje sobe {} neuspjelo.", id, e);
             throw new IllegalStateException("Soba se ne briše.", e);

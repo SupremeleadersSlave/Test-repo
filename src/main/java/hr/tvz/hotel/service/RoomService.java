@@ -5,7 +5,7 @@ import hr.tvz.hotel.entities.ChangeRecord;
 import hr.tvz.hotel.entities.EntityCollection;
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.entities.Room;
-import hr.tvz.hotel.persistence.ChangeLogManager;
+import hr.tvz.hotel.files.ChangeLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ public class RoomService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RoomService.class);
 
     private final RoomDao roomDao;
-    private final ChangeLogManager changeLogManager;
+    private final ChangeLog changeLog;
     private final EntityCollection<Room> rooms = new EntityCollection<>();
     private ReservationService reservationService;
 
@@ -33,11 +33,11 @@ public class RoomService {
      * postojeće sobe iz baze.
      *
      * @param roomDao          DAO za pristup sobama u bazi
-     * @param changeLogManager upravitelj poviješću promjena
+     * @param changeLog upravitelj poviješću promjena
      */
-    public RoomService(RoomDao roomDao, ChangeLogManager changeLogManager) {
+    public RoomService(RoomDao roomDao, ChangeLog changeLog) {
         this.roomDao = roomDao;
-        this.changeLogManager = changeLogManager;
+        this.changeLog = changeLog;
         refresh();
     }
 
@@ -144,6 +144,6 @@ public class RoomService {
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {
-        changeLogManager.append(new ChangeRecord("Room", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
+        changeLog.append(new ChangeRecord("Room", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
     }
 }

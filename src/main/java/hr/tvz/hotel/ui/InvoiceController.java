@@ -183,14 +183,14 @@ public class InvoiceController {
      * Postavlja prikaz stavki padajućeg izbornika prema zadanoj funkciji.
      *
      * @param comboBox padajući izbornik za postavljanje prikaza
-     * @param displayFunction funkcija koja pretvara stavku u tekstualni prikaz
+     * @param display funkcija koja pretvara stavku u tekstualni prikaz
      * @param <T> tip stavki padajućeg izbornika
      */
-    private <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> displayFunction) {
+    private <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> display) {
         comboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(T item) {
-                return item == null ? "" : displayFunction.apply(item);
+                return item == null ? "" : display.apply(item);
             }
 
             @Override

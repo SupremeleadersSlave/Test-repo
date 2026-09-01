@@ -1,4 +1,4 @@
-package hr.tvz.hotel.concurrency;
+package hr.tvz.hotel.threads;
 
 import javafx.application.Platform;
 import org.slf4j.Logger;
@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
  *
  * @version 1.0
  */
-public class DataRefreshTask implements Runnable {
+public class DataRefresher implements Runnable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataRefreshTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataRefresher.class);
 
     private final Runnable refreshAction;
     private final long intervalMillis;
@@ -23,7 +23,7 @@ public class DataRefreshTask implements Runnable {
      * @param refreshAction akcija refreshanja
      * @param intervalMillis interval refreshanja (ms)
      */
-    public DataRefreshTask(Runnable refreshAction, long intervalMillis) {
+    public DataRefresher(Runnable refreshAction, long intervalMillis) {
         this.refreshAction = refreshAction;
         this.intervalMillis = intervalMillis;
     }

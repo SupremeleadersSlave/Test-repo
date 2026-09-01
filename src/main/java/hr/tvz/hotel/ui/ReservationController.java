@@ -168,9 +168,9 @@ public class ReservationController {
         if (!DialogUtils.confirm("Potvrda brisanja", "Želite li obrisati odabranu rezervaciju?")) {
             return;
         }
-        int invoiceCount = invoiceService.findByReservation(selected).size();
-        if (invoiceCount > 0 && !DialogUtils.confirm("Dodatno upozorenje",
-                "Brisanje ove rezervacije povući će i brisanje " + invoiceCount
+        int count = invoiceService.findByReservation(selected).size();
+        if (count > 0 && !DialogUtils.confirm("Dodatno upozorenje",
+                "Brisanje ove rezervacije povući će i brisanje " + count
                         + " povezanih računa. Nastaviti?")) {
             return;
         }
@@ -221,14 +221,14 @@ public class ReservationController {
      * Postavlja prikaz stavki padajućeg izbornika prema zadanoj funkciji.
      *
      * @param comboBox padajući izbornik za postavljanje prikaza
-     * @param displayFunction funkcija koja pretvara stavku u tekstualni prikaz
+     * @param display funkcija koja pretvara stavku u tekstualni prikaz
      * @param <T> tip stavki padajućeg izbornika
      */
-    private <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> displayFunction) {
+    private <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> display) {
         comboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(T item) {
-                return item == null ? "" : displayFunction.apply(item);
+                return item == null ? "" : display.apply(item);
             }
 
             @Override

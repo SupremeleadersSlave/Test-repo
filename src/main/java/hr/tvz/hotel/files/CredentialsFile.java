@@ -1,4 +1,4 @@
-package hr.tvz.hotel.persistence;
+package hr.tvz.hotel.files;
 
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.exceptions.CredentialsFileException;
@@ -23,9 +23,9 @@ import java.util.Optional;
  *
  * @version 1.0
  */
-public class CredentialsFileManager {
+public class CredentialsFile {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsFileManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsFile.class);
     private static final String SEPARATOR = ";";
 
     private final Path credentialsFilePath;
@@ -35,7 +35,7 @@ public class CredentialsFileManager {
      *
      * @param credentialsFilePath putanja do tekstualne datoteke s podacima za prijavu
      */
-    public CredentialsFileManager(Path credentialsFilePath) {
+    public CredentialsFile(Path credentialsFilePath) {
         this.credentialsFilePath = credentialsFilePath;
     }
 

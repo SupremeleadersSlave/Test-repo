@@ -17,15 +17,15 @@ import java.util.List;
 public class UserDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDao.class);
-    private final DatabaseConnection databaseConnection;
+    private final Database database;
 
     /**
      * Kreira DAO za korisnike sustava.
      *
-     * @param databaseConnection konekcija prema bazi
+     * @param database konekcija prema bazi
      */
-    public UserDao(DatabaseConnection databaseConnection) {
-        this.databaseConnection = databaseConnection;
+    public UserDao(Database database) {
+        this.database = database;
     }
 
     /**
@@ -35,7 +35,7 @@ public class UserDao {
      */
     public List<User> findAll() {
         try {
-            return databaseConnection.executeQuery("SELECT * FROM users ORDER BY username", UserDao::mapRow);
+            return database.executeQuery("SELECT * FROM users ORDER BY username", UserDao::mapRow);
         } catch (SQLException e) {
             LOGGER.error("Dohvat korisnika neuspio.", e);
             return List.of();
@@ -51,7 +51,7 @@ public class UserDao {
      */
     public User findById(Long id) {
         try {
-            List<User> results = databaseConnection.executeQuery("SELECT * FROM users WHERE id = ?", UserDao::mapRow, id);
+            List<User> results = database.executeQuery("SELECT * FROM users WHERE id = ?", UserDao::mapRow, id);
             if (results.isEmpty()) {
                 LOGGER.warn("Korisnik {} ne postoji.", id);
                 throw new EntityNotFoundException("Korisnik s identifikatorom " + id + " ne postoji.");
@@ -71,7 +71,7 @@ public class UserDao {
      */
     public Long insert(User user) {
         try {
-            return databaseConnection.executeInsert(
+            return database.executeInsert(
                     "INSERT INTO users (first_name, last_name, email, phone, username, password_hash, role) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(),
                     user.getUsername(), user.getPasswordHash(), user.getRole().name());
@@ -88,7 +88,7 @@ public class UserDao {
      */
     public void update(User user) {
         try {
-            databaseConnection.executeUpdate(
+            database.executeUpdate(
                     "UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, username = ?, password_hash = ?, role = ? WHERE id = ?",
                     user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(),
                     user.getUsername(), user.getPasswordHash(), user.getRole().name(), user.getId());
@@ -105,7 +105,7 @@ public class UserDao {
      */
     public void delete(Long id) {
         try {
-            databaseConnection.executeUpdate("DELETE FROM users WHERE id = ?", id);
+            database.executeUpdate("DELETE FROM users WHERE id = ?", id);
         } catch (SQLException e) {
             LOGGER.error("Brisanje korisnika {} neuspjelo.", id, e);
             throw new IllegalStateException("Korisnik se ne briše.", e);

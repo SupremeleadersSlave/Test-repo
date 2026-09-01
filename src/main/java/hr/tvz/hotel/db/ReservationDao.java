@@ -21,19 +21,19 @@ import java.util.List;
 public class ReservationDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationDao.class);
-    private final DatabaseConnection databaseConnection;
+    private final Database database;
     private final GuestDao guestDao;
     private final RoomDao roomDao;
 
     /**
      * Kreira DAO za rezervacije.
      *
-     * @param databaseConnection konekcija prema bazi
+     * @param database konekcija prema bazi
      * @param guestDao DAO za dohvat gostiju
      * @param roomDao DAO za dohvat soba
      */
-    public ReservationDao(DatabaseConnection databaseConnection, GuestDao guestDao, RoomDao roomDao) {
-        this.databaseConnection = databaseConnection;
+    public ReservationDao(Database database, GuestDao guestDao, RoomDao roomDao) {
+        this.database = database;
         this.guestDao = guestDao;
         this.roomDao = roomDao;
     }
@@ -45,7 +45,7 @@ public class ReservationDao {
      */
     public List<Reservation> findAll() {
         try {
-            return databaseConnection.executeQuery("SELECT * FROM reservations ORDER BY check_in", this::mapRow);
+            return database.executeQuery("SELECT * FROM reservations ORDER BY check_in", this::mapRow);
         } catch (SQLException e) {
             LOGGER.error("Dohvat rezervacija neuspio.", e);
             return List.of();
@@ -61,7 +61,7 @@ public class ReservationDao {
      */
     public Reservation findById(Long id) {
         try {
-            List<Reservation> results = databaseConnection.executeQuery("SELECT * FROM reservations WHERE id = ?", this::mapRow, id);
+            List<Reservation> results = database.executeQuery("SELECT * FROM reservations WHERE id = ?", this::mapRow, id);
             if (results.isEmpty()) {
                 LOGGER.warn("Rezervacija {} ne postoji.", id);
                 throw new EntityNotFoundException("Rezervacija s identifikatorom " + id + " ne postoji.");
@@ -81,7 +81,7 @@ public class ReservationDao {
      */
     public Long insert(Reservation reservation) {
         try {
-            return databaseConnection.executeInsert(
+            return database.executeInsert(
                     "INSERT INTO reservations (guest_id, room_id, check_in, check_out, status, total_price) VALUES (?, ?, ?, ?, ?, ?)",
                     reservation.getGuest().getId(), reservation.getRoom().getId(), reservation.getCheckInDate(),
                     reservation.getCheckOutDate(), reservation.getStatus().name(), reservation.getTotalPrice());
@@ -98,7 +98,7 @@ public class ReservationDao {
      */
     public void updateStatus(Reservation reservation) {
         try {
-            databaseConnection.executeUpdate("UPDATE reservations SET status = ? WHERE id = ?",
+            database.executeUpdate("UPDATE reservations SET status = ? WHERE id = ?",
                     reservation.getStatus().name(), reservation.getId());
         } catch (SQLException e) {
             LOGGER.error("Ažuriranje rezervacije {} neuspjelo.", reservation.getId(), e);
@@ -113,7 +113,7 @@ public class ReservationDao {
      */
     public void delete(Long id) {
         try {
-            databaseConnection.executeUpdate("DELETE FROM reservations WHERE id = ?", id);
+            database.executeUpdate("DELETE FROM reservations WHERE id = ?", id);
         } catch (SQLException e) {
             LOGGER.error("Brisanje rezervacije {} neuspjelo.", id, e);
             throw new IllegalStateException("Rezervacija se ne briše.", e);

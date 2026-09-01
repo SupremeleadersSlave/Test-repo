@@ -23,17 +23,17 @@ import java.util.List;
 public class InvoiceDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceDao.class);
-    private final DatabaseConnection databaseConnection;
+    private final Database database;
     private final ReservationDao reservationDao;
 
     /**
      * Kreira DAO za račune.
      *
-     * @param databaseConnection konekcija prema bazi
+     * @param database konekcija prema bazi
      * @param reservationDao DAO za dohvat rezervacija
      */
-    public InvoiceDao(DatabaseConnection databaseConnection, ReservationDao reservationDao) {
-        this.databaseConnection = databaseConnection;
+    public InvoiceDao(Database database, ReservationDao reservationDao) {
+        this.database = database;
         this.reservationDao = reservationDao;
     }
 
@@ -44,7 +44,7 @@ public class InvoiceDao {
      */
     public List<Invoice> findAll() {
         try {
-            return databaseConnection.executeQuery("SELECT * FROM invoices ORDER BY issue_date DESC", this::mapRow);
+            return database.executeQuery("SELECT * FROM invoices ORDER BY issue_date DESC", this::mapRow);
         } catch (SQLException e) {
             LOGGER.error("Dohvat računa neuspio.", e);
             return List.of();
@@ -64,7 +64,7 @@ public class InvoiceDao {
         String cardNumber = method instanceof CardPayment card ? card.maskedCardNumber() : null;
         String authCode = method instanceof CardPayment card ? card.authorizationCode() : null;
         try {
-            return databaseConnection.executeInsert(
+            return database.executeInsert(
                     "INSERT INTO invoices (reservation_id, amount, payment_type, cash_amount_received, "
                             + "card_masked_number, card_authorization_code, issue_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
                     invoice.getReservation().getId(), invoice.getAmount(), type, cashReceived, cardNumber, authCode,
@@ -82,7 +82,7 @@ public class InvoiceDao {
      */
     public void delete(Long id) {
         try {
-            databaseConnection.executeUpdate("DELETE FROM invoices WHERE id = ?", id);
+            database.executeUpdate("DELETE FROM invoices WHERE id = ?", id);
         } catch (SQLException e) {
             LOGGER.error("Brisanje računa {} neuspjelo.", id, e);
             throw new IllegalStateException("Račun se ne briše.", e);

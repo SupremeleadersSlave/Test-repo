@@ -1,4 +1,4 @@
-package hr.tvz.hotel.persistence;
+package hr.tvz.hotel.files;
 
 import hr.tvz.hotel.entities.ChangeRecord;
 import org.slf4j.Logger;
@@ -21,9 +21,9 @@ import java.util.List;
  *
  * @version 1.0
  */
-public class ChangeLogManager {
+public class ChangeLog {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeLogManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeLog.class);
 
     private final Object lock = new Object();
     private final Path changeLogFilePath;
@@ -33,7 +33,7 @@ public class ChangeLogManager {
      *
      * @param changeLogFilePath putanja do binarne datoteke povijesti promjena
      */
-    public ChangeLogManager(Path changeLogFilePath) {
+    public ChangeLog(Path changeLogFilePath) {
         this.changeLogFilePath = changeLogFilePath;
     }
 

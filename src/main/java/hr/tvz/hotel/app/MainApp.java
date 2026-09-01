@@ -1,15 +1,11 @@
 package hr.tvz.hotel.app;
 
-import hr.tvz.hotel.db.DatabaseConnection;
-import hr.tvz.hotel.db.GuestDao;
-import hr.tvz.hotel.db.InvoiceDao;
-import hr.tvz.hotel.db.ReservationDao;
-import hr.tvz.hotel.db.RoomDao;
-import hr.tvz.hotel.db.UserDao;
+import hr.tvz.hotel.db.*;
+import hr.tvz.hotel.db.Database;
 import hr.tvz.hotel.entities.User;
 import hr.tvz.hotel.exceptions.CredentialsFileException;
-import hr.tvz.hotel.persistence.ChangeLogManager;
-import hr.tvz.hotel.persistence.CredentialsFileManager;
+import hr.tvz.hotel.files.ChangeLog;
+import hr.tvz.hotel.files.CredentialsFile;
 import hr.tvz.hotel.service.AuthService;
 import hr.tvz.hotel.service.GuestService;
 import hr.tvz.hotel.service.InvoiceService;
@@ -69,44 +65,44 @@ public class MainApp extends Application {
      * @return izgrađeni kontekst usluga
      */
     private ServiceContext buildServiceContext() {
-        DatabaseConnection databaseConnection = new DatabaseConnection();
+        Database database = new Database();
         try {
-            databaseConnection.connect();
-            databaseConnection.initializeSchema();
+            database.connect();
+            database.initializeSchema();
         } catch (SQLException e) {
             LOGGER.error("Inicijalizacija baze propala.", e);
             throw new IllegalStateException("Baza nedostupna.", e);
         }
 
-        RoomDao roomDao = new RoomDao(databaseConnection);
-        GuestDao guestDao = new GuestDao(databaseConnection);
-        UserDao userDao = new UserDao(databaseConnection);
-        ReservationDao reservationDao = new ReservationDao(databaseConnection, guestDao, roomDao);
-        InvoiceDao invoiceDao = new InvoiceDao(databaseConnection, reservationDao);
+        RoomDao roomDao = new RoomDao(database);
+        GuestDao guestDao = new GuestDao(database);
+        UserDao userDao = new UserDao(database);
+        ReservationDao reservationDao = new ReservationDao(database, guestDao, roomDao);
+        InvoiceDao invoiceDao = new InvoiceDao(database, reservationDao);
 
-        ChangeLogManager changeLogManager = new ChangeLogManager(Path.of("data", "changelog.dat"));
-        CredentialsFileManager credentialsFileManager = new CredentialsFileManager(Path.of("data", "credentials.txt"));
+        ChangeLog changeLog = new ChangeLog(Path.of("data", "changelog.dat"));
+        CredentialsFile credentialsFile = new CredentialsFile(Path.of("data", "credentials.txt"));
 
-        seedUsersIfEmpty(userDao, credentialsFileManager);
+        seedUsersIfEmpty(userDao, credentialsFile);
 
-        RoomService roomService = new RoomService(roomDao, changeLogManager);
-        GuestService guestService = new GuestService(guestDao, changeLogManager);
-        ReservationService reservationService = new ReservationService(reservationDao, changeLogManager);
-        InvoiceService invoiceService = new InvoiceService(invoiceDao, changeLogManager);
+        RoomService roomService = new RoomService(roomDao, changeLog);
+        GuestService guestService = new GuestService(guestDao, changeLog);
+        ReservationService reservationService = new ReservationService(reservationDao, changeLog);
+        InvoiceService invoiceService = new InvoiceService(invoiceDao, changeLog);
 
         reservationService.setInvoiceService(invoiceService);
         guestService.setReservationService(reservationService);
         roomService.setReservationService(reservationService);
 
         return new ServiceContext(
-                databaseConnection,
+                database,
                 roomService,
                 guestService,
                 reservationService,
                 invoiceService,
-                new UserService(userDao, changeLogManager, credentialsFileManager),
-                new AuthService(credentialsFileManager),
-                changeLogManager);
+                new UserService(userDao, changeLog, credentialsFile),
+                new AuthService(credentialsFile),
+                changeLog);
     }
 
     /**
@@ -114,14 +110,14 @@ public class MainApp extends Application {
      * prilikom prvog pokretanja aplikacije na praznoj bazi.
      *
      * @param userDao DAO za pristup korisnicima u bazi podataka
-     * @param credentialsFileManager upravitelj datotekom s podacima za prijavu
+     * @param credentialsFile upravitelj datotekom s podacima za prijavu
      */
-    private void seedUsersIfEmpty(UserDao userDao, CredentialsFileManager credentialsFileManager) {
+    private void seedUsersIfEmpty(UserDao userDao, CredentialsFile credentialsFile) {
         if (!userDao.findAll().isEmpty()) {
             return;
         }
         try {
-            credentialsFileManager.loadCredentials().values().forEach(entry -> {
+            credentialsFile.loadCredentials().values().forEach(entry -> {
                 User user = new User(null, entry.username(), "(uvezeno)", null, null,
                         entry.username(), entry.passwordHash(), entry.role());
                 userDao.insert(user);

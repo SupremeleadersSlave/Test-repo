@@ -2,7 +2,7 @@ package hr.tvz.hotel.service;
 
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.exceptions.CredentialsFileException;
-import hr.tvz.hotel.persistence.CredentialsFileManager;
+import hr.tvz.hotel.files.CredentialsFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,15 +16,15 @@ import java.util.Optional;
 public class AuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
-    private final CredentialsFileManager credentialsFileManager;
+    private final CredentialsFile credentialsFile;
 
     /**
      * Kreira novu instancu servisa za prijavu.
      *
-     * @param credentialsFileManager upravitelj datotekom s podacima za prijavu
+     * @param credentialsFile upravitelj datotekom s podacima za prijavu
      */
-    public AuthService(CredentialsFileManager credentialsFileManager) {
-        this.credentialsFileManager = credentialsFileManager;
+    public AuthService(CredentialsFile credentialsFile) {
+        this.credentialsFile = credentialsFile;
     }
 
     /**
@@ -36,7 +36,7 @@ public class AuthService {
      */
     public Optional<Role> login(String username, String password) {
         try {
-            return credentialsFileManager.authenticate(username, password);
+            return credentialsFile.authenticate(username, password);
         } catch (CredentialsFileException e) {
             LOGGER.error("Prijava neuspjela: greška datoteke.", e);
             return Optional.empty();

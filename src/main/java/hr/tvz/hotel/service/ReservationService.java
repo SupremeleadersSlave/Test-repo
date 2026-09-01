@@ -12,7 +12,7 @@ import hr.tvz.hotel.entities.Room;
 import hr.tvz.hotel.entities.Schedulable;
 import hr.tvz.hotel.exceptions.EntityNotFoundException;
 import hr.tvz.hotel.exceptions.ReservationNotAvailableException;
-import hr.tvz.hotel.persistence.ChangeLogManager;
+import hr.tvz.hotel.files.ChangeLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +36,7 @@ public class ReservationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
 
     private final ReservationDao reservationDao;
-    private final ChangeLogManager changeLogManager;
+    private final ChangeLog changeLog;
     private final EntityCollection<Reservation> reservations = new EntityCollection<>();
     private InvoiceService invoiceService;
 
@@ -45,11 +45,11 @@ public class ReservationService {
      * učitava postojeće rezervacije iz baze.
      *
      * @param reservationDao DAO za pristup rezervacijama u bazi
-     * @param changeLogManager upravitelj poviješću promjena
+     * @param changeLog upravitelj poviješću promjena
      */
-    public ReservationService(ReservationDao reservationDao, ChangeLogManager changeLogManager) {
+    public ReservationService(ReservationDao reservationDao, ChangeLog changeLog) {
         this.reservationDao = reservationDao;
-        this.changeLogManager = changeLogManager;
+        this.changeLog = changeLog;
         refresh();
     }
 
@@ -154,7 +154,7 @@ public class ReservationService {
             throw new ReservationNotAvailableException(
                     "Soba " + room.getRoomNumber() + " nije u ponudi ili razdoblje " + checkIn + " - " + checkOut + " nije valjano.");
         }
-        Schedulable requestedPeriod = new Schedulable() {
+        Schedulable period = new Schedulable() {
             @Override
             public LocalDate getStartDate() {
                 return checkIn;
@@ -167,7 +167,7 @@ public class ReservationService {
         };
         boolean overlapping = reservations.filter(r -> r.getRoom().equals(room) && r.getStatus() != ReservationStatus.CANCELLED)
                 .stream()
-                .anyMatch(r -> r.overlaps(requestedPeriod));
+                .anyMatch(r -> r.overlaps(period));
         if (overlapping) {
             LOGGER.warn("Soba {} nedostupna za {} - {}.", room.getRoomNumber(), checkIn, checkOut);
             throw new ReservationNotAvailableException(
@@ -218,6 +218,6 @@ public class ReservationService {
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {
-        changeLogManager.append(new ChangeRecord("Reservation", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
+        changeLog.append(new ChangeRecord("Reservation", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
     }
 }

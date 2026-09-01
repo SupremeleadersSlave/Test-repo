@@ -18,15 +18,15 @@ import java.util.List;
 public class GuestDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GuestDao.class);
-    private final DatabaseConnection databaseConnection;
+    private final Database database;
 
     /**
      * Kreira DAO za goste.
      *
-     * @param databaseConnection konekcija prema bazi
+     * @param database konekcija prema bazi
      */
-    public GuestDao(DatabaseConnection databaseConnection) {
-        this.databaseConnection = databaseConnection;
+    public GuestDao(Database database) {
+        this.database = database;
     }
 
     /**
@@ -36,7 +36,7 @@ public class GuestDao {
      */
     public List<Guest> findAll() {
         try {
-            return databaseConnection.executeQuery("SELECT * FROM guests ORDER BY last_name", GuestDao::mapRow);
+            return database.executeQuery("SELECT * FROM guests ORDER BY last_name", GuestDao::mapRow);
         } catch (SQLException e) {
             LOGGER.error("Dohvat gostiju neuspio.", e);
             return List.of();
@@ -52,7 +52,7 @@ public class GuestDao {
      */
     public Guest findById(Long id) {
         try {
-            List<Guest> results = databaseConnection.executeQuery("SELECT * FROM guests WHERE id = ?", GuestDao::mapRow, id);
+            List<Guest> results = database.executeQuery("SELECT * FROM guests WHERE id = ?", GuestDao::mapRow, id);
             if (results.isEmpty()) {
                 LOGGER.warn("Gost {} ne postoji.", id);
                 throw new EntityNotFoundException("Gost s identifikatorom " + id + " ne postoji.");
@@ -73,7 +73,7 @@ public class GuestDao {
     public Long insert(Guest guest) {
         try {
             Address address = guest.getAddress();
-            return databaseConnection.executeInsert(
+            return database.executeInsert(
                     "INSERT INTO guests (first_name, last_name, email, phone, document_number, street, city, postal_code, country) "
                             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     guest.getFirstName(), guest.getLastName(), guest.getEmail(), guest.getPhone(), guest.getDocumentNumber(),
@@ -92,7 +92,7 @@ public class GuestDao {
     public void update(Guest guest) {
         try {
             Address address = guest.getAddress();
-            databaseConnection.executeUpdate(
+            database.executeUpdate(
                     "UPDATE guests SET first_name = ?, last_name = ?, email = ?, phone = ?, document_number = ?, "
                             + "street = ?, city = ?, postal_code = ?, country = ? WHERE id = ?",
                     guest.getFirstName(), guest.getLastName(), guest.getEmail(), guest.getPhone(), guest.getDocumentNumber(),
@@ -110,7 +110,7 @@ public class GuestDao {
      */
     public void delete(Long id) {
         try {
-            databaseConnection.executeUpdate("DELETE FROM guests WHERE id = ?", id);
+            database.executeUpdate("DELETE FROM guests WHERE id = ?", id);
         } catch (SQLException e) {
             LOGGER.error("Brisanje gosta {} neuspjelo.", id, e);
             throw new IllegalStateException("Gost se ne briše.", e);

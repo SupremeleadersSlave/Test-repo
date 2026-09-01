@@ -6,8 +6,8 @@ import hr.tvz.hotel.entities.EntityCollection;
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.entities.User;
 import hr.tvz.hotel.exceptions.CredentialsFileException;
-import hr.tvz.hotel.persistence.ChangeLogManager;
-import hr.tvz.hotel.persistence.CredentialsFileManager;
+import hr.tvz.hotel.files.ChangeLog;
+import hr.tvz.hotel.files.CredentialsFile;
 import hr.tvz.hotel.util.PasswordHasher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +28,8 @@ public class UserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     private final UserDao userDao;
-    private final ChangeLogManager changeLogManager;
-    private final CredentialsFileManager credentialsFileManager;
+    private final ChangeLog changeLog;
+    private final CredentialsFile credentialsFile;
     private final EntityCollection<User> users = new EntityCollection<>();
 
     /**
@@ -37,13 +37,13 @@ public class UserService {
      * učitava postojeće korisnike iz baze.
      *
      * @param userDao DAO za pristup korisnicima u bazi
-     * @param changeLogManager upravitelj poviješću promjena
-     * @param credentialsFileManager upravitelj datotekom s podacima za prijavu
+     * @param changeLog upravitelj poviješću promjena
+     * @param credentialsFile upravitelj datotekom s podacima za prijavu
      */
-    public UserService(UserDao userDao, ChangeLogManager changeLogManager, CredentialsFileManager credentialsFileManager) {
+    public UserService(UserDao userDao, ChangeLog changeLog, CredentialsFile credentialsFile) {
         this.userDao = userDao;
-        this.changeLogManager = changeLogManager;
-        this.credentialsFileManager = credentialsFileManager;
+        this.changeLog = changeLog;
+        this.credentialsFile = credentialsFile;
         refresh();
     }
 
@@ -134,18 +134,18 @@ public class UserService {
     }
 
     private void syncCredentialsFile() {
-        List<CredentialsFileManager.CredentialEntry> entries = users.getAll().stream()
+        List<CredentialsFile.CredentialEntry> entries = users.getAll().stream()
                 .filter(u -> u.getUsername() != null && u.getPasswordHash() != null)
-                .map(u -> new CredentialsFileManager.CredentialEntry(u.getUsername(), u.getPasswordHash(), u.getRole()))
+                .map(u -> new CredentialsFile.CredentialEntry(u.getUsername(), u.getPasswordHash(), u.getRole()))
                 .toList();
         try {
-            credentialsFileManager.saveCredentials(entries);
+            credentialsFile.saveCredentials(entries);
         } catch (CredentialsFileException e) {
             LOGGER.error("Sinkronizacija datoteke za prijavu neuspjela.", e);
         }
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {
-        changeLogManager.append(new ChangeRecord("User", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
+        changeLog.append(new ChangeRecord("User", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
     }
 }

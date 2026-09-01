@@ -1,4 +1,4 @@
 /**
  * Klase za rad s tekstualnim i binarnim datotekama.
  */
-package hr.tvz.hotel.persistence;
+package hr.tvz.hotel.files;

@@ -1,7 +1,7 @@
-package hr.tvz.hotel.concurrency;
+package hr.tvz.hotel.threads;
 
 import hr.tvz.hotel.entities.ChangeRecord;
-import hr.tvz.hotel.persistence.ChangeLogManager;
+import hr.tvz.hotel.files.ChangeLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
  *
  * @version 1.0
  */
-public class ChangeLogWatcherTask implements Runnable {
+public class ChangeWatcher implements Runnable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeLogWatcherTask.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChangeWatcher.class);
 
-    private final ChangeLogManager changeLogManager;
+    private final ChangeLog changeLog;
     private final long intervalMillis;
     private volatile boolean running = true;
     private ChangeRecord lastSeenRecord;
@@ -23,11 +23,11 @@ public class ChangeLogWatcherTask implements Runnable {
     /**
      * Stvara zadatak za nadzor povijesti promjena.
      *
-     * @param changeLogManager upravlja promjena
+     * @param changeLog upravlja promjena
      * @param intervalMillis interval provjere (milis)
      */
-    public ChangeLogWatcherTask(ChangeLogManager changeLogManager, long intervalMillis) {
-        this.changeLogManager = changeLogManager;
+    public ChangeWatcher(ChangeLog changeLog, long intervalMillis) {
+        this.changeLog = changeLog;
         this.intervalMillis = intervalMillis;
     }
 
@@ -36,7 +36,7 @@ public class ChangeLogWatcherTask implements Runnable {
         LOGGER.info("Nit pokrenuta.");
         while (running) {
             try {
-                ChangeRecord lastChange = changeLogManager.getLastChange();
+                ChangeRecord lastChange = changeLog.getLastChange();
                 if (lastChange != null && !lastChange.equals(lastSeenRecord)) {
                     lastSeenRecord = lastChange;
                     LOGGER.info("Nova promjena zabilježena: {}", lastChange);

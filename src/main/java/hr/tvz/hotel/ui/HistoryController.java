@@ -2,7 +2,7 @@ package hr.tvz.hotel.ui;
 
 import hr.tvz.hotel.app.ServiceContext;
 import hr.tvz.hotel.entities.ChangeRecord;
-import hr.tvz.hotel.persistence.ChangeLogManager;
+import hr.tvz.hotel.files.ChangeLog;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -18,7 +18,7 @@ import javafx.scene.control.TableView;
  */
 public class HistoryController {
 
-    private final ChangeLogManager changeLogManager;
+    private final ChangeLog changeLog;
 
     @FXML
     private TableView<ChangeRecord> tableView;
@@ -45,7 +45,7 @@ public class HistoryController {
      * @param context kontekst usluga aplikacije
      */
     public HistoryController(ServiceContext context) {
-        this.changeLogManager = context.changeLogManager();
+        this.changeLog = context.changeLog();
     }
 
     @FXML
@@ -65,6 +65,6 @@ public class HistoryController {
      */
     @FXML
     public void reload() {
-        tableView.setItems(FXCollections.observableArrayList(changeLogManager.readAll()));
+        tableView.setItems(FXCollections.observableArrayList(changeLog.readAll()));
     }
 }

@@ -1,8 +1,8 @@
 package hr.tvz.hotel.ui;
 
 import hr.tvz.hotel.app.ServiceContext;
-import hr.tvz.hotel.concurrency.ChangeLogWatcherTask;
-import hr.tvz.hotel.concurrency.DataRefreshTask;
+import hr.tvz.hotel.threads.ChangeWatcher;
+import hr.tvz.hotel.threads.DataRefresher;
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.util.DialogUtils;
 import javafx.fxml.FXML;
@@ -41,8 +41,8 @@ public class MainController {
     private UserController userController;
     private HistoryController historyController;
 
-    private DataRefreshTask dataRefreshTask;
-    private ChangeLogWatcherTask changeLogWatcherTask;
+    private DataRefresher dataRefresher;
+    private ChangeWatcher changeWatcher;
 
     @FXML
     private TabPane tabPane;
@@ -87,10 +87,10 @@ public class MainController {
             LOGGER.error("Učitavanje ekrana entiteta propalo.", e);
         }
 
-        dataRefreshTask = new DataRefreshTask(this::refreshAllTabs, 5000);
-        changeLogWatcherTask = new ChangeLogWatcherTask(context.changeLogManager(), 3000);
-        startDaemonThread(dataRefreshTask, "data-refresh-thread");
-        startDaemonThread(changeLogWatcherTask, "changelog-watcher-thread");
+        dataRefresher = new DataRefresher(this::refreshAllTabs, 5000);
+        changeWatcher = new ChangeWatcher(context.changeLog(), 3000);
+        startDaemonThread(dataRefresher, "data-refresh-thread");
+        startDaemonThread(changeWatcher, "changelog-watcher-thread");
 
         userLabel.setText("Prijavljen: " + username + " (" + currentRole + ")");
         stage.setOnCloseRequest(event -> shutdown());
@@ -152,8 +152,8 @@ public class MainController {
         if (!DialogUtils.confirm("Odjava", "Želite li se odjaviti?")) {
             return;
         }
-        dataRefreshTask.stop();
-        changeLogWatcherTask.stop();
+        dataRefresher.stop();
+        changeWatcher.stop();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
             loader.setController(new LoginController(context, stage));
@@ -172,8 +172,8 @@ public class MainController {
      */
     private void shutdown() {
         LOGGER.info("Zatvaranje - zaustavljanje niti.");
-        dataRefreshTask.stop();
-        changeLogWatcherTask.stop();
-        context.databaseConnection().close();
+        dataRefresher.stop();
+        changeWatcher.stop();
+        context.database().close();
     }
 }

@@ -7,7 +7,7 @@ import hr.tvz.hotel.entities.Invoice;
 import hr.tvz.hotel.entities.Reservation;
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.exceptions.EntityNotFoundException;
-import hr.tvz.hotel.persistence.ChangeLogManager;
+import hr.tvz.hotel.files.ChangeLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ public class InvoiceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceService.class);
 
     private final InvoiceDao invoiceDao;
-    private final ChangeLogManager changeLogManager;
+    private final ChangeLog changeLog;
     private final EntityCollection<Invoice> invoices = new EntityCollection<>();
 
     /**
@@ -35,11 +35,11 @@ public class InvoiceService {
      * postojeće račune iz baze podataka.
      *
      * @param invoiceDao DAO za pristup računima u bazi
-     * @param changeLogManager upravitelj poviješću promjena
+     * @param changeLog upravitelj poviješću promjena
      */
-    public InvoiceService(InvoiceDao invoiceDao, ChangeLogManager changeLogManager) {
+    public InvoiceService(InvoiceDao invoiceDao, ChangeLog changeLog) {
         this.invoiceDao = invoiceDao;
-        this.changeLogManager = changeLogManager;
+        this.changeLog = changeLog;
         refresh();
     }
 
@@ -122,6 +122,6 @@ public class InvoiceService {
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {
-        changeLogManager.append(new ChangeRecord("Invoice", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
+        changeLog.append(new ChangeRecord("Invoice", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
     }
 }

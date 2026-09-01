@@ -128,9 +128,9 @@ public class RoomController {
         if (!DialogUtils.confirm("Potvrda brisanja", "Želite li obrisati odabranu sobu?")) {
             return;
         }
-        int reservationCount = roomService.countReservations(selected);
-        if (reservationCount > 0 && !DialogUtils.confirm("Dodatno upozorenje",
-                "Brisanje ove sobe povući će i brisanje " + reservationCount
+        int count = roomService.countReservations(selected);
+        if (count > 0 && !DialogUtils.confirm("Dodatno upozorenje",
+                "Brisanje ove sobe povući će i brisanje " + count
                         + " povezanih rezervacija i pripadajućih računa. Nastaviti?")) {
             return;
         }
