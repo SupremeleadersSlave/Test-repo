@@ -39,6 +39,7 @@ public class ReservationService {
     private final ReservationDao reservationDao;
     private final ChangeLogManager changeLogManager;
     private final EntityCollection<Reservation> reservations = new EntityCollection<>();
+    private InvoiceService invoiceService;
 
     /**
      * Kreira novu instancu servisa za upravljanje rezervacijama i
@@ -51,6 +52,36 @@ public class ReservationService {
         this.reservationDao = reservationDao;
         this.changeLogManager = changeLogManager;
         refresh();
+    }
+
+    /**
+     * Postavlja uslugu za račune, potrebnu za kaskadno brisanje računa
+     * povezanih s rezervacijom.
+     *
+     * @param invoiceService usluga za upravljanje računima
+     */
+    public void setInvoiceService(InvoiceService invoiceService) {
+        this.invoiceService = invoiceService;
+    }
+
+    /**
+     * Vraća rezervacije povezane sa zadanim gostom.
+     *
+     * @param guest gost čije se rezervacije traže
+     * @return popis rezervacija tog gosta
+     */
+    public List<Reservation> findByGuest(Guest guest) {
+        return reservations.filter(r -> r.getGuest().equals(guest));
+    }
+
+    /**
+     * Vraća rezervacije povezane sa zadanom sobom.
+     *
+     * @param room soba čije se rezervacije traže
+     * @return popis rezervacija te sobe
+     */
+    public List<Reservation> findByRoom(Room room) {
+        return reservations.filter(r -> r.getRoom().equals(room));
     }
 
     /**
@@ -178,6 +209,9 @@ public class ReservationService {
      * @param changedBy uloga korisnika koji izvršava promjenu
      */
     public void deleteReservation(Reservation reservation, Role changedBy) {
+        if (invoiceService != null) {
+            invoiceService.findByReservation(reservation).forEach(invoice -> invoiceService.deleteInvoice(invoice, changedBy));
+        }
         reservationDao.delete(reservation.getId());
         reservations.remove(reservation);
         logChange(reservation.getId(), "sve", reservation.toString(), null, changedBy);

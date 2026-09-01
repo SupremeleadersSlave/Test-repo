@@ -4,6 +4,7 @@ import hr.tvz.hotel.db.InvoiceDao;
 import hr.tvz.hotel.entities.ChangeRecord;
 import hr.tvz.hotel.entities.EntityCollection;
 import hr.tvz.hotel.entities.Invoice;
+import hr.tvz.hotel.entities.Reservation;
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.exceptions.EntityNotFoundException;
 import hr.tvz.hotel.persistence.ChangeLogManager;
@@ -82,6 +83,16 @@ public class InvoiceService {
      */
     public List<Invoice> sortedBy(Comparator<Invoice> comparator) {
         return invoices.sorted(comparator);
+    }
+
+    /**
+     * Vraća račune povezane sa zadanom rezervacijom.
+     *
+     * @param reservation rezervacija čiji se računi traže
+     * @return popis računa te rezervacije
+     */
+    public List<Invoice> findByReservation(Reservation reservation) {
+        return invoices.filter(i -> i.getReservation().equals(reservation));
     }
 
     /**

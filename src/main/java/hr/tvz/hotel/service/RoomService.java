@@ -27,6 +27,7 @@ public class RoomService {
     private final RoomDao roomDao;
     private final ChangeLogManager changeLogManager;
     private final EntityCollection<Room> rooms = new EntityCollection<>();
+    private ReservationService reservationService;
 
     /**
      * Kreira novu instancu servisa za upravljanje sobama i učitava
@@ -47,6 +48,26 @@ public class RoomService {
     public final void refresh() {
         rooms.clear();
         roomDao.findAll().forEach(rooms::add);
+    }
+
+    /**
+     * Postavlja uslugu za rezervacije, potrebnu za kaskadno brisanje
+     * rezervacija povezanih sa sobom.
+     *
+     * @param reservationService usluga za upravljanje rezervacijama
+     */
+    public void setReservationService(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
+
+    /**
+     * Vraća broj rezervacija povezanih sa zadanom sobom.
+     *
+     * @param room soba za koju se broje rezervacije
+     * @return broj povezanih rezervacija
+     */
+    public int countReservations(Room room) {
+        return reservationService == null ? 0 : reservationService.findByRoom(room).size();
     }
 
     /**
@@ -114,6 +135,9 @@ public class RoomService {
      * @param changedBy korisnika koji izvršava promjene
      */
     public void deleteRoom(Room room, Role changedBy) {
+        if (reservationService != null) {
+            reservationService.findByRoom(room).forEach(r -> reservationService.deleteReservation(r, changedBy));
+        }
         roomDao.delete(room.getId());
         rooms.remove(room);
         logChange(room.getId(), "sve", room.toString(), null, changedBy);

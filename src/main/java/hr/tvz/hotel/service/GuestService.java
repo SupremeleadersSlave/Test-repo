@@ -27,6 +27,7 @@ public class GuestService {
     private final GuestDao guestDao;
     private final ChangeLogManager changeLogManager;
     private final EntityCollection<Guest> guests = new EntityCollection<>();
+    private ReservationService reservationService;
 
     /**
      * Kreira novu instancu servisa za upravljanje gostima i učitava
@@ -39,6 +40,26 @@ public class GuestService {
         this.guestDao = guestDao;
         this.changeLogManager = changeLogManager;
         refresh();
+    }
+
+    /**
+     * Postavlja uslugu za rezervacije, potrebnu za kaskadno brisanje
+     * rezervacija povezanih s gostom.
+     *
+     * @param reservationService usluga za upravljanje rezervacijama
+     */
+    public void setReservationService(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
+
+    /**
+     * Vraća broj rezervacija povezanih sa zadanim gostom.
+     *
+     * @param guest gost za koji se broje rezervacije
+     * @return broj povezanih rezervacija
+     */
+    public int countReservations(Guest guest) {
+        return reservationService == null ? 0 : reservationService.findByGuest(guest).size();
     }
 
     /**
@@ -114,6 +135,9 @@ public class GuestService {
      * @param changedBy uloga korisnika koji izvršava promjenu
      */
     public void deleteGuest(Guest guest, Role changedBy) {
+        if (reservationService != null) {
+            reservationService.findByGuest(guest).forEach(r -> reservationService.deleteReservation(r, changedBy));
+        }
         guestDao.delete(guest.getId());
         guests.remove(guest);
         logChange(guest.getId(), "sve", guest.toString(), null, changedBy);

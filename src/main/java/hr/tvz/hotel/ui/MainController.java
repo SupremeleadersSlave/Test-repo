@@ -8,6 +8,9 @@ import hr.tvz.hotel.util.DialogUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
@@ -44,6 +47,10 @@ public class MainController {
 
     @FXML
     private TabPane tabPane;
+    @FXML
+    private Label userLabel;
+    @FXML
+    private Button logoutButton;
 
     /**
      * Kreira novi kontroler glavnog ekrana.
@@ -86,6 +93,7 @@ public class MainController {
         startDaemonThread(dataRefreshTask, "data-refresh-thread");
         startDaemonThread(changeLogWatcherTask, "changelog-watcher-thread");
 
+        userLabel.setText("Prijavljen: " + username + " (" + currentRole + ")");
         stage.setOnCloseRequest(event -> shutdown());
         LOGGER.info("Prijavljen korisnik {}, rola {}.", username, currentRole);
     }
@@ -134,6 +142,29 @@ public class MainController {
             userController.reload();
         }
         historyController.reload();
+    }
+
+    /**
+     * Odjavljuje korisnika: zaustavlja pozadinske niti i vraća ekran za
+     * prijavu, bez zatvaranja aplikacije i veze s bazom.
+     */
+    @FXML
+    private void handleLogout() {
+        if (!DialogUtils.confirm("Odjava", "Želite li se odjaviti?")) {
+            return;
+        }
+        dataRefreshTask.stop();
+        changeLogWatcherTask.stop();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+            loader.setController(new LoginController(context, stage));
+            Parent root = loader.load();
+            stage.setTitle("Sustav za rezervaciju hotela - Prijava");
+            stage.setScene(new Scene(root, 400, 260));
+        } catch (IOException e) {
+            LOGGER.error("Vraćanje na ekran za prijavu propalo.", e);
+            DialogUtils.showError("Greška", "Ekran za prijavu se ne može učitati.");
+        }
     }
 
     /**

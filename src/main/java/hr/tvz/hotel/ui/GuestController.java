@@ -131,6 +131,12 @@ public class GuestController {
         if (!DialogUtils.confirm("Potvrda brisanja", "Želite li obrisati odabranog gosta?")) {
             return;
         }
+        int reservationCount = guestService.countReservations(selected);
+        if (reservationCount > 0 && !DialogUtils.confirm("Dodatno upozorenje",
+                "Brisanje ovog gosta povući će i brisanje " + reservationCount
+                        + " povezanih rezervacija i pripadajućih računa. Nastaviti?")) {
+            return;
+        }
         guestService.deleteGuest(selected, currentRole);
         reload();
     }

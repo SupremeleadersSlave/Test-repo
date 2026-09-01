@@ -53,6 +53,7 @@ public class ReservationController {
     private final ReservationService reservationService;
     private final GuestService guestService;
     private final RoomService roomService;
+    private final hr.tvz.hotel.service.InvoiceService invoiceService;
     private final Role currentRole;
 
     @FXML
@@ -90,6 +91,7 @@ public class ReservationController {
         this.reservationService = context.reservationService();
         this.guestService = context.guestService();
         this.roomService = context.roomService();
+        this.invoiceService = context.invoiceService();
         this.currentRole = currentRole;
     }
 
@@ -165,6 +167,12 @@ public class ReservationController {
             return;
         }
         if (!DialogUtils.confirm("Potvrda brisanja", "Želite li obrisati odabranu rezervaciju?")) {
+            return;
+        }
+        int invoiceCount = invoiceService.findByReservation(selected).size();
+        if (invoiceCount > 0 && !DialogUtils.confirm("Dodatno upozorenje",
+                "Brisanje ove rezervacije povući će i brisanje " + invoiceCount
+                        + " povezanih računa. Nastaviti?")) {
             return;
         }
         reservationService.deleteReservation(selected, currentRole);

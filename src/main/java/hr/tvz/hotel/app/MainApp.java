@@ -90,12 +90,21 @@ public class MainApp extends Application {
 
         seedUsersIfEmpty(userDao, credentialsFileManager);
 
+        RoomService roomService = new RoomService(roomDao, changeLogManager);
+        GuestService guestService = new GuestService(guestDao, changeLogManager);
+        ReservationService reservationService = new ReservationService(reservationDao, changeLogManager);
+        InvoiceService invoiceService = new InvoiceService(invoiceDao, changeLogManager);
+
+        reservationService.setInvoiceService(invoiceService);
+        guestService.setReservationService(reservationService);
+        roomService.setReservationService(reservationService);
+
         return new ServiceContext(
                 databaseConnection,
-                new RoomService(roomDao, changeLogManager),
-                new GuestService(guestDao, changeLogManager),
-                new ReservationService(reservationDao, changeLogManager),
-                new InvoiceService(invoiceDao, changeLogManager),
+                roomService,
+                guestService,
+                reservationService,
+                invoiceService,
                 new UserService(userDao, changeLogManager, credentialsFileManager),
                 new AuthService(credentialsFileManager),
                 changeLogManager);
