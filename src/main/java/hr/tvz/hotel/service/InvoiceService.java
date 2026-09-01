@@ -11,10 +11,14 @@ import hr.tvz.hotel.files.ChangeLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Implementira poslovnu logiku upravljanja računima izdanima za
@@ -92,6 +96,20 @@ public class InvoiceService {
      */
     public List<Invoice> findByReservation(Reservation reservation) {
         return invoices.filter(i -> i.getReservation().equals(reservation));
+    }
+
+    /**
+     * Zbraja iznose izdanih računa za zadanu godinu po mjesecima.
+     *
+     * @param year godina za koju se računa zarada
+     * @return mapa mjeseca na ukupan iznos računa tog mjeseca
+     */
+    public Map<Month, BigDecimal> earningsByMonth(int year) {
+        return invoices.getAll().stream()
+                .filter(i -> i.getIssueDate().getYear() == year)
+                .collect(Collectors.groupingBy(
+                        i -> i.getIssueDate().getMonth(),
+                        Collectors.reducing(BigDecimal.ZERO, Invoice::getAmount, BigDecimal::add)));
     }
 
     /**

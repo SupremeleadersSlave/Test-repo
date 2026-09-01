@@ -139,6 +139,15 @@ public class InvoiceController {
         ComboBox<Reservation> reservationBox = new ComboBox<>(FXCollections.observableArrayList(reservationService.findAll()));
         setDisplay(reservationBox, r -> r.getGuest().getFullName() + " - " + r.getRoom().getRoomNumber());
         TextField amountField = new TextField();
+        Button calcButton = new Button("Izračunaj");
+        calcButton.setOnAction(e -> {
+            Reservation selected = reservationBox.getValue();
+            if (selected == null) {
+                DialogUtils.showError("Neispravan unos", "Prvo odaberite rezervaciju.");
+                return;
+            }
+            amountField.setText(selected.getTotalPrice().toString());
+        });
         ChoiceBox<String> typeBox = new ChoiceBox<>(FXCollections.observableArrayList("Gotovina", "Kartica"));
         typeBox.setValue("Gotovina");
         TextField cashField = new TextField();
@@ -149,7 +158,7 @@ public class InvoiceController {
         grid.setHgap(10);
         grid.setVgap(10);
         grid.addRow(0, new Label("Rezervacija:"), reservationBox);
-        grid.addRow(1, new Label("Iznos:"), amountField);
+        grid.addRow(1, new Label("Iznos:"), amountField, calcButton);
         grid.addRow(2, new Label("Način plaćanja:"), typeBox);
         grid.addRow(3, new Label("Primljena gotovina:"), cashField);
         grid.addRow(4, new Label("Broj kartice (maskiran):"), cardNumberField);

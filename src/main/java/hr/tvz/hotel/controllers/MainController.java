@@ -39,6 +39,7 @@ public class MainController {
     private ReservationController reservationController;
     private InvoiceController invoiceController;
     private UserController userController;
+    private EarningsController earningsController;
     private HistoryController historyController;
 
     private DataRefresher dataRefresher;
@@ -80,6 +81,8 @@ public class MainController {
             if (currentRole == Role.ADMIN) {
                 userController = new UserController(context, currentRole);
                 addTab("Korisnici", "/fxml/users.fxml", userController);
+                earningsController = new EarningsController(context);
+                addTab("Zarada", "/fxml/earnings.fxml", earningsController);
             }
             historyController = new HistoryController(context);
             addTab("Povijest promjena", "/fxml/history.fxml", historyController);
@@ -139,6 +142,7 @@ public class MainController {
         if (userController != null) {
             context.userService().refresh();
             userController.reload();
+            earningsController.reload();
         }
         historyController.reload();
     }
