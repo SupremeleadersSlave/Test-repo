@@ -25,7 +25,7 @@ public interface Schedulable {
      * Provjerava preklapa li se razdoblje s drugim {@code Schedulable} entitetom.
      *
      * @param other entitet za usporedbu
-     * @return {@code true}: razdoblja se preklapaju, inače {@code false}
+     * @return {@code true} ako se razdoblja preklapaju
      */
     default boolean overlaps(Schedulable other) {
         if (other == null) {

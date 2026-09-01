@@ -42,7 +42,7 @@ public class CredentialsFileManager {
      * Učitava sve podatke za prijavu iz tekstualne datoteke.
      *
      * @return mapa korisničkih imena na zapise o podacima za prijavu
-     * @throws CredentialsFileException: datoteka ne postoji ili sadrži neispravan format
+     * @throws CredentialsFileException ako datoteka ne postoji ili sadrži neispravan format
      */
     public Map<String, CredentialEntry> loadCredentials() throws CredentialsFileException {
         if (!Files.exists(credentialsFilePath)) {
@@ -68,7 +68,7 @@ public class CredentialsFileManager {
     /**
      * Rastavlja redak tekstualne datoteke u {@link CredentialEntry}.
      *
-     * @throws CredentialsFileException: redak nije u očekivanom formatu ili sadrži nepoznatu rolu
+     * @throws CredentialsFileException ako redak nije u očekivanom formatu ili sadrži nepoznatu rolu
      */
     private CredentialEntry parseLine(String line) throws CredentialsFileException {
         String[] parts = line.split(SEPARATOR);
@@ -83,12 +83,12 @@ public class CredentialsFileManager {
     }
 
     /**
-     * Pokušava autenticirati korisnika prema korisničkom imenu i lozinki.
+     * Pokušava autentificirati korisnika prema korisničkom imenu i lozinci.
      *
-     * @param username      korisničko ime
+     * @param username korisničko ime
      * @param plainPassword lozinka u čitljivom obliku
-     * @return rola prijavljenog korisnika, ili prazan {@link Optional} ako prijava ne uspije
-     * @throws CredentialsFileException: datoteka za prijavu se ne čita
+     * @return rola prijavljenog korisnika ili prazan {@link Optional} ako prijava ne uspije
+     * @throws CredentialsFileException ako se datoteka za prijavu ne može pročitati
      */
     public Optional<Role> authenticate(String username, String plainPassword) throws CredentialsFileException {
         CredentialEntry entry = loadCredentials().get(username);
@@ -107,9 +107,9 @@ public class CredentialsFileManager {
     /**
      * Jedan redak podataka za prijavu, učitan iz tekstualne datoteke.
      *
-     * @param username     korisničko ime
+     * @param username korisničko ime
      * @param passwordHash hashirana lozinka
-     * @param role         rola korisnika
+     * @param role uloga korisnika
      */
     public record CredentialEntry(String username, String passwordHash, Role role) {
     }

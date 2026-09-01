@@ -23,9 +23,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Kontroler JavaFX ekrana za upravljanje gostima, s tablicom TableView
- * za pretragu, dodavanje, uređivanje i brisanje gostiju. Uređivanje i
- * brisanje zahtijevaju potvrdu korisnika putem dijaloškog okvira.
+ * Kontroler JavaFX ekrana za upravljanje gostima, uključujući
+ * pretragu, dodavanje, uređivanje i brisanje gostiju.
+ * <p>
+ * Uređivanje i brisanje zahtijevaju potvrdu korisnika.
  */
 public class GuestController {
 
@@ -58,8 +59,8 @@ public class GuestController {
     /**
      * Kreira novi kontroler ekrana za goste.
      *
-     * @param context     kontekst usluga aplikacije
-     * @param currentRole rola prijavljenog korisnika, bilježena uz svaku promjenu
+     * @param context kontekst usluga aplikacije
+     * @param currentRole uloga prijavljenog korisnika, bilježena uz svaku promjenu
      */
     public GuestController(ServiceContext context, Role currentRole) {
         this.guestService = context.guestService();
@@ -135,8 +136,8 @@ public class GuestController {
     /**
      * Prikazuje dijalog za unos ili uređivanje podataka o gostu.
      *
-     * @param existing gost za uređivanje, ili {@code null} za novog gosta
-     * @return izgrađeni gost kod potvrde unosa, inače prazan {@link Optional}
+     * @param existing gost za uređivanje ili {@code null} za novog gosta
+     * @return izgrađeni gost ako je unos potvrđen, inače prazan {@link Optional}
      */
     private Optional<Guest> showGuestDialog(Guest existing) {
         Dialog<Guest> dialog = new Dialog<>();

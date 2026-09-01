@@ -37,10 +37,11 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Kontroler JavaFX ekrana za upravljanje rezervacijama, s tablicom
- * TableView za pretragu, kreiranje, promjenu statusa i brisanje
- * rezervacija. Provjerava raspoloživost sobe prilikom kreiranja,
- * zahtijeva potvrdu korisnika za promjenu statusa i brisanje.
+ * Kontroler JavaFX ekrana za upravljanje rezervacijama, uključujući
+ * pretragu, kreiranje, promjenu statusa i brisanje rezervacija.
+ * <p>
+ * Prilikom kreiranja provjerava raspoloživost sobe, a promjena statusa
+ * i brisanje zahtijevaju potvrdu korisnika.
  */
 public class ReservationController {
 
@@ -77,8 +78,8 @@ public class ReservationController {
     /**
      * Kreira novi kontroler ekrana za rezervacije.
      *
-     * @param context     kontekst usluga aplikacije
-     * @param currentRole rola prijavljenog korisnika, bilježena uz svaku promjenu
+     * @param context kontekst usluga aplikacije
+     * @param currentRole uloga prijavljenog korisnika, bilježena uz svaku promjenu
      */
     public ReservationController(ServiceContext context, Role currentRole) {
         this.reservationService = context.reservationService();
@@ -101,7 +102,7 @@ public class ReservationController {
     }
 
     /**
-     * Ponovno učitava podatke o rezervacijama iz usluge u tablicu.
+     * Ponovno učitava podatke o rezervacijama iz servisa u tablicu.
      */
     public void reload() {
         refreshTable(reservationService.findAll());
@@ -169,7 +170,8 @@ public class ReservationController {
     /**
      * Prikazuje dijalog za unos podataka o novoj rezervaciji.
      *
-     * @return uneseni podaci kod potvrde unosa i odabira gosta i sobe, inače prazan {@link Optional}
+     * @return uneseni podaci ako je unos potvrđen i odabrani su gost i soba,
+     *         inače prazan {@link Optional}
      */
     private Optional<NewReservationRequest> showReservationDialog() {
         Dialog<NewReservationRequest> dialog = new Dialog<>();
@@ -204,9 +206,9 @@ public class ReservationController {
     /**
      * Postavlja prikaz stavki padajućeg izbornika prema zadanoj funkciji.
      *
-     * @param comboBox        padajući izbornik za postavljanje prikaza
-     * @param displayFunction funkcija, pretvara stavku u tekstualni prikaz
-     * @param <T>             tip stavki padajućeg izbornika
+     * @param comboBox padajući izbornik za postavljanje prikaza
+     * @param displayFunction funkcija koja pretvara stavku u tekstualni prikaz
+     * @param <T> tip stavki padajućeg izbornika
      */
     private <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> displayFunction) {
         comboBox.setConverter(new StringConverter<>() {

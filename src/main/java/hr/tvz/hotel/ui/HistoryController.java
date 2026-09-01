@@ -11,11 +11,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 /**
- * Prikazuje potpunu povijest promjena podataka, učitanu iz
- * serijalizirane binarne datoteke.
+ * Prikazuje potpunu povijest promjena podataka.
  * <p>
- * Prikazani podaci: entitet, izmijenjeno polje, stara i nova
- * vrijednost, rola korisnika, izvršitelj promjene, vrijeme promjene.
+ * Prikazani podaci uključuju entitet, izmijenjeno polje, staru i novu
+ * vrijednost, ulogu korisnika i vrijeme promjene.
  */
 public class HistoryController {
 

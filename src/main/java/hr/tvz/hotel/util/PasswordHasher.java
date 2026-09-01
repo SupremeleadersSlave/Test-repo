@@ -7,8 +7,8 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Pomoćna klasa za hashiranje lozinki korištenjem SHA-256 algoritma.
  * <p>
- * Lozinke se nikada ne pohranjuju niti uspoređuju u čitljivom
- * obliku, već isključivo kao heksadecimalni prikaz njihovog hasha.
+ * Lozinke se ne pohranjuju niti uspoređuju u čitljivom obliku, već
+ * isključivo kao heksadecimalni prikaz njihovog hasha.
  */
 public final class PasswordHasher {
 
@@ -41,8 +41,8 @@ public final class PasswordHasher {
      * pohranjenom hashu.
      *
      * @param plainPassword lozinka u čitljivom obliku
-     * @param expectedHash  očekivani heksadecimalni hash
-     * @return {@code true}, hash lozinke se podudara s očekivanim hashom
+     * @param expectedHash očekivani heksadecimalni hash
+     * @return {@code true} ako se hash lozinke podudara s očekivanim hashom
      */
     public static boolean matches(String plainPassword, String expectedHash) {
         return hash(plainPassword).equalsIgnoreCase(expectedHash);

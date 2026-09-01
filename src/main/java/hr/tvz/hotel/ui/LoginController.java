@@ -21,9 +21,8 @@ import java.util.Optional;
 /**
  * Kontroler JavaFX ekrana za prijavu korisnika u aplikaciju.
  * <p>
- * Podržava prijavu korisnika s rolama: {@link Role#ADMIN} i
- * {@link Role#RECEPTIONIST}. Provjerava podatke putem usluge za
- * prijavu iz {@link ServiceContext}.
+ * Podržava prijavu korisnika s ulogama {@link Role#ADMIN} i
+ * {@link Role#RECEPTIONIST}.
  */
 public class LoginController {
 
@@ -45,7 +44,7 @@ public class LoginController {
      * Kreira novi kontroler ekrana za prijavu.
      *
      * @param context kontekst usluga aplikacije
-     * @param stage   glavni prozor aplikacije
+     * @param stage glavni prozor aplikacije
      */
     public LoginController(ServiceContext context, Stage stage) {
         this.context = context;
@@ -72,9 +71,9 @@ public class LoginController {
     /**
      * Učitava i prikazuje glavni ekran aplikacije za uspješno prijavljenog korisnika.
      *
-     * @param role     rola prijavljenog korisnika
+     * @param role uloga prijavljenog korisnika
      * @param username korisničko ime prijavljenog korisnika
-     * @throws IOException: glavni ekran se ne učitava
+     * @throws IOException ako se glavni ekran ne može učitati
      */
     private void showMainScreen(Role role, String username) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));

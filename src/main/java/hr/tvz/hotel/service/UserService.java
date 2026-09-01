@@ -28,9 +28,9 @@ public class UserService {
 
     /**
      * Kreira novu instancu servisa za upravljanje korisnicima sustava i
-     * učitava postojeće korisnike iz baze podataka.
+     * učitava postojeće korisnike iz baze.
      *
-     * @param userDao          DAO za pristup korisnicima u bazi podataka
+     * @param userDao          DAO za pristup korisnicima u bazi
      * @param changeLogManager upravitelj poviješću promjena
      */
     public UserService(UserDao userDao, ChangeLogManager changeLogManager) {
@@ -40,7 +40,7 @@ public class UserService {
     }
 
     /**
-     * Ponovno učitava korisnike sustava iz baze podataka u memorijsku kolekciju.
+     * Ponovno učitava korisnike sustava iz baze podataka u memoriju.
      */
     public final void refresh() {
         users.clear();
@@ -57,9 +57,9 @@ public class UserService {
     }
 
     /**
-     * Pretražuje korisnike sustava prema zadanom uvjetu.
+     * Pretražuje korisnike sustava prema uvjetu.
      *
-     * @param predicate uvjet pretrage, lambda izraz
+     * @param predicate uvjet pretrage
      * @return popis korisnika koji zadovoljavaju uvjet
      */
     public List<User> search(Predicate<User> predicate) {
@@ -67,9 +67,9 @@ public class UserService {
     }
 
     /**
-     * Vraća korisnike sustava sortirane prema zadanom komparatoru.
+     * Vraća korisnike sustava sortirane prema komparatoru.
      *
-     * @param comparator redoslijed sortiranja, lambda izraz
+     * @param comparator redoslijed sortiranja
      * @return sortirani popis korisnika
      */
     public List<User> sortedBy(Comparator<User> comparator) {
@@ -78,11 +78,11 @@ public class UserService {
 
     /**
      * Dodaje novog korisnika sustava, hashira lozinku, bilježi
-     * promjenu u povijest promjena.
+     * promjenu u log.
      *
      * @param user          novi korisnik
      * @param plainPassword lozinka u čitljivom obliku za hashiranje
-     * @param changedBy     rola korisnika, izvršitelj promjene
+     * @param changedBy     korisnika koji izvršava promjene
      */
     public void addUser(User user, String plainPassword, Role changedBy) {
         user.setPasswordHash(PasswordHasher.hash(plainPassword));
@@ -95,11 +95,11 @@ public class UserService {
 
     /**
      * Ažurira postojećeg korisnika sustava, bilježi promjenu u
-     * povijest promjena.
+     * log.
      *
      * @param oldUser   korisnik prije izmjene
      * @param newUser   korisnik nakon izmjene
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy korisnika koji izvršava promjene
      */
     public void updateUser(User oldUser, User newUser, Role changedBy) {
         userDao.update(newUser);
@@ -110,10 +110,10 @@ public class UserService {
     }
 
     /**
-     * Briše korisnika sustava, bilježi promjenu u povijest promjena.
+     * Briše korisnika sustava, bilježi promjenu u log.
      *
      * @param user      korisnik za brisanje
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy korisnika koji izvršava promjene
      */
     public void deleteUser(User user, Role changedBy) {
         userDao.delete(user.getId());

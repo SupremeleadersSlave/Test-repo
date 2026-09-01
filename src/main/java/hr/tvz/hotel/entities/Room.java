@@ -143,16 +143,16 @@ public class Room implements Reservable {
     /**
      * Provjerava je li soba trenutno u ponudi.
      *
-     * @return {@code true}: soba je aktivna
+     * @return {@code true} ako je soba aktivna
      */
     public boolean isActive() {
         return active;
     }
 
     /**
-     * Postavlja je li soba trenutno u ponudi.
+     * Postavlja status sobe.
      *
-     * @param active nova vrijednost aktivnosti sobe
+     * @param active nova vrijednost statusa sobe
      */
     public void setActive(boolean active) {
         this.active = active;

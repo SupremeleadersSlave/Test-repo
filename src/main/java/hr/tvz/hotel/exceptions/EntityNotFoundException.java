@@ -1,12 +1,7 @@
 package hr.tvz.hotel.exceptions;
 
 /**
- * Neoznačena iznimka: baca se kada traženi entitet, npr. soba, gost,
- * rezervacija ili korisnik, nije pronađen prema zadanom identifikatoru.
- * <p>
- * Riječ je o pogrešci u toku programa: pokušaj rada s nepostojećim
- * identifikatorom. Ne predstavlja situaciju izravno uzrokovanu
- * korisničkim unosom podataka.
+ * Iznimka koja se baca kada traženi entitet nije pronađen.
  */
 public class EntityNotFoundException extends RuntimeException {
 
@@ -23,7 +18,7 @@ public class EntityNotFoundException extends RuntimeException {
      * Kreira iznimku s opisnom porukom i uzrokom.
      *
      * @param message opis nepronađenog entiteta
-     * @param cause   izvorni uzrok iznimke
+     * @param cause uzrok iznimke
      */
     public EntityNotFoundException(String message, Throwable cause) {
         super(message, cause);

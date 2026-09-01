@@ -16,11 +16,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Serijalizira i deserijalizira povijest promjena entiteta
- * ({@link ChangeRecord}) u binarnu datoteku.
- * <p>
- * Metode su sinkronizirane nad zajedničkom bravom: siguran istovremeni
- * pristup iz više niti, npr. jedna nit sprema dok druga čita.
+ * Sprema i učitava povijest promjena entiteta ({@link ChangeRecord})
+ * u binarnu datoteku.
  */
 public class ChangeLogManager {
 
@@ -66,7 +63,7 @@ public class ChangeLogManager {
     /**
      * Vraća posljednju zabilježenu promjenu, ako postoji.
      *
-     * @return posljednja promjena, ili {@code null} ako povijest nije zabilježena
+     * @return posljednja promjena ili {@code null} ako povijest ne postoji
      */
     public ChangeRecord getLastChange() {
         synchronized (lock) {
@@ -76,10 +73,9 @@ public class ChangeLogManager {
     }
 
     /**
-     * Čita povijest promjena iz binarne datoteke, bez sinkronizacije:
-     * pozivaju je samo metode s već zauzetom bravom.
+     * Čita povijest promjena iz binarne datoteke.
      *
-     * @return popis svih zabilježenih promjena, ili prazan popis ako datoteka ne postoji
+     * @return popis svih zabilježenih promjena ili prazan popis ako datoteka ne postoji
      */
     @SuppressWarnings("unchecked")
     private List<ChangeRecord> readAllInternal() {
@@ -96,8 +92,7 @@ public class ChangeLogManager {
     }
 
     /**
-     * Sprema povijest promjena u binarnu datoteku, bez sinkronizacije:
-     * pozivaju je samo metode s već zauzetom bravom.
+     * Sprema povijest promjena u binarnu datoteku.
      */
     private void writeAll(List<ChangeRecord> history) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(changeLogFilePath.toFile()))) {

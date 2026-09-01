@@ -25,9 +25,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Kontroler JavaFX ekrana za upravljanje sobama, s tablicom TableView
- * za pretragu, dodavanje, uređivanje i brisanje soba. Uređivanje i
- * brisanje zahtijevaju potvrdu korisnika putem dijaloškog okvira.
+ * Kontroler JavaFX ekrana za upravljanje sobama, uključujući
+ * pretragu, dodavanje, uređivanje i brisanje soba.
+ * <p>
+ * Uređivanje i brisanje zahtijevaju potvrdu korisnika.
  */
 public class RoomController {
 
@@ -58,8 +59,8 @@ public class RoomController {
     /**
      * Kreira novi kontroler ekrana za sobe.
      *
-     * @param context     kontekst usluga aplikacije
-     * @param currentRole rola prijavljenog korisnika, bilježena uz svaku promjenu
+     * @param context kontekst usluga aplikacije
+     * @param currentRole uloga prijavljenog korisnika, bilježena uz svaku promjenu
      */
     public RoomController(ServiceContext context, Role currentRole) {
         this.roomService = context.roomService();
@@ -77,7 +78,7 @@ public class RoomController {
     }
 
     /**
-     * Ponovno učitava podatke o sobama iz usluge u tablicu.
+     * Ponovno učitava podatke o sobama iz servisa u tablicu.
      */
     public void reload() {
         refreshTable(roomService.findAll());
@@ -133,8 +134,8 @@ public class RoomController {
     /**
      * Prikazuje dijalog za unos ili uređivanje podataka o sobi.
      *
-     * @param existing soba za uređivanje, ili {@code null} za novu sobu
-     * @return izgrađena soba kod potvrde unosa, inače prazan {@link Optional}
+     * @param existing soba za uređivanje ili {@code null} za novu sobu
+     * @return izgrađena soba ako je unos potvrđen, inače prazan {@link Optional}
      */
     private Optional<Room> showRoomDialog(Room existing) {
         Dialog<Room> dialog = new Dialog<>();

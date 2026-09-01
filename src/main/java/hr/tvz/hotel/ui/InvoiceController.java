@@ -33,9 +33,10 @@ import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Kontroler JavaFX ekrana za upravljanje računima, s tablicom TableView
- * za pretragu, izdavanje i brisanje računa. Brisanje zahtijeva potvrdu
- * korisnika putem dijaloškog okvira.
+ * Kontroler JavaFX ekrana za upravljanje računima, uključujući
+ * pretragu, izdavanje i brisanje računa.
+ * <p>
+ * Brisanje zahtijeva potvrdu korisnika.
  */
 public class InvoiceController {
 
@@ -63,8 +64,8 @@ public class InvoiceController {
     /**
      * Kreira novi kontroler ekrana za račune.
      *
-     * @param context     kontekst usluga aplikacije
-     * @param currentRole rola prijavljenog korisnika, bilježena uz svaku promjenu
+     * @param context kontekst usluga aplikacije
+     * @param currentRole uloga prijavljenog korisnika, bilježena uz svaku promjenu
      */
     public InvoiceController(ServiceContext context, Role currentRole) {
         this.invoiceService = context.invoiceService();
@@ -124,9 +125,10 @@ public class InvoiceController {
 
     /**
      * Prikazuje dijalog za unos podataka o novom računu, uključujući
-     * odabir rezervacije i unos podataka o odabranom načinu plaćanja.
+     * odabir rezervacije i načina plaćanja.
      *
-     * @return izgrađeni račun kod potvrde unosa i odabira rezervacije, inače prazan {@link Optional}
+     * @return izgrađeni račun ako je unos potvrđen i rezervacija odabrana,
+     * inače prazan {@link Optional}
      */
     private Optional<Invoice> showInvoiceDialog() {
         Dialog<Invoice> dialog = new Dialog<>();
@@ -179,9 +181,9 @@ public class InvoiceController {
     /**
      * Postavlja prikaz stavki padajućeg izbornika prema zadanoj funkciji.
      *
-     * @param comboBox        padajući izbornik za postavljanje prikaza
-     * @param displayFunction funkcija, pretvara stavku u tekstualni prikaz
-     * @param <T>             tip stavki padajućeg izbornika
+     * @param comboBox padajući izbornik za postavljanje prikaza
+     * @param displayFunction funkcija koja pretvara stavku u tekstualni prikaz
+     * @param <T> tip stavki padajućeg izbornika
      */
     private <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> displayFunction) {
         comboBox.setConverter(new StringConverter<>() {

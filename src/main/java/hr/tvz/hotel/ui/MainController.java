@@ -16,12 +16,11 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * Kontroler glavnog ekrana aplikacije, s navigacijom između pojedinih
+ * Kontroler glavnog ekrana aplikacije s navigacijom između pojedinih
  * ekrana entiteta putem kartica.
  * <p>
- * Pokreće pozadinske niti za periodičko osvježavanje prikazanih
- * podataka i nadzor povijesti promjena, zaustavlja ih prilikom
- * zatvaranja aplikacije.
+ * Pokreće pozadinske niti za periodičko osvježavanje podataka i nadzor
+ * povijesti promjena te ih zaustavlja prilikom zatvaranja aplikacije.
  */
 public class MainController {
 
@@ -48,10 +47,10 @@ public class MainController {
     /**
      * Kreira novi kontroler glavnog ekrana.
      *
-     * @param context     kontekst usluga aplikacije
-     * @param currentRole rola prijavljenog korisnika
-     * @param username    korisničko ime prijavljenog korisnika
-     * @param stage       glavni prozor aplikacije
+     * @param context kontekst usluga aplikacije
+     * @param currentRole uloga prijavljenog korisnika
+     * @param username korisničko ime prijavljenog korisnika
+     * @param stage glavni prozor aplikacije
      */
     public MainController(ServiceContext context, Role currentRole, String username, Stage stage) {
         this.context = context;
@@ -100,10 +99,10 @@ public class MainController {
      * Učitava ekran entiteta iz zadane FXML datoteke i dodaje ga kao novu
      * karticu u glavni ekran aplikacije.
      *
-     * @param title      naziv kartice
-     * @param fxmlPath   putanja do FXML datoteke unutar resursa aplikacije
+     * @param title naziv kartice
+     * @param fxmlPath putanja do FXML datoteke unutar resursa aplikacije
      * @param controller kontroler koji se povezuje s učitanim ekranom
-     * @throws IOException: ekran se ne učitava
+     * @throws IOException ako se ekran ne može učitati
      */
     private void addTab(String title, String fxmlPath, Object controller) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -114,7 +113,7 @@ public class MainController {
 
     /**
      * Ponovno učitava podatke svih usluga i osvježava prikaz u svim
-     * karticama glavnog ekrana; poziva ga pozadinski zadatak za osvježavanje.
+     * karticama glavnog ekrana.
      */
     private void refreshAllTabs() {
         context.roomService().refresh();
@@ -133,7 +132,7 @@ public class MainController {
     }
 
     /**
-     * Zaustavlja pozadinske niti i zatvara vezu s bazom podataka
+     * Zaustavlja pozadinske niti i zatvara vezu s bazom
      * prilikom zatvaranja aplikacije.
      */
     private void shutdown() {

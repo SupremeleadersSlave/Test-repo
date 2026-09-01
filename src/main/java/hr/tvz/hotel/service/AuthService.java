@@ -19,18 +19,18 @@ public class AuthService {
     /**
      * Kreira novu instancu servisa za prijavu.
      *
-     * @param credentialsFileManager upravitelj datotekom s podacima za prijavu.
+     * @param credentialsFileManager upravitelj datotekom s podacima za prijavu
      */
     public AuthService(CredentialsFileManager credentialsFileManager) {
         this.credentialsFileManager = credentialsFileManager;
     }
 
     /**
-     * Prijavljuje korisnika sa korisničkim imenom i lozinkom.
+     * Prijavljuje korisnika s korisničkim imenom i lozinkom.
      *
      * @param username korisničko ime
      * @param password lozinka
-     * @return rola prijavljenog korisnika, ili prazan {@link Optional} kod propale prijave
+     * @return uloga prijavljenog korisnika ili prazan {@link Optional} kod neuspješne prijave
      */
     public Optional<Role> login(String username, String password) {
         try {

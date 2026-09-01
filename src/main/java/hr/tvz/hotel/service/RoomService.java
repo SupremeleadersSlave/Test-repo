@@ -27,9 +27,9 @@ public class RoomService {
 
     /**
      * Kreira novu instancu servisa za upravljanje sobama i učitava
-     * postojeće sobe iz baze podataka.
+     * postojeće sobe iz baze.
      *
-     * @param roomDao          DAO za pristup sobama u bazi podataka
+     * @param roomDao          DAO za pristup sobama u bazi
      * @param changeLogManager upravitelj poviješću promjena
      */
     public RoomService(RoomDao roomDao, ChangeLogManager changeLogManager) {
@@ -39,7 +39,7 @@ public class RoomService {
     }
 
     /**
-     * Ponovno učitava sobe iz baze podataka u memorijsku kolekciju.
+     * Ponovno učitava sobe iz baze podataka u memoriju.
      */
     public final void refresh() {
         rooms.clear();
@@ -56,9 +56,9 @@ public class RoomService {
     }
 
     /**
-     * Pretražuje sobe prema zadanom uvjetu.
+     * Pretražuje sobe prema uvjetu.
      *
-     * @param predicate uvjet pretrage, lambda izraz
+     * @param predicate uvjet pretrage
      * @return popis soba koje zadovoljavaju uvjet
      */
     public List<Room> search(Predicate<Room> predicate) {
@@ -66,9 +66,9 @@ public class RoomService {
     }
 
     /**
-     * Vraća sobe sortirane prema zadanom komparatoru.
+     * Vraća sobe sortirane prema komparatoru.
      *
-     * @param comparator redoslijed sortiranja, lambda izraz
+     * @param comparator redoslijed sortiranja
      * @return sortirani popis soba
      */
     public List<Room> sortedBy(Comparator<Room> comparator) {
@@ -76,10 +76,10 @@ public class RoomService {
     }
 
     /**
-     * Dodaje novu sobu, bilježi promjenu u povijest promjena.
+     * Dodaje novu sobu, bilježi promjenu u log.
      *
      * @param room      nova soba
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy rola korisnika koji izvršava promjene
      */
     public void addRoom(Room room, Role changedBy) {
         Long id = roomDao.insert(room);
@@ -90,11 +90,11 @@ public class RoomService {
     }
 
     /**
-     * Ažurira postojeću sobu, bilježi promjenu u povijest promjena.
+     * Ažurira postojeću sobu, bilježi promjenu u log.
      *
      * @param oldRoom   soba prije izmjene
      * @param newRoom   soba nakon izmjene
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy korisnika koji izvršava promjene
      */
     public void updateRoom(Room oldRoom, Room newRoom, Role changedBy) {
         roomDao.update(newRoom);
@@ -105,10 +105,10 @@ public class RoomService {
     }
 
     /**
-     * Briše sobu, bilježi promjenu u povijest promjena.
+     * Briše sobu, bilježi promjenu u log.
      *
      * @param room      soba za brisanje
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy korisnika koji izvršava promjene
      */
     public void deleteRoom(Room room, Role changedBy) {
         roomDao.delete(room.getId());

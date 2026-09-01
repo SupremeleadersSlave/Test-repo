@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 
 /**
  * Implementira poslovnu logiku upravljanja rezervacijama, uključujući
- * provjeru raspoloživosti sobe za zadano razdoblje pomoću sučelja
+ * provjeru raspoloživosti sobe za zadano razdoblje.
  * {@link Schedulable}.
  */
 public class ReservationService {
@@ -35,9 +35,9 @@ public class ReservationService {
 
     /**
      * Kreira novu instancu servisa za upravljanje rezervacijama i
-     * učitava postojeće rezervacije iz baze podataka.
+     * učitava postojeće rezervacije iz baze.
      *
-     * @param reservationDao   DAO za pristup rezervacijama u bazi podataka
+     * @param reservationDao DAO za pristup rezervacijama u bazi
      * @param changeLogManager upravitelj poviješću promjena
      */
     public ReservationService(ReservationDao reservationDao, ChangeLogManager changeLogManager) {
@@ -47,7 +47,7 @@ public class ReservationService {
     }
 
     /**
-     * Ponovno učitava rezervacije iz baze podataka u memorijsku kolekciju.
+     * Ponovno učitava rezervacije iz baze podataka u memoriju.
      */
     public final void refresh() {
         reservations.clear();
@@ -55,7 +55,7 @@ public class ReservationService {
     }
 
     /**
-     * Vraća sve trenutno učitane rezervacije.
+     * Vraća sve učitane rezervacije.
      *
      * @return popis svih rezervacija
      */
@@ -64,9 +64,9 @@ public class ReservationService {
     }
 
     /**
-     * Pretražuje rezervacije prema zadanom uvjetu.
+     * Pretražuje rezervacije prema uvjetu.
      *
-     * @param predicate uvjet pretrage, lambda izraz
+     * @param predicate uvjet pretrage
      * @return popis rezervacija koje zadovoljavaju uvjet
      */
     public List<Reservation> search(Predicate<Reservation> predicate) {
@@ -74,9 +74,9 @@ public class ReservationService {
     }
 
     /**
-     * Vraća rezervacije sortirane prema zadanom komparatoru.
+     * Vraća rezervacije sortirane prema komparatoru.
      *
-     * @param comparator redoslijed sortiranja, lambda izraz
+     * @param comparator redoslijed sortiranja
      * @return sortirani popis rezervacija
      */
     public List<Reservation> sortedBy(Comparator<Reservation> comparator) {
@@ -87,13 +87,13 @@ public class ReservationService {
      * Kreira novu rezervaciju nakon provjere raspoloživosti sobe za
      * zadano razdoblje.
      *
-     * @param guest     gost rezervacije
-     * @param room      soba koja se rezervira
-     * @param checkIn   datum dolaska
-     * @param checkOut  datum odlaska
-     * @param changedBy rola korisnika, kreator rezervacije
+     * @param guest gost rezervacije
+     * @param room soba koja se rezervira
+     * @param checkIn datum dolaska
+     * @param checkOut datum odlaska
+     * @param changedBy uloga korisnika koji kreira rezervaciju
      * @return kreirana rezervacija
-     * @throws ReservationNotAvailableException: soba je već rezervirana za dio zadanog razdoblja
+     * @throws ReservationNotAvailableException ako je soba već rezervirana za dio zadanog razdoblja
      */
     public Reservation createReservation(Guest guest, Room room, LocalDate checkIn, LocalDate checkOut, Role changedBy)
             throws ReservationNotAvailableException {
@@ -129,12 +129,12 @@ public class ReservationService {
     }
 
     /**
-     * Mijenja status postojeće rezervacije, bilježi promjenu u
-     * povijest promjena.
+     * Mijenja status postojeće rezervacije i bilježi promjenu u
+     * log.
      *
      * @param reservation rezervacija za promjenu statusa
-     * @param newStatus   novi status rezervacije
-     * @param changedBy   rola korisnika, izvršitelj promjene
+     * @param newStatus novi status rezervacije
+     * @param changedBy uloga korisnika koji izvršava promjenu
      */
     public void changeStatus(Reservation reservation, ReservationStatus newStatus, Role changedBy) {
         ReservationStatus oldStatus = reservation.getStatus();
@@ -145,10 +145,10 @@ public class ReservationService {
     }
 
     /**
-     * Briše rezervaciju, bilježi promjenu u povijest promjena.
+     * Briše rezervaciju i bilježi promjenu u log.
      *
      * @param reservation rezervacija za brisanje
-     * @param changedBy   rola korisnika, izvršitelj promjene
+     * @param changedBy uloga korisnika koji izvršava promjenu
      */
     public void deleteReservation(Reservation reservation, Role changedBy) {
         reservationDao.delete(reservation.getId());

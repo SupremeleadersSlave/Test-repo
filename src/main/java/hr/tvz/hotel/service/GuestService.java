@@ -58,7 +58,7 @@ public class GuestService {
     /**
      * Pretražuje goste prema zadanom uvjetu.
      *
-     * @param predicate uvjet pretrage, lambda izraz
+     * @param predicate uvjet pretrage
      * @return popis gostiju koji zadovoljavaju uvjet
      */
     public List<Guest> search(Predicate<Guest> predicate) {
@@ -68,7 +68,7 @@ public class GuestService {
     /**
      * Vraća goste sortirane prema zadanom komparatoru.
      *
-     * @param comparator redoslijed sortiranja, lambda izraz
+     * @param comparator redoslijed sortiranja
      * @return sortirani popis gostiju
      */
     public List<Guest> sortedBy(Comparator<Guest> comparator) {
@@ -76,10 +76,10 @@ public class GuestService {
     }
 
     /**
-     * Dodaje novog gosta, bilježi promjenu u povijest promjena.
+     * Dodaje novog gosta, bilježi promjenu u logu.
      *
      * @param guest     novi gost
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy uloga korisnika koji izvršava promjenu
      */
     public void addGuest(Guest guest, Role changedBy) {
         Long id = guestDao.insert(guest);
@@ -94,7 +94,7 @@ public class GuestService {
      *
      * @param oldGuest  gost prije izmjene
      * @param newGuest  gost nakon izmjene
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy uloga korisnika koji izvršava promjenu
      */
     public void updateGuest(Guest oldGuest, Guest newGuest, Role changedBy) {
         guestDao.update(newGuest);
@@ -108,7 +108,7 @@ public class GuestService {
      * Briše gosta, bilježi promjenu u povijest promjena.
      *
      * @param guest     gost za brisanje
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy uloga korisnika koji izvršava promjenu
      */
     public void deleteGuest(Guest guest, Role changedBy) {
         guestDao.delete(guest.getId());

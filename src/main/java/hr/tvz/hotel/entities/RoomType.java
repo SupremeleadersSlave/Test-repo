@@ -1,7 +1,7 @@
 package hr.tvz.hotel.entities;
 
 /**
- * Nabrojani tip: predstavlja vrstu hotelske sobe.
+ * Vrsta hotelske sobe.
  */
 public enum RoomType {
 

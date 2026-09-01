@@ -24,9 +24,10 @@ import java.util.Optional;
 
 /**
  * Kontroler JavaFX ekrana za upravljanje korisnicima sustava, dostupan
- * samo administratoru, s tablicom TableView za pretragu, dodavanje,
- * uređivanje i brisanje korisnika. Uređivanje i brisanje zahtijevaju
- * potvrdu korisnika putem dijaloškog okvira.
+ * samo administratoru, uključujući pretragu, dodavanje, uređivanje i
+ * brisanje korisnika.
+ * <p>
+ * Uređivanje i brisanje zahtijevaju potvrdu korisnika.
  */
 public class UserController {
 
@@ -57,8 +58,8 @@ public class UserController {
     /**
      * Kreira novi kontroler ekrana za korisnike sustava.
      *
-     * @param context     kontekst usluga aplikacije
-     * @param currentRole rola prijavljenog korisnika, bilježena uz svaku promjenu
+     * @param context kontekst usluga aplikacije
+     * @param currentRole uloga prijavljenog korisnika, bilježena uz svaku promjenu
      */
     public UserController(ServiceContext context, Role currentRole) {
         this.userService = context.userService();
@@ -76,7 +77,7 @@ public class UserController {
     }
 
     /**
-     * Ponovno učitava podatke o korisnicima iz usluge u tablicu.
+     * Ponovno učitava podatke o korisnicima iz servisa u tablicu.
      */
     public void reload() {
         refreshTable(userService.findAll());
@@ -131,11 +132,11 @@ public class UserController {
     }
 
     /**
-     * Nosi rezultat dijaloga za unos korisnika: izgrađenog korisnika i
+     * Sadrži rezultat dijaloga za unos korisnika: izgrađenog korisnika i
      * lozinku u čitljivom obliku unesenu u dijalogu. Lozinka se hashira
-     * tek u uslužnom sloju.
+     * tek u servisnom sloju.
      *
-     * @param user          izgrađeni korisnik
+     * @param user izgrađeni korisnik
      * @param plainPassword lozinka u čitljivom obliku unesena u dijalogu
      */
     private record DialogResult(User user, String plainPassword) {
@@ -144,8 +145,8 @@ public class UserController {
     /**
      * Prikazuje dijalog za unos ili uređivanje podataka o korisniku.
      *
-     * @param existing korisnik za uređivanje, ili {@code null} za novog korisnika
-     * @return rezultat dijaloga kod potvrde unosa, inače prazan {@link Optional}
+     * @param existing korisnik za uređivanje ili {@code null} za novog korisnika
+     * @return rezultat dijaloga ako je unos potvrđen, inače prazan {@link Optional}
      */
     private Optional<DialogResult> showUserDialog(User existing) {
         Dialog<DialogResult> dialog = new Dialog<>();

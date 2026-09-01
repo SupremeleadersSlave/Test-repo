@@ -30,7 +30,7 @@ public class InvoiceService {
      * Kreira novu instancu servisa za upravljanje računima i učitava
      * postojeće račune iz baze podataka.
      *
-     * @param invoiceDao       DAO za pristup računima u bazi podataka
+     * @param invoiceDao DAO za pristup računima u bazi
      * @param changeLogManager upravitelj poviješću promjena
      */
     public InvoiceService(InvoiceDao invoiceDao, ChangeLogManager changeLogManager) {
@@ -40,7 +40,7 @@ public class InvoiceService {
     }
 
     /**
-     * Ponovno učitava račune iz baze podataka u memorijsku kolekciju.
+     * Ponovno učitava račune iz baze u memorijsku kolekciju.
      */
     public final void refresh() {
         invoices.clear();
@@ -48,7 +48,7 @@ public class InvoiceService {
     }
 
     /**
-     * Vraća sve trenutno učitane račune.
+     * Vraća sve učitane račune.
      *
      * @return popis svih računa
      */
@@ -57,9 +57,9 @@ public class InvoiceService {
     }
 
     /**
-     * Pretražuje račune prema zadanom uvjetu.
+     * Pretražuje račune prema uvjetu.
      *
-     * @param predicate uvjet pretrage, lambda izraz
+     * @param predicate uvjet pretrage
      * @return popis računa koji zadovoljavaju uvjet
      */
     public List<Invoice> search(Predicate<Invoice> predicate) {
@@ -67,9 +67,9 @@ public class InvoiceService {
     }
 
     /**
-     * Vraća račune sortirane prema zadanom komparatoru.
+     * Vraća račune sortirane prema komparatoru.
      *
-     * @param comparator redoslijed sortiranja, lambda izraz
+     * @param comparator redoslijed sortiranja
      * @return sortirani popis računa
      */
     public List<Invoice> sortedBy(Comparator<Invoice> comparator) {
@@ -77,10 +77,10 @@ public class InvoiceService {
     }
 
     /**
-     * Izdaje novi račun, bilježi promjenu u povijest promjena.
+     * Izdaje novi račun, bilježi promjenu u logu.
      *
      * @param invoice   novi račun
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy rola korisnika koji izvršava promjene
      */
     public void addInvoice(Invoice invoice, Role changedBy) {
         Long id = invoiceDao.insert(invoice);
@@ -91,10 +91,10 @@ public class InvoiceService {
     }
 
     /**
-     * Briše račun, bilježi promjenu u povijest promjena.
+     * Briše račun, bilježi promjenu u log.
      *
      * @param invoice   račun za brisanje
-     * @param changedBy rola korisnika, izvršitelj promjene
+     * @param changedBy rola korisnika koji izvršava promjene
      */
     public void deleteInvoice(Invoice invoice, Role changedBy) {
         invoiceDao.delete(invoice.getId());

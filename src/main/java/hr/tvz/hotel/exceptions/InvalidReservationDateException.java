@@ -1,12 +1,7 @@
 package hr.tvz.hotel.exceptions;
 
 /**
- * Neoznačena iznimka: baca se kada su datumi rezervacije neispravni,
- * npr. datum odlaska nije nakon datuma dolaska.
- * <p>
- * Riječ je o programerskoj, validacijskoj pogrešci: sprječava se prije
- * poziva poslovne logike. Ne predstavlja poslovnu situaciju za obradu
- * pozivatelja.
+ * Iznimka koja se baca kada su datumi rezervacije neispravni.
  */
 public class InvalidReservationDateException extends RuntimeException {
 
@@ -23,7 +18,7 @@ public class InvalidReservationDateException extends RuntimeException {
      * Kreira iznimku s opisnom porukom i uzrokom.
      *
      * @param message opis razloga neispravnosti datuma
-     * @param cause   izvorni uzrok iznimke
+     * @param cause uzrok iznimke
      */
     public InvalidReservationDateException(String message, Throwable cause) {
         super(message, cause);

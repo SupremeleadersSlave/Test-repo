@@ -13,14 +13,14 @@ public class User extends Person {
     /**
      * Kreira novog korisnika sustava.
      *
-     * @param id           identifikator korisnika
-     * @param firstName    ime
-     * @param lastName     prezime
-     * @param email        adresa elektroničke pošte
-     * @param phone        broj telefona
-     * @param username     korisničko ime za prijavu
+     * @param id id korisnika
+     * @param firstName ime
+     * @param lastName prezime
+     * @param email email
+     * @param phone broj telefona
+     * @param username korisničko ime za prijavu
      * @param passwordHash hashirana lozinka
-     * @param role         uloga korisnika u sustavu
+     * @param role uloga korisnika u sustavu
      */
     public User(Long id, String firstName, String lastName, String email, String phone,
                 String username, String passwordHash, Role role) {
