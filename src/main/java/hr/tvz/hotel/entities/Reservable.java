@@ -4,16 +4,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Sučelje za entitete: mogu se rezervirati.
+ * Sučelje za entitete koji se mogu rezervirati.
  */
 public interface Reservable {
 
     /**
      * Provjerava je li entitet raspoloživ za zadano razdoblje.
      *
-     * @param checkIn  datum dolaska
+     * @param checkIn datum dolaska
      * @param checkOut datum odlaska
-     * @return {@code true}: entitet je raspoloživ, inače {@code false}
+     * @return {@code true} ako je entitet dostupan
      */
     boolean isAvailableFor(LocalDate checkIn, LocalDate checkOut);
 

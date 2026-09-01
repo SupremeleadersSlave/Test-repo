@@ -14,9 +14,7 @@ import java.util.List;
 
 /**
  * DAO klasa za entitet {@link Reservation}.
- * <p>
- * Pri mapiranju retka koristi {@link GuestDao} i {@link RoomDao} za
- * dohvaćanje gosta i sobe.
+ * Pri mapiranju koristi {@link GuestDao} i {@link RoomDao} za dohvat gosta i sobe.
  */
 public class ReservationDao {
 
@@ -28,9 +26,9 @@ public class ReservationDao {
     /**
      * Kreira DAO za rezervacije.
      *
-     * @param databaseConnection konekcija prema bazi podataka
-     * @param guestDao           DAO za dohvaćanje gostiju
-     * @param roomDao            DAO za dohvaćanje soba
+     * @param databaseConnection konekcija prema bazi
+     * @param guestDao DAO za dohvat gostiju
+     * @param roomDao DAO za dohvat soba
      */
     public ReservationDao(DatabaseConnection databaseConnection, GuestDao guestDao, RoomDao roomDao) {
         this.databaseConnection = databaseConnection;
@@ -41,7 +39,7 @@ public class ReservationDao {
     /**
      * Dohvaća sve rezervacije.
      *
-     * @return popis svih rezervacija
+     * @return sve rezervacije
      */
     public List<Reservation> findAll() {
         try {
@@ -53,11 +51,11 @@ public class ReservationDao {
     }
 
     /**
-     * Dohvaća rezervaciju prema identifikatoru.
+     * Dohvaća rezervaciju prema id-u.
      *
-     * @param id identifikator rezervacije
+     * @param id id rezervacije
      * @return pronađena rezervacija
-     * @throws EntityNotFoundException: rezervacija ne postoji
+     * @throws EntityNotFoundException ako rezervacija ne postoji
      */
     public Reservation findById(Long id) {
         try {
@@ -77,7 +75,7 @@ public class ReservationDao {
      * Sprema novu rezervaciju.
      *
      * @param reservation rezervacija za spremanje
-     * @return identifikator novokreirane rezervacije
+     * @return generirani id rezervacije
      */
     public Long insert(Reservation reservation) {
         try {
@@ -92,9 +90,9 @@ public class ReservationDao {
     }
 
     /**
-     * Ažurira status postojeće rezervacije.
+     * Updatea status postojeće rezervacije.
      *
-     * @param reservation rezervacija s ažuriranim statusom
+     * @param reservation rezervacija s novim statusom
      */
     public void updateStatus(Reservation reservation) {
         try {
@@ -107,9 +105,9 @@ public class ReservationDao {
     }
 
     /**
-     * Briše rezervaciju prema identifikatoru.
+     * Briše rezervaciju prema id-u.
      *
-     * @param id identifikator rezervacije
+     * @param id id rezervacije
      */
     public void delete(Long id) {
         try {
@@ -121,8 +119,7 @@ public class ReservationDao {
     }
 
     /**
-     * Mapira redak rezultata u {@link Reservation}, dohvaćajući gosta i
-     * sobu putem njihovih DAO-ova.
+     * Mapira redak rezultata u {@link Reservation}, dohvatom gosta i sobe putem DAO-ova.
      */
     private Reservation mapRow(ResultSet rs) throws SQLException {
         Guest guest = guestDao.findById(rs.getLong("guest_id"));

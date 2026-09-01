@@ -12,11 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Upravlja konekcijom prema bazi podataka: kreiranje, izvršavanje upita,
- * dohvaćanje podataka, zatvaranje.
- * <p>
- * Koristi ugrađenu H2 bazu podataka u datoteci unutar mape {@code data}:
- * prenosivo, bez zasebnog poslužitelja.
+ * Upravlja konekcijom prema H2 bazi podataka i izvršavanjem upita.
+ * Baza se pohranjuje u datoteci unutar mape {@code data}.
  */
 public class DatabaseConnection {
 
@@ -28,10 +25,10 @@ public class DatabaseConnection {
     private Connection connection;
 
     /**
-     * Vraća aktivnu konekciju prema bazi podataka ili je uspostavlja.
+     * Vraća aktivnu konekciju prema bazi podataka ili uspostavlja novu.
      *
      * @return aktivna konekcija
-     * @throws SQLException: konekcija se ne uspostavlja
+     * @throws SQLException ako uspostavljanje konekcije ne uspije
      */
     public Connection connect() throws SQLException {
         if (connection == null || connection.isClosed()) {
@@ -42,9 +39,9 @@ public class DatabaseConnection {
     }
 
     /**
-     * Kreira tablice baze podataka ako još ne postoje.
+     * Kreira tablice baze podataka ako ne postoje.
      *
-     * @throws SQLException: DDL naredbe ne uspijevaju
+     * @throws SQLException ako izvršavanje DDL naredbi ne uspije
      */
     public void initializeSchema() throws SQLException {
         executeUpdate("""
@@ -105,11 +102,11 @@ public class DatabaseConnection {
     }
 
     /**
-     * Izvršava upit bez rezultata: INSERT, UPDATE, DELETE ili DDL naredbu.
+     * Izvršava upit bez rezultata: INSERT, UPDATE, DELETE, DDL.
      *
-     * @param sql    SQL naredba s upitnicima za parametre
+     * @param sql SQL naredba s parametrima
      * @param params vrijednosti parametara upita
-     * @throws SQLException: upit ne uspijeva
+     * @throws SQLException ako izvršavanje upita ne uspije
      */
     public void executeUpdate(String sql, Object... params) throws SQLException {
         try (PreparedStatement statement = prepareStatement(sql, params)) {
@@ -118,12 +115,12 @@ public class DatabaseConnection {
     }
 
     /**
-     * Umeće redak i vraća generirani identifikator.
+     * Umeće redak i vraća generirani id.
      *
-     * @param sql    SQL INSERT naredba s upitnicima za parametre
+     * @param sql SQL INSERT naredba s parametrima
      * @param params vrijednosti parametara upita
-     * @return generirani identifikator umetnutog retka
-     * @throws SQLException: upit ne uspijeva
+     * @return generirani id umetnutog retka
+     * @throws SQLException ako izvršavanje upita ne uspije
      */
     public long executeInsert(String sql, Object... params) throws SQLException {
         try (PreparedStatement statement = connect().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -136,15 +133,14 @@ public class DatabaseConnection {
     }
 
     /**
-     * Izvršava upit za dohvaćanje podataka i mapira retke rezultata
-     * pomoću mapera.
+     * Dohvaća podatke i mapira retke pomoću mapera.
      *
-     * @param sql    SQL SELECT naredba s upitnicima za parametre
-     * @param mapper funkcija za mapiranje retka u objekt
+     * @param sql SQL SELECT naredba s parametrima
+     * @param mapper funkcija, mapiranje retka u objekt
      * @param params vrijednosti parametara upita
-     * @param <T>    tip mapiranog objekta
+     * @param <T> tip mapiranog objekta
      * @return popis mapiranih objekata
-     * @throws SQLException: upit ne uspijeva
+     * @throws SQLException ako izvršavanje upita ne uspije
      */
     public <T> List<T> executeQuery(String sql, RowMapper<T> mapper, Object... params) throws SQLException {
         List<T> results = new ArrayList<>();
@@ -170,7 +166,7 @@ public class DatabaseConnection {
     }
 
     /**
-     * Zatvara konekciju prema bazi podataka ako je otvorena.
+     * Zatvara otvorenu konekciju prema bazi podataka.
      */
     public void close() {
         if (connection != null) {

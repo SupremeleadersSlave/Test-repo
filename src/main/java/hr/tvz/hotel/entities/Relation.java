@@ -4,15 +4,11 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Predstavlja imenovanu poslovnu vezu između dva entiteta, npr.
- * {@link User} obrađuje {@link Reservation}.
- * <p>
- * Generički tip "Pair&lt;K, V&gt;" drži samo dvije vrijednosti bez
- * značenja. Ova klasa, za razliku od njega, uz entitete čuva vrstu
- * veze i trenutak uspostave, s poslovnom semantikom domene.
+ * Imenovana poslovna veza između dva entiteta.
+ * Sadrži vrstu veze i trenutak uspostave.
  *
- * @param <A> tip izvornog entiteta veze
- * @param <B> tip ciljnog entiteta veze
+ * @param <A> tip izvornog entiteta
+ * @param <B> tip ciljnog entiteta
  */
 public class Relation<A, B> {
 
@@ -24,9 +20,9 @@ public class Relation<A, B> {
     /**
      * Kreira novu vezu između dva entiteta.
      *
-     * @param source       izvorni entitet veze
-     * @param target       ciljni entitet veze
-     * @param relationType opis vrste veze: "OBRADIO", "PREFERIRA"
+     * @param source izvorni entitet veze
+     * @param target ciljni entitet veze
+     * @param relationType vrsta veze
      */
     public Relation(A source, B target, String relationType) {
         this.source = source;
@@ -75,7 +71,7 @@ public class Relation<A, B> {
      * Provjerava sudjeluje li entitet u vezi, kao izvor ili cilj.
      *
      * @param entity entitet za provjeru
-     * @return {@code true}: entitet sudjeluje u vezi
+     * @return {@code true} ako entitet sudjeluje u vezi
      */
     public boolean involves(Object entity) {
         return Objects.equals(source, entity) || Objects.equals(target, entity);

@@ -11,13 +11,13 @@ public class Guest extends Person {
     /**
      * Kreira novog gosta hotela.
      *
-     * @param id             identifikator gosta
-     * @param firstName      ime
-     * @param lastName       prezime
-     * @param email          adresa elektroničke pošte
-     * @param phone          broj telefona
-     * @param documentNumber broj osobnog dokumenta: osobna iskaznica ili putovnica
-     * @param address        adresa prebivališta gosta
+     * @param id id gosta
+     * @param firstName ime
+     * @param lastName prezime
+     * @param email email gosta
+     * @param phone broj telefona
+     * @param documentNumber broj osobnog dokumenta
+     * @param address adresa gosta
      */
     public Guest(Long id, String firstName, String lastName, String email, String phone,
                  String documentNumber, Address address) {

@@ -3,9 +3,9 @@ package hr.tvz.hotel.entities;
 import java.io.Serializable;
 
 /**
- * Predstavlja plaćanje karticom.
+ * Plaćanje karticom.
  *
- * @param maskedCardNumber broj kartice prikazan u maskiranom obliku
+ * @param maskedCardNumber maskirani broj kartice
  * @param authorizationCode autorizacijski kod transakcije
  */
 public record CardPayment(String maskedCardNumber, String authorizationCode) implements PaymentMethod, Serializable {

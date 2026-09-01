@@ -3,8 +3,7 @@ package hr.tvz.hotel.entities;
 import java.util.Objects;
 
 /**
- * Predstavlja zajednička svojstva svih osoba u sustavu: korisnika
- * sustava i gostiju hotela.
+ * Zajednička svojstva korisnika sustava i gostiju hotela.
  */
 public abstract class Person {
 
@@ -15,13 +14,13 @@ public abstract class Person {
     private String phone;
 
     /**
-     * Kreira novu osobu sa zadanim osobnim podacima.
+     * Kreira novu osobu.
      *
-     * @param id        identifikator osobe
+     * @param id id osobe
      * @param firstName ime
-     * @param lastName  prezime
-     * @param email     adresa elektroničke pošte
-     * @param phone     broj telefona
+     * @param lastName prezime
+     * @param email email osobe
+     * @param phone broj telefona
      */
     protected Person(Long id, String firstName, String lastName, String email, String phone) {
         this.id = id;
@@ -32,25 +31,25 @@ public abstract class Person {
     }
 
     /**
-     * Vraća opis vrste osobe, npr. "Korisnik sustava" ili "Gost".
+     * Vraća opis vrste osobe.
      *
      * @return opis vrste osobe
      */
     public abstract String getPersonType();
 
     /**
-     * Vraća identifikator osobe.
+     * Vraća id osobe.
      *
-     * @return identifikator osobe
+     * @return id osobe
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Postavlja identifikator osobe.
+     * Postavlja id osobe.
      *
-     * @param id novi identifikator osobe
+     * @param id novi id osobe
      */
     public void setId(Long id) {
         this.id = id;
@@ -93,18 +92,18 @@ public abstract class Person {
     }
 
     /**
-     * Vraća adresu elektroničke pošte osobe.
+     * Vraća email osobe.
      *
-     * @return adresa elektroničke pošte
+     * @return email osobe
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * Postavlja adresu elektroničke pošte osobe.
+     * Postavlja email osobe.
      *
-     * @param email nova adresa elektroničke pošte
+     * @param email novi email osobe
      */
     public void setEmail(String email) {
         this.email = email;

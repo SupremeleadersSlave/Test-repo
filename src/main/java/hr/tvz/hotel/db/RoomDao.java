@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * DAO klasa za entitet {@link Room}.
+ * DAO klasa za {@link Room}.
  */
 public class RoomDao {
 
@@ -21,7 +21,7 @@ public class RoomDao {
     /**
      * Kreira DAO za sobe.
      *
-     * @param databaseConnection konekcija prema bazi podataka
+     * @param databaseConnection konekcija prema bazi
      */
     public RoomDao(DatabaseConnection databaseConnection) {
         this.databaseConnection = databaseConnection;
@@ -30,7 +30,7 @@ public class RoomDao {
     /**
      * Dohvaća sve sobe.
      *
-     * @return popis svih soba
+     * @return sve sobe
      */
     public List<Room> findAll() {
         try {
@@ -42,11 +42,11 @@ public class RoomDao {
     }
 
     /**
-     * Dohvaća sobu prema identifikatoru.
+     * Dohvaća sobu prema id-u.
      *
-     * @param id identifikator sobe
+     * @param id id sobe
      * @return pronađena soba
-     * @throws EntityNotFoundException: soba ne postoji
+     * @throws EntityNotFoundException ako soba ne postoji
      */
     public Room findById(Long id) {
         try {
@@ -66,7 +66,7 @@ public class RoomDao {
      * Sprema novu sobu.
      *
      * @param room soba za spremanje
-     * @return identifikator novokreirane sobe
+     * @return generirani id sobe
      */
     public Long insert(Room room) {
         try {
@@ -80,9 +80,9 @@ public class RoomDao {
     }
 
     /**
-     * Ažurira postojeću sobu.
+     * Updatea postojeću sobu.
      *
-     * @param room soba s ažuriranim podacima
+     * @param room soba s novim podacima
      */
     public void update(Room room) {
         try {
@@ -96,9 +96,9 @@ public class RoomDao {
     }
 
     /**
-     * Briše sobu prema identifikatoru.
+     * Briše sobu prema id-u.
      *
-     * @param id identifikator sobe
+     * @param id id sobe
      */
     public void delete(Long id) {
         try {

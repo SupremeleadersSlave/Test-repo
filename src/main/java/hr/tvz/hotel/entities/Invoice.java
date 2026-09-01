@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Predstavlja račun izdan za rezervaciju.
+ * Račun izdan za rezervaciju.
  */
 public class Invoice {
 
@@ -18,11 +18,11 @@ public class Invoice {
     /**
      * Kreira novi račun.
      *
-     * @param id            identifikator računa
-     * @param reservation   rezervacija za koju se izdaje račun
-     * @param amount        iznos računa
+     * @param id id računa
+     * @param reservation rezervacija za koju se izdaje račun
+     * @param amount iznos računa
      * @param paymentMethod način plaćanja
-     * @param issueDate     datum i vrijeme izdavanja računa
+     * @param issueDate datum i vrijeme izdavanja računa
      */
     public Invoice(Long id, Reservation reservation, BigDecimal amount, PaymentMethod paymentMethod, LocalDateTime issueDate) {
         this.id = id;
@@ -33,18 +33,18 @@ public class Invoice {
     }
 
     /**
-     * Vraća identifikator računa.
+     * Vraća id računa.
      *
-     * @return identifikator računa
+     * @return id računa
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Postavlja identifikator računa.
+     * Postavlja id računa.
      *
-     * @param id novi identifikator računa
+     * @param id novi id računa
      */
     public void setId(Long id) {
         this.id = id;

@@ -6,12 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Periodički čita posljednju promjenu iz serijalizirane binarne
- * datoteke i ispisuje njezine detalje.
- * <p>
- * Pristup podacima je siguran za istovremeno izvođenje: {@link ChangeLogManager}
- * interno sinkronizira čitanje i pisanje nad istom bravom, i dok druga
- * nit sprema promjene (npr. iz sloja usluga nakon izmjene entiteta).
+ * Čita i ispisuje posljednju promjenu iz binarne datoteke.
+ * Thread safe je za istovrremeni pristup.
  */
 public class ChangeLogWatcherTask implements Runnable {
 
@@ -23,10 +19,10 @@ public class ChangeLogWatcherTask implements Runnable {
     private ChangeRecord lastSeenRecord;
 
     /**
-     * Kreira zadatak nadzora povijesti promjena.
+     * Stvara zadatak za nadzor povijesti promjena.
      *
-     * @param changeLogManager upravitelj binarnom datotekom povijesti promjena
-     * @param intervalMillis   razmak između dvije provjere u milisekundama
+     * @param changeLogManager upravlja promjena
+     * @param intervalMillis interval provjere (milis)
      */
     public ChangeLogWatcherTask(ChangeLogManager changeLogManager, long intervalMillis) {
         this.changeLogManager = changeLogManager;
@@ -54,7 +50,7 @@ public class ChangeLogWatcherTask implements Runnable {
     }
 
     /**
-     * Zaustavlja zadatak nadzora povijesti promjena.
+     * Zaustavlja zadatak.
      */
     public void stop() {
         running = false;

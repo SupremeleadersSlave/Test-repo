@@ -21,7 +21,7 @@ public class UserDao {
     /**
      * Kreira DAO za korisnike sustava.
      *
-     * @param databaseConnection konekcija prema bazi podataka
+     * @param databaseConnection konekcija prema bazi
      */
     public UserDao(DatabaseConnection databaseConnection) {
         this.databaseConnection = databaseConnection;
@@ -30,7 +30,7 @@ public class UserDao {
     /**
      * Dohvaća sve korisnike sustava.
      *
-     * @return popis svih korisnika
+     * @return svi korisnici
      */
     public List<User> findAll() {
         try {
@@ -42,11 +42,11 @@ public class UserDao {
     }
 
     /**
-     * Dohvaća korisnika prema identifikatoru.
+     * Dohvaća korisnika prema id-u.
      *
-     * @param id identifikator korisnika
+     * @param id id korisnika
      * @return pronađeni korisnik
-     * @throws EntityNotFoundException: korisnik ne postoji
+     * @throws EntityNotFoundException ako korisnik ne postoji
      */
     public User findById(Long id) {
         try {
@@ -66,7 +66,7 @@ public class UserDao {
      * Sprema novog korisnika sustava.
      *
      * @param user korisnik za spremanje
-     * @return identifikator novokreiranog korisnika
+     * @return generirani id korisnika
      */
     public Long insert(User user) {
         try {
@@ -81,9 +81,9 @@ public class UserDao {
     }
 
     /**
-     * Ažurira postojećeg korisnika sustava.
+     * Updatea postojećeg korisnika sustava.
      *
-     * @param user korisnik s ažuriranim podacima
+     * @param user korisnik s novim podacima
      */
     public void update(User user) {
         try {
@@ -98,9 +98,9 @@ public class UserDao {
     }
 
     /**
-     * Briše korisnika sustava prema identifikatoru.
+     * Briše korisnika sustava prema id-u.
      *
-     * @param id identifikator korisnika
+     * @param id id korisnika
      */
     public void delete(Long id) {
         try {

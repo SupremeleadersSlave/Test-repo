@@ -21,7 +21,7 @@ public class GuestDao {
     /**
      * Kreira DAO za goste.
      *
-     * @param databaseConnection konekcija prema bazi podataka
+     * @param databaseConnection konekcija prema bazi
      */
     public GuestDao(DatabaseConnection databaseConnection) {
         this.databaseConnection = databaseConnection;
@@ -42,11 +42,11 @@ public class GuestDao {
     }
 
     /**
-     * Dohvaća gosta prema identifikatoru.
+     * Dohvaća gosta prema id-u.
      *
-     * @param id identifikator gosta
+     * @param id id gosta
      * @return pronađeni gost
-     * @throws EntityNotFoundException: gost ne postoji
+     * @throws EntityNotFoundException ako gost ne postoji
      */
     public Guest findById(Long id) {
         try {
@@ -66,7 +66,7 @@ public class GuestDao {
      * Sprema novog gosta.
      *
      * @param guest gost za spremanje
-     * @return identifikator novokreiranog gosta
+     * @return generirani id gosta
      */
     public Long insert(Guest guest) {
         try {
@@ -83,9 +83,9 @@ public class GuestDao {
     }
 
     /**
-     * Ažurira postojećeg gosta.
+     * Radi update postojećeg gosta.
      *
-     * @param guest gost s ažuriranim podacima
+     * @param guest gost s novim podacima
      */
     public void update(Guest guest) {
         try {
@@ -102,9 +102,9 @@ public class GuestDao {
     }
 
     /**
-     * Briše gosta prema identifikatoru.
+     * Briše gosta prema id-u.
      *
-     * @param id identifikator gosta
+     * @param id id gosta
      */
     public void delete(Long id) {
         try {

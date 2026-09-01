@@ -4,8 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Funkcijsko sučelje koje mapira jedan redak rezultata upita
- * ({@link ResultSet}) u objekt zadanog tipa.
+ * Funkcijsko sučelje za mapiranje retka rezultata upita u objekt.
  *
  * @param <T> tip mapiranog objekta
  */
@@ -13,11 +12,11 @@ import java.sql.SQLException;
 public interface RowMapper<T> {
 
     /**
-     * Mapira trenutni redak rezultata upita u objekt.
+     * Mapira trenutni redak rezultata upita.
      *
-     * @param resultSet rezultat upita, pozicioniran na redak
+     * @param resultSet rezultat upita na trenutnom retku
      * @return mapirani objekt
-     * @throws SQLException: čitanje retka ne uspijeva
+     * @throws SQLException ako čitanje retka ne uspije
      */
     T map(ResultSet resultSet) throws SQLException;
 }

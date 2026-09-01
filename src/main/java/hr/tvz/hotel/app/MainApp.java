@@ -27,7 +27,7 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 
 /**
- * Glavna, pokretačka klasa aplikacije "Sustav za rezervaciju hotela".
+ * Starter klasa aplikacije.
  * <p>
  * Inicijalizira slojeve aplikacije: bazu podataka, usluge, upravitelje
  * datoteka, prikaz početnog ekrana za prijavu.
@@ -60,7 +60,7 @@ public class MainApp extends Application {
 
     /**
      * Izgrađuje kontekst usluga aplikacije: uspostavlja konekciju prema
-     * bazi podataka, inicijalizira shemu, kreira DAO objekte, usluge i
+     * bazi, inicijalizira shemu, kreira DAO objekte, usluge i
      * upravitelje datotekama.
      *
      * @return izgrađeni kontekst usluga

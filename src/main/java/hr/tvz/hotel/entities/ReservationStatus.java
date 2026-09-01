@@ -1,7 +1,7 @@
 package hr.tvz.hotel.entities;
 
 /**
- * Nabrojani tip: predstavlja status rezervacije.
+ * Status rezervacije.
  */
 public enum ReservationStatus {
 

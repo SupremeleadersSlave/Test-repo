@@ -9,8 +9,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 /**
- * Generička kolekcija entiteta s operacijama dodavanja, uklanjanja,
- * filtriranja i sortiranja pomoću lambda izraza.
+ * Kolekcija entiteta s operacijama dodavanja, uklanjanja, filtriranja i sortiranja.
  *
  * @param <T> tip entiteta
  */
@@ -31,36 +30,36 @@ public class EntityCollection<T> {
      * Uklanja entitet iz kolekcije.
      *
      * @param item entitet za uklanjanje
-     * @return {@code true}: entitet je uklonjen, inače {@code false}
+     * @return {@code true} ako je entitet uklonjen
      */
     public boolean remove(T item) {
         return items.remove(item);
     }
 
     /**
-     * Vraća nepromjenjivi popis svih entiteta u kolekciji.
+     * Vraća nepromjenjivu kolekciju svih entiteta.
      *
-     * @return popis svih entiteta
+     * @return svi entiteti
      */
     public List<T> getAll() {
         return Collections.unmodifiableList(items);
     }
 
     /**
-     * Filtrira entitete prema zadanom predikatu.
+     * Filtrira entitete prema predikatu.
      *
      * @param predicate uvjet filtriranja
-     * @return popis filtriranih entiteta
+     * @return filtrirani entiteti
      */
     public List<T> filter(Predicate<T> predicate) {
         return items.stream().filter(predicate).toList();
     }
 
     /**
-     * Vraća entitete sortirane prema zadanom komparatoru.
+     * Vraća entitete sortirane prema komparatoru.
      *
      * @param comparator redoslijed sortiranja
-     * @return sortirani popis entiteta
+     * @return sortirani entiteti
      */
     public List<T> sorted(Comparator<T> comparator) {
         List<T> copy = new ArrayList<>(items);
@@ -71,7 +70,7 @@ public class EntityCollection<T> {
     /**
      * Vraća entitete kao skup, bez duplikata.
      *
-     * @return skup svih entiteta
+     * @return skup entiteta
      */
     public Set<T> toSet() {
         return new HashSet<>(items);
@@ -89,7 +88,7 @@ public class EntityCollection<T> {
     /**
      * Provjerava je li kolekcija prazna.
      *
-     * @return {@code true}: kolekcija ne sadrži entitete
+     * @return {@code true} ako je kolekcija prazna
      */
     public boolean isEmpty() {
         return items.isEmpty();

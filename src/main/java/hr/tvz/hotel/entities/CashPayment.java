@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * Predstavlja plaćanje gotovinom.
+ * Plaćanje gotovinom.
  *
  * @param amountReceived iznos primljene gotovine
  */

@@ -7,10 +7,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * Predstavlja rezervaciju sobe za gosta u zadanom razdoblju.
- * <p>
- * Instance nastaju isključivo kroz {@link Builder}: jamči valjane
- * datume.
+ * Rezervacija sobe za gosta u zadanom razdoblju.
+ * Instance se stvaraju kroz {@link Builder}, koji validira datume.
  */
 public class Reservation implements Schedulable {
 
@@ -136,7 +134,7 @@ public class Reservation implements Schedulable {
     }
 
     /**
-     * Graditelj za kreiranje instanci klase {@link Reservation}.
+     * Builder za {@link Reservation}.
      */
     public static final class Builder {
 
@@ -149,10 +147,10 @@ public class Reservation implements Schedulable {
         private BigDecimal totalPrice;
 
         /**
-         * Postavlja identifikator rezervacije.
+         * Postavlja id rezervacije.
          *
-         * @param id identifikator rezervacije
-         * @return ovaj graditelj, radi ulančavanja poziva
+         * @param id id rezervacije
+         * @return ovaj Builder
          */
         public Builder id(Long id) {
             this.id = id;
@@ -163,7 +161,7 @@ public class Reservation implements Schedulable {
          * Postavlja gosta na kojeg rezervacija glasi.
          *
          * @param guest gost rezervacije
-         * @return ovaj graditelj, radi ulančavanja poziva
+         * @return ovaj Builder
          */
         public Builder guest(Guest guest) {
             this.guest = guest;
@@ -174,7 +172,7 @@ public class Reservation implements Schedulable {
          * Postavlja sobu na koju se rezervacija odnosi.
          *
          * @param room soba rezervacije
-         * @return ovaj graditelj, radi ulančavanja poziva
+         * @return ovaj Builder
          */
         public Builder room(Room room) {
             this.room = room;
@@ -185,7 +183,7 @@ public class Reservation implements Schedulable {
          * Postavlja datum dolaska.
          *
          * @param checkInDate datum dolaska
-         * @return ovaj graditelj, radi ulančavanja poziva
+         * @return ovaj Builder
          */
         public Builder checkInDate(LocalDate checkInDate) {
             this.checkInDate = checkInDate;
@@ -196,7 +194,7 @@ public class Reservation implements Schedulable {
          * Postavlja datum odlaska.
          *
          * @param checkOutDate datum odlaska
-         * @return ovaj graditelj, radi ulančavanja poziva
+         * @return ovaj Builder
          */
         public Builder checkOutDate(LocalDate checkOutDate) {
             this.checkOutDate = checkOutDate;
@@ -207,7 +205,7 @@ public class Reservation implements Schedulable {
          * Postavlja status rezervacije.
          *
          * @param status status rezervacije
-         * @return ovaj graditelj, radi ulančavanja poziva
+         * @return ovaj Builder
          */
         public Builder status(ReservationStatus status) {
             this.status = status;
@@ -218,7 +216,7 @@ public class Reservation implements Schedulable {
          * Postavlja ukupnu cijenu rezervacije.
          *
          * @param totalPrice ukupna cijena
-         * @return ovaj graditelj, radi ulančavanja poziva
+         * @return ovaj Builder
          */
         public Builder totalPrice(BigDecimal totalPrice) {
             this.totalPrice = totalPrice;
@@ -226,10 +224,10 @@ public class Reservation implements Schedulable {
         }
 
         /**
-         * Gradi novu instancu rezervacije, provjeravajući valjanost datuma.
+         * Gradi novu rezervaciju i provjerava valjanost datuma.
          *
-         * @return izgrađena instanca {@link Reservation}
-         * @throws InvalidReservationDateException: datum odlaska nije nakon datuma dolaska
+         * @return izgrađena rezervacija
+         * @throws InvalidReservationDateException ako datum odlaska nije nakon datuma dolaska
          */
         public Reservation build() {
             if (checkInDate == null || checkOutDate == null || !checkOutDate.isAfter(checkInDate)) {

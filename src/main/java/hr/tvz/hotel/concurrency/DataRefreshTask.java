@@ -5,11 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Periodički poziva akciju osvježavanja podataka na JavaFX ekranu.
- * <p>
- * Akcija se izvršava na JavaFX aplikacijskoj niti putem
- * {@link Platform#runLater(Runnable)}: sigurno ažuriranje sučelja iz
- * pozadinske niti.
+ * Periodički osvježava podatke na JavaFX sučelju.
  */
 public class DataRefreshTask implements Runnable {
 
@@ -20,10 +16,10 @@ public class DataRefreshTask implements Runnable {
     private volatile boolean running = true;
 
     /**
-     * Kreira zadatak osvježavanja podataka.
+     * Stvara zadatak za refresh podataka.
      *
-     * @param refreshAction  akcija za svako osvježavanje
-     * @param intervalMillis razmak između dva osvježavanja u milisekundama
+     * @param refreshAction akcija refreshanja
+     * @param intervalMillis interval refreshanja (ms)
      */
     public DataRefreshTask(Runnable refreshAction, long intervalMillis) {
         this.refreshAction = refreshAction;
@@ -47,7 +43,7 @@ public class DataRefreshTask implements Runnable {
     }
 
     /**
-     * Zaustavlja zadatak osvježavanja podataka.
+     * Zaustavlja zadatak.
      */
     public void stop() {
         running = false;

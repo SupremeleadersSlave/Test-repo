@@ -1,7 +1,5 @@
 /**
- * Klase za rad s bazom podataka.
- * <p>
- * Klasa za upravljanje konekcijom: kreiranje, izvršavanje upita,
- * dohvaćanje podataka, zatvaranje. DAO klase za entitete aplikacije.
+ * Klase za rad s bazom podataka:
+ * konekcija, izvršavanje upita, dohvat podataka, DAO klase.
  */
 package hr.tvz.hotel.db;

@@ -6,10 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 /**
- * Predstavlja hotelsku sobu.
- * <p>
- * Dostupnost provjerava {@code ReservationService}; ova klasa kroz
- * {@link Reservable} osigurava valjanost razdoblja i izračun cijene.
+ * Hotelska soba.
  */
 public class Room implements Reservable {
 
@@ -28,7 +25,7 @@ public class Room implements Reservable {
      * @param type          vrsta sobe
      * @param pricePerNight cijena po noćenju
      * @param capacity      najveći broj gostiju u sobi
-     * @param active        označava je li soba trenutno u ponudi
+     * @param active        označava je li soba u ponudi
      */
     public Room(Long id, String roomNumber, RoomType type, BigDecimal pricePerNight, int capacity, boolean active) {
         this.id = id;
@@ -40,8 +37,7 @@ public class Room implements Reservable {
     }
 
     /**
-     * Provjerava je li soba aktivna i razdoblje valjano: datum odlaska
-     * je nakon dolaska; preklapanje s rezervacijama provjerava sloj usluga.
+     * Provjerava je li soba aktivna i razdoblje valjano.
      */
     @Override
     public boolean isAvailableFor(LocalDate checkIn, LocalDate checkOut) {
@@ -55,36 +51,36 @@ public class Room implements Reservable {
     }
 
     /**
-     * Vraća identifikator sobe.
+     * Vraća id sobe.
      *
-     * @return identifikator sobe
+     * @return id sobe
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Postavlja identifikator sobe.
+     * Postavlja id sobe.
      *
-     * @param id novi identifikator sobe
+     * @param id novi id sobe*
      */
     public void setId(Long id) {
         this.id = id;
     }
 
     /**
-     * Vraća oznaku sobe.
+     * Vraća broj sobe.
      *
-     * @return oznaka sobe
+     * @return broj sobe
      */
     public String getRoomNumber() {
         return roomNumber;
     }
 
     /**
-     * Postavlja oznaku sobe.
+     * Postavlja broj sobe.
      *
-     * @param roomNumber nova oznaka sobe
+     * @param roomNumber novi broj sobe
      */
     public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;

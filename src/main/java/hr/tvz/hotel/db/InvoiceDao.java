@@ -15,10 +15,8 @@ import java.util.List;
 
 /**
  * DAO klasa za entitet {@link Invoice}.
- * <p>
- * Pri mapiranju koristi {@link ReservationDao} za dohvaćanje rezervacije.
- * Stupac {@code payment_type} određuje implementaciju zapečaćenog sučelja
- * {@link PaymentMethod}: {@link CashPayment} ili {@link CardPayment}.
+ * Koristi {@link ReservationDao} za rezervacije.
+ * Mapira {@code payment_type} u {@link PaymentMethod}.
  */
 public class InvoiceDao {
 
@@ -29,8 +27,8 @@ public class InvoiceDao {
     /**
      * Kreira DAO za račune.
      *
-     * @param databaseConnection konekcija prema bazi podataka
-     * @param reservationDao     DAO za dohvaćanje rezervacija
+     * @param databaseConnection konekcija prema bazi
+     * @param reservationDao DAO za dohvat rezervacija
      */
     public InvoiceDao(DatabaseConnection databaseConnection, ReservationDao reservationDao) {
         this.databaseConnection = databaseConnection;
@@ -40,7 +38,7 @@ public class InvoiceDao {
     /**
      * Dohvaća sve račune.
      *
-     * @return popis svih računa, od najnovijeg prema najstarijem
+     * @return računi od najnovijeg prema najstarijem
      */
     public List<Invoice> findAll() {
         try {
@@ -55,7 +53,7 @@ public class InvoiceDao {
      * Sprema novi račun.
      *
      * @param invoice račun za spremanje
-     * @return identifikator novokreiranog računa
+     * @return generirani id računa
      */
     public Long insert(Invoice invoice) {
         PaymentMethod method = invoice.getPaymentMethod();
@@ -76,9 +74,9 @@ public class InvoiceDao {
     }
 
     /**
-     * Briše račun prema identifikatoru.
+     * Briše račun prema id-u.
      *
-     * @param id identifikator računa
+     * @param id id računa
      */
     public void delete(Long id) {
         try {
@@ -90,9 +88,8 @@ public class InvoiceDao {
     }
 
     /**
-     * Mapira redak rezultata u {@link Invoice}, rekonstruirajući
-     * odgovarajuću implementaciju sučelja {@link PaymentMethod} prema
-     * stupcu {@code payment_type}.
+     * Mapira redak rezultata u {@link Invoice}.
+     * Mapira {@code payment_type} u {@link PaymentMethod}.
      */
     private Invoice mapRow(ResultSet rs) throws SQLException {
         Reservation reservation = reservationDao.findById(rs.getLong("reservation_id"));
