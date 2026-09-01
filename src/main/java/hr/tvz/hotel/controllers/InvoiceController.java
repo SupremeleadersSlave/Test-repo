@@ -1,4 +1,4 @@
-package hr.tvz.hotel.ui;
+package hr.tvz.hotel.controllers;
 
 import hr.tvz.hotel.app.ServiceContext;
 import hr.tvz.hotel.entities.CardPayment;

@@ -5,4 +5,4 @@
  * Ekrani entiteta podržavaju pretragu, filtriranje, dodavanje, izmjenu
  * i brisanje uz potvrdu korisnika.
  */
-package hr.tvz.hotel.ui;
+package hr.tvz.hotel.controllers;

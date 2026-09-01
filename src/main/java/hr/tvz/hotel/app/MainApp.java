@@ -12,7 +12,7 @@ import hr.tvz.hotel.service.InvoiceService;
 import hr.tvz.hotel.service.ReservationService;
 import hr.tvz.hotel.service.RoomService;
 import hr.tvz.hotel.service.UserService;
-import hr.tvz.hotel.ui.LoginController;
+import hr.tvz.hotel.controllers.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
