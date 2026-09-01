@@ -2,6 +2,9 @@ package hr.tvz.hotel.exceptions;
 
 /**
  * Iznimka koja se baca kada traženi entitet nije pronađen.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class EntityNotFoundException extends RuntimeException {
 

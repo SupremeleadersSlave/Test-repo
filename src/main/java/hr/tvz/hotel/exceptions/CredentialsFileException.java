@@ -3,6 +3,9 @@ package hr.tvz.hotel.exceptions;
 /**
  * Iznimka koja se baca kada datoteka s korisničkim podacima ne postoji,
  * ne može se pročitati ili ima neispravan format zapisa.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class CredentialsFileException extends Exception {
 

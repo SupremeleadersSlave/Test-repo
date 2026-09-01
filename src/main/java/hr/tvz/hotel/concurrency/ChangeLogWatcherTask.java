@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Čita i ispisuje posljednju promjenu iz binarne datoteke.
  * Thread safe je za istovrremeni pristup.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class ChangeLogWatcherTask implements Runnable {
 

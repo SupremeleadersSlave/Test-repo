@@ -4,6 +4,9 @@ import java.time.LocalDate;
 
 /**
  * Sučelje za entitete s datumom početka i završetka.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public interface Schedulable {
 

@@ -2,6 +2,9 @@ package hr.tvz.hotel.entities;
 
 /**
  * Vrsta hotelske sobe.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public enum RoomType {
 

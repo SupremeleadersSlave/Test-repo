@@ -28,6 +28,7 @@ import javafx.util.StringConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -35,6 +36,9 @@ import java.util.function.Function;
 /**
  * Kontroler JavaFX ekrana za upravljanje računima: pretraga, izdavanje
  * i brisanje računa uz potvrdu korisnika.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class InvoiceController {
 
@@ -86,7 +90,7 @@ public class InvoiceController {
      * Ponovno učitava podatke o računima iz usluge u tablicu.
      */
     public void reload() {
-        refreshTable(invoiceService.findAll());
+        refreshTable(invoiceService.sortedBy(Comparator.comparing(i -> i.getIssueDate())));
     }
 
     private void refreshTable(List<Invoice> invoices) {

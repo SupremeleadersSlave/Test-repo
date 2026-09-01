@@ -12,6 +12,9 @@ import java.util.function.Predicate;
  * Kolekcija entiteta s operacijama dodavanja, uklanjanja, filtriranja i sortiranja.
  *
  * @param <T> tip entiteta
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class EntityCollection<T> {
 

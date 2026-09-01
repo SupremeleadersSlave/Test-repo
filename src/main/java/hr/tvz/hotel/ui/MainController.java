@@ -19,6 +19,9 @@ import java.io.IOException;
 /**
  * Kontroler glavnog ekrana s navigacijom putem kartica. Pokreće i
  * zaustavlja pozadinske niti za osvježavanje i nadzor promjena.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class MainController {
 

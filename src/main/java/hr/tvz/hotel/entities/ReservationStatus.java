@@ -2,6 +2,9 @@ package hr.tvz.hotel.entities;
 
 /**
  * Status rezervacije.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public enum ReservationStatus {
 

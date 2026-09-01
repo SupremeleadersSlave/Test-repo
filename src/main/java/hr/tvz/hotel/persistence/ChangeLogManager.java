@@ -18,6 +18,9 @@ import java.util.List;
 /**
  * Sprema i učitava povijest promjena entiteta ({@link ChangeRecord})
  * u binarnu datoteku.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class ChangeLogManager {
 

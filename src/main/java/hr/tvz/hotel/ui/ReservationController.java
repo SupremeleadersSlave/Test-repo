@@ -2,6 +2,7 @@ package hr.tvz.hotel.ui;
 
 import hr.tvz.hotel.app.ServiceContext;
 import hr.tvz.hotel.entities.Guest;
+import hr.tvz.hotel.entities.Relation;
 import hr.tvz.hotel.entities.Reservation;
 import hr.tvz.hotel.entities.ReservationStatus;
 import hr.tvz.hotel.entities.Role;
@@ -32,13 +33,18 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
  * Kontroler JavaFX ekrana za upravljanje rezervacijama: pretraga,
  * kreiranje, promjena statusa i brisanje rezervacija.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class ReservationController {
 
@@ -71,6 +77,8 @@ public class ReservationController {
     private Button editButton;
     @FXML
     private Button deleteButton;
+    @FXML
+    private Label relationsLabel;
 
     /**
      * Kreira novi kontroler ekrana za rezervacije.
@@ -102,7 +110,9 @@ public class ReservationController {
      * Ponovno učitava podatke o rezervacijama iz servisa u tablicu.
      */
     public void reload() {
-        refreshTable(reservationService.findAll());
+        refreshTable(reservationService.sortedBy(Comparator.comparing(r -> r.getCheckInDate())));
+        Set<Relation<Guest, Room>> relations = reservationService.findGuestRoomRelations();
+        relationsLabel.setText("Veza gost-soba: " + relations.size());
     }
 
     private void refreshTable(List<Reservation> reservations) {

@@ -29,11 +29,12 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 
 /**
- * Starter klasa aplikacije.
- * <p>
- * Inicijalizira slojeve aplikacije: bazu podataka, usluge, upravitelje
- * datoteka, prikaz početnog ekrana za prijavu. Prilikom prvog
- * pokretanja puni tablicu korisnika iz tekstualne datoteke.
+ * Starter klasa aplikacije. Inicijalizira bazu, usluge i upravitelje
+ * datotekama te prilikom prvog pokretanja puni tablicu korisnika iz
+ * tekstualne datoteke.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class MainApp extends Application {
 
@@ -85,8 +86,9 @@ public class MainApp extends Application {
         InvoiceDao invoiceDao = new InvoiceDao(databaseConnection, reservationDao);
 
         ChangeLogManager changeLogManager = new ChangeLogManager(Path.of("data", "changelog.dat"));
+        CredentialsFileManager credentialsFileManager = new CredentialsFileManager(Path.of("data", "credentials.txt"));
 
-        seedUsersIfEmpty(userDao);
+        seedUsersIfEmpty(userDao, credentialsFileManager);
 
         return new ServiceContext(
                 databaseConnection,
@@ -94,24 +96,22 @@ public class MainApp extends Application {
                 new GuestService(guestDao, changeLogManager),
                 new ReservationService(reservationDao, changeLogManager),
                 new InvoiceService(invoiceDao, changeLogManager),
-                new UserService(userDao, changeLogManager),
-                new AuthService(userDao),
+                new UserService(userDao, changeLogManager, credentialsFileManager),
+                new AuthService(credentialsFileManager),
                 changeLogManager);
     }
 
     /**
-     * Puni tablicu korisnika iz {@code data/credentials.txt} ako je
-     * prazna, npr. prilikom prvog pokretanja aplikacije na praznoj
-     * bazi. Na sljedećim pokretanjima tablica više nije prazna, pa se
-     * datoteka uopće ne čita.
+     * Puni tablicu korisnika iz tekstualne datoteke ako je prazna, npr.
+     * prilikom prvog pokretanja aplikacije na praznoj bazi.
      *
      * @param userDao DAO za pristup korisnicima u bazi podataka
+     * @param credentialsFileManager upravitelj datotekom s podacima za prijavu
      */
-    private void seedUsersIfEmpty(UserDao userDao) {
+    private void seedUsersIfEmpty(UserDao userDao, CredentialsFileManager credentialsFileManager) {
         if (!userDao.findAll().isEmpty()) {
             return;
         }
-        CredentialsFileManager credentialsFileManager = new CredentialsFileManager(Path.of("data", "credentials.txt"));
         try {
             credentialsFileManager.loadCredentials().values().forEach(entry -> {
                 User user = new User(null, entry.username(), "(uvezeno)", null, null,

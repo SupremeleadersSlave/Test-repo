@@ -21,12 +21,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Kontroler JavaFX ekrana za upravljanje sobama: pretraga, dodavanje,
  * uređivanje i brisanje soba uz potvrdu korisnika.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class RoomController {
 
@@ -79,7 +83,7 @@ public class RoomController {
      * Ponovno učitava podatke o sobama iz servisa u tablicu.
      */
     public void reload() {
-        refreshTable(roomService.findAll());
+        refreshTable(roomService.sortedBy(Comparator.comparing(r -> r.getRoomNumber())));
     }
 
     private void refreshTable(List<Room> rooms) {

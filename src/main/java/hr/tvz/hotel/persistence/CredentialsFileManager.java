@@ -2,6 +2,7 @@ package hr.tvz.hotel.persistence;
 
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.exceptions.CredentialsFileException;
+import hr.tvz.hotel.util.PasswordHasher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,17 +10,19 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
- * Čita korisnička imena i hashirane lozinke iz tekstualne datoteke,
- * koristi se za jednokratno punjenje baze podataka korisnicima
- * prilikom prvog pokretanja aplikacije.
- * <p>
- * Očekivani format svakog retka datoteke je
+ * Čita i sprema korisnička imena i hashirane lozinke u tekstualnu
+ * datoteku te provjerava podatke pri prijavi. Format retka je
  * {@code korisnickoIme;hashLozinke;ROLA}.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class CredentialsFileManager {
 
@@ -65,10 +68,47 @@ public class CredentialsFileManager {
     }
 
     /**
-     * Rastavlja redak tekstualne datoteke u {@link CredentialEntry}.
+     * Sprema zadane podatke za prijavu u tekstualnu datoteku i pritom
+     * zamjenjuje njezin dosadašnji sadržaj.
      *
-     * @throws CredentialsFileException ako redak nije u očekivanom formatu ili sadrži nepoznatu rolu
+     * @param entries podaci za prijavu koji se spremaju
+     * @throws CredentialsFileException ako se datoteka ne može zapisati
      */
+    public void saveCredentials(Collection<CredentialEntry> entries) throws CredentialsFileException {
+        List<String> lines = entries.stream()
+                .map(entry -> entry.username() + SEPARATOR + entry.passwordHash() + SEPARATOR + entry.role().name())
+                .toList();
+        try {
+            Files.write(credentialsFilePath, lines, StandardCharsets.UTF_8);
+            LOGGER.info("Datoteka za prijavu spremljena: {} zapisa.", lines.size());
+        } catch (IOException e) {
+            LOGGER.error("Spremanje datoteke za prijavu neuspjelo: {}", credentialsFilePath, e);
+            throw new CredentialsFileException("Datoteka za prijavu se ne sprema.", e);
+        }
+    }
+
+    /**
+     * Pokušava autentificirati korisnika prema korisničkom imenu i lozinci.
+     *
+     * @param username korisničko ime
+     * @param plainPassword lozinka u čitljivom obliku
+     * @return uloga prijavljenog korisnika ili prazan {@link Optional} ako prijava ne uspije
+     * @throws CredentialsFileException ako se datoteka za prijavu ne može pročitati
+     */
+    public Optional<Role> authenticate(String username, String plainPassword) throws CredentialsFileException {
+        CredentialEntry entry = loadCredentials().get(username);
+        if (entry == null) {
+            LOGGER.warn("Nepostojeće korisničko ime: {}", username);
+            return Optional.empty();
+        }
+        if (!PasswordHasher.matches(plainPassword, entry.passwordHash())) {
+            LOGGER.warn("Neuspješna prijava: {}", username);
+            return Optional.empty();
+        }
+        LOGGER.info("Prijava uspjela: {} ({})", username, entry.role());
+        return Optional.of(entry.role());
+    }
+
     private CredentialEntry parseLine(String line) throws CredentialsFileException {
         String[] parts = line.split(SEPARATOR);
         if (parts.length != 3) {

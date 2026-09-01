@@ -9,6 +9,9 @@ import java.util.Objects;
 /**
  * Rezervacija sobe za gosta u zadanom razdoblju.
  * Instance se stvaraju kroz {@link Builder}, koji validira datume.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class Reservation implements Schedulable {
 

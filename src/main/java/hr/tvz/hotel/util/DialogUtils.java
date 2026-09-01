@@ -14,6 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Broji trenutno otvorene dijaloge: dok je barem jedan otvoren,
  * pozadinsko osvježavanje podataka se preskače kako se odabir u
  * tablicama ne bi gubio.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public final class DialogUtils {
 

@@ -7,8 +7,10 @@ import hr.tvz.hotel.entities.Guest;
 import hr.tvz.hotel.entities.Reservation;
 import hr.tvz.hotel.entities.ReservationStatus;
 import hr.tvz.hotel.entities.Role;
+import hr.tvz.hotel.entities.Relation;
 import hr.tvz.hotel.entities.Room;
 import hr.tvz.hotel.entities.Schedulable;
+import hr.tvz.hotel.exceptions.EntityNotFoundException;
 import hr.tvz.hotel.exceptions.ReservationNotAvailableException;
 import hr.tvz.hotel.persistence.ChangeLogManager;
 import org.slf4j.Logger;
@@ -18,12 +20,17 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Implementira poslovnu logiku upravljanja rezervacijama, uključujući
  * provjeru raspoloživosti sobe za zadano razdoblje pomoću sučelja
  * {@link Schedulable}.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class ReservationService {
 
@@ -51,7 +58,22 @@ public class ReservationService {
      */
     public final void refresh() {
         reservations.clear();
-        reservationDao.findAll().forEach(reservations::add);
+        try {
+            reservationDao.findAll().forEach(reservations::add);
+        } catch (EntityNotFoundException e) {
+            LOGGER.error("Učitavanje rezervacija neuspjelo: gost ili soba ne postoji.", e);
+        }
+    }
+
+    /**
+     * Vraća skup veza između gostiju i soba koje su rezervirali.
+     *
+     * @return skup veza gost-soba, bez ponavljanja
+     */
+    public Set<Relation<Guest, Room>> findGuestRoomRelations() {
+        return reservations.toSet().stream()
+                .map(r -> new Relation<>(r.getGuest(), r.getRoom(), "REZERVIRAO"))
+                .collect(Collectors.toSet());
     }
 
     /**

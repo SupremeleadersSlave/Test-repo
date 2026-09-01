@@ -19,12 +19,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Kontroler JavaFX ekrana za upravljanje korisnicima sustava, dostupan
  * samo administratoru: pretraga, dodavanje, uređivanje i brisanje.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class UserController {
 
@@ -77,7 +81,7 @@ public class UserController {
      * Ponovno učitava podatke o korisnicima iz servisa u tablicu.
      */
     public void reload() {
-        refreshTable(userService.findAll());
+        refreshTable(userService.sortedBy(Comparator.comparing(u -> u.getUsername())));
     }
 
     private void refreshTable(List<User> users) {

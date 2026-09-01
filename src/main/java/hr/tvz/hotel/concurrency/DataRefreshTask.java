@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Periodički osvježava podatke na JavaFX sučelju.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class DataRefreshTask implements Runnable {
 

@@ -19,12 +19,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * Kontroler JavaFX ekrana za upravljanje gostima: pretraga, dodavanje,
  * uređivanje i brisanje gostiju uz potvrdu korisnika.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class GuestController {
 
@@ -81,7 +85,7 @@ public class GuestController {
      * Ponovno učitava podatke o gostima iz usluge u tablicu.
      */
     public void reload() {
-        refreshTable(guestService.findAll());
+        refreshTable(guestService.sortedBy(Comparator.comparing(g -> g.getLastName())));
     }
 
     private void refreshTable(List<Guest> guests) {

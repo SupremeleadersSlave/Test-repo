@@ -20,6 +20,9 @@ import hr.tvz.hotel.service.UserService;
  * @param userService        usluga za upravljanje usera
  * @param authService        usluga za prijavu usera
  * @param changeLogManager   upravitelj loga
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public record ServiceContext(
         DatabaseConnection databaseConnection,

@@ -5,6 +5,7 @@ import hr.tvz.hotel.entities.ChangeRecord;
 import hr.tvz.hotel.entities.EntityCollection;
 import hr.tvz.hotel.entities.Invoice;
 import hr.tvz.hotel.entities.Role;
+import hr.tvz.hotel.exceptions.EntityNotFoundException;
 import hr.tvz.hotel.persistence.ChangeLogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,9 @@ import java.util.function.Predicate;
 /**
  * Implementira poslovnu logiku upravljanja računima izdanima za
  * rezervacije.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class InvoiceService {
 
@@ -44,7 +48,11 @@ public class InvoiceService {
      */
     public final void refresh() {
         invoices.clear();
-        invoiceDao.findAll().forEach(invoices::add);
+        try {
+            invoiceDao.findAll().forEach(invoices::add);
+        } catch (EntityNotFoundException e) {
+            LOGGER.error("Učitavanje računa neuspjelo: rezervacija ne postoji.", e);
+        }
     }
 
     /**

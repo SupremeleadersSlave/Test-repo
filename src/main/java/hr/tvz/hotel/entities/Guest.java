@@ -2,6 +2,9 @@ package hr.tvz.hotel.entities;
 
 /**
  * Predstavlja gosta hotela.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class Guest extends Person {
 

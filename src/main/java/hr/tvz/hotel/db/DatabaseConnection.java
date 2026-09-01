@@ -14,6 +14,9 @@ import java.util.List;
 /**
  * Upravlja konekcijom prema H2 bazi podataka i izvršavanjem upita.
  * Baza se pohranjuje u datoteci unutar mape {@code data}.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class DatabaseConnection {
 

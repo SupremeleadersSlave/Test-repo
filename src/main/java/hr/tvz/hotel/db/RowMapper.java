@@ -7,6 +7,9 @@ import java.sql.SQLException;
  * Funkcijsko sučelje za mapiranje retka rezultata upita u objekt.
  *
  * @param <T> tip mapiranog objekta
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 @FunctionalInterface
 public interface RowMapper<T> {

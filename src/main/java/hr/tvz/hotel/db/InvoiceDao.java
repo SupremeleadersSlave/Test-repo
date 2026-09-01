@@ -17,6 +17,9 @@ import java.util.List;
  * DAO klasa za entitet {@link Invoice}.
  * Koristi {@link ReservationDao} za rezervacije.
  * Mapira {@code payment_type} u {@link PaymentMethod}.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class InvoiceDao {
 

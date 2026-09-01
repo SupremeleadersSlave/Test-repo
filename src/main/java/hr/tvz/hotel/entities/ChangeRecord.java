@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
  * @param newValue nova vrijednost
  * @param changedByRole rola autora promjene
  * @param timestamp datum i vrijeme promjene
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public record ChangeRecord(
         String entityName,

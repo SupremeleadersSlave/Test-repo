@@ -16,6 +16,9 @@ import java.util.function.Predicate;
 
 /**
  * Implementira logiku upravljanja gostima.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class GuestService {
 

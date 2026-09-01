@@ -6,6 +6,9 @@ import java.util.Objects;
 
 /**
  * Račun izdan za rezervaciju.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class Invoice {
 

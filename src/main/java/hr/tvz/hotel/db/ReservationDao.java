@@ -15,6 +15,9 @@ import java.util.List;
 /**
  * DAO klasa za entitet {@link Reservation}.
  * Pri mapiranju koristi {@link GuestDao} i {@link RoomDao} za dohvat gosta i sobe.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class ReservationDao {
 

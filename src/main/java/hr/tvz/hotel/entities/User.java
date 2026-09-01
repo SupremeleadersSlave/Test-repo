@@ -3,6 +3,9 @@ package hr.tvz.hotel.entities;
 /**
  * Korisnik sustava, djelatnik hotela, prijavljuje se korisničkim
  * imenom i lozinkom.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class User extends Person {
 

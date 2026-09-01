@@ -7,6 +7,9 @@ import java.util.Objects;
 
 /**
  * Hotelska soba.
+ *
+ * @author Viktor Barešić
+ * @version 1.0
  */
 public class Room implements Reservable {
 
