@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -109,7 +110,7 @@ public class ReservationController {
      * Ponovno učitava podatke o rezervacijama iz servisa u tablicu.
      */
     public void reload() {
-        refreshTable(reservationService.sortedBy(Comparator.comparing(r -> r.getCheckInDate())));
+        refreshTable(reservationService.sortedBy(Comparator.comparing(Reservation::getCheckInDate)));
         Set<Relation<Guest, Room>> relations = reservationService.findGuestRoomRelations();
         relationsLabel.setText("Veza gost-soba: " + relations.size());
     }
@@ -194,8 +195,8 @@ public class ReservationController {
         DialogUtils.setDisplay(guestBox, Guest::getFullName);
         ComboBox<Room> roomBox = new ComboBox<>(FXCollections.observableArrayList(roomService.findAll()));
         DialogUtils.setDisplay(roomBox, r -> r.getRoomNumber() + " (" + r.getType() + ")");
-        DatePicker checkInPicker = new DatePicker(LocalDate.now());
-        DatePicker checkOutPicker = new DatePicker(LocalDate.now().plusDays(1));
+        DatePicker checkInPicker = new DatePicker(LocalDate.now(ZoneId.systemDefault()));
+        DatePicker checkOutPicker = new DatePicker(LocalDate.now(ZoneId.systemDefault()).plusDays(1));
 
         GridPane grid = new GridPane();
         grid.setHgap(10);

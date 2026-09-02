@@ -1,6 +1,7 @@
 package hr.tvz.hotel.entities;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Objects;
 
 /**
@@ -30,7 +31,7 @@ public class Relation<A, B> {
         this.source = source;
         this.target = target;
         this.relationType = relationType;
-        this.establishedAt = LocalDateTime.now();
+        this.establishedAt = LocalDateTime.now(ZoneId.systemDefault());
     }
 
     /**

@@ -27,6 +27,7 @@ import javafx.scene.layout.GridPane;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,9 @@ import java.util.Optional;
  * @version 1.0
  */
 public class InvoiceController {
+
+    private static final String NEISPRAVAN_UNOS = "Neispravan unos";
+    private static final String GOTOVINA = "Gotovina";
 
     private final InvoiceService invoiceService;
     private final ReservationService reservationService;
@@ -87,7 +91,7 @@ public class InvoiceController {
      * Ponovno učitava podatke o računima iz usluge u tablicu.
      */
     public void reload() {
-        refreshTable(invoiceService.sortedBy(Comparator.comparing(i -> i.getIssueDate())));
+        refreshTable(invoiceService.sortedBy(Comparator.comparing(Invoice::getIssueDate)));
     }
 
     private void refreshTable(List<Invoice> invoices) {
@@ -141,13 +145,13 @@ public class InvoiceController {
         calcButton.setOnAction(e -> {
             Reservation selected = reservationBox.getValue();
             if (selected == null) {
-                DialogUtils.showError("Neispravan unos", "Prvo odaberite rezervaciju.");
+                DialogUtils.showError(NEISPRAVAN_UNOS, "Prvo odaberite rezervaciju.");
                 return;
             }
             amountField.setText(selected.getTotalPrice().toString());
         });
-        ChoiceBox<String> typeBox = new ChoiceBox<>(FXCollections.observableArrayList("Gotovina", "Kartica"));
-        typeBox.setValue("Gotovina");
+        ChoiceBox<String> typeBox = new ChoiceBox<>(FXCollections.observableArrayList(GOTOVINA, "Kartica"));
+        typeBox.setValue(GOTOVINA);
         TextField cashField = new TextField();
         TextField cardNumberField = new TextField();
         TextField authCodeField = new TextField();
@@ -169,17 +173,17 @@ public class InvoiceController {
             }
             Reservation reservation = reservationBox.getValue();
             if (reservation == null) {
-                DialogUtils.showError("Neispravan unos", "Potrebno je odabrati rezervaciju.");
+                DialogUtils.showError(NEISPRAVAN_UNOS, "Potrebno je odabrati rezervaciju.");
                 return null;
             }
             try {
                 BigDecimal amount = new BigDecimal(amountField.getText());
-                PaymentMethod method = "Gotovina".equals(typeBox.getValue())
+                PaymentMethod method = GOTOVINA.equals(typeBox.getValue())
                         ? new CashPayment(new BigDecimal(cashField.getText()))
                         : new CardPayment(cardNumberField.getText(), authCodeField.getText());
-                return new Invoice(null, reservation, amount, method, LocalDateTime.now());
-            } catch (NumberFormatException e) {
-                DialogUtils.showError("Neispravan unos", "Iznos i primljena gotovina moraju biti brojevi.");
+                return new Invoice(null, reservation, amount, method, LocalDateTime.now(ZoneId.systemDefault()));
+            } catch (NumberFormatException _) {
+                DialogUtils.showError(NEISPRAVAN_UNOS, "Iznos i primljena gotovina moraju biti brojevi.");
                 return null;
             }
         });

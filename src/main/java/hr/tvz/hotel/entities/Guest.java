@@ -1,5 +1,7 @@
 package hr.tvz.hotel.entities;
 
+import java.util.Objects;
+
 /**
  * Predstavlja gosta hotela.
  *
@@ -67,5 +69,15 @@ public class Guest extends Person {
      */
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

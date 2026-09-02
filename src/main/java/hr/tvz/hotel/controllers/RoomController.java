@@ -36,6 +36,9 @@ import java.util.Optional;
  */
 public class RoomController {
 
+    private static final String NEISPRAVAN_UNOS = "Neispravan unos";
+    private static final String NEISPRAVAN_BROJ_SOBE = "Neispravan broj sobe";
+
     private final RoomService roomService;
     private final Role currentRole;
 
@@ -85,7 +88,7 @@ public class RoomController {
      * Ponovno učitava podatke o sobama iz servisa u tablicu.
      */
     public void reload() {
-        refreshTable(roomService.sortedBy(Comparator.comparing(r -> r.getRoomNumber())));
+        refreshTable(roomService.sortedBy(Comparator.comparing(Room::getRoomNumber)));
     }
 
     private void refreshTable(List<Room> rooms) {
@@ -103,7 +106,7 @@ public class RoomController {
     private void handleAdd() {
         showRoomDialog(null).ifPresent(room -> {
             if (roomService.roomNumberExists(room.getRoomNumber(), null)) {
-                DialogUtils.showError("Neispravan broj sobe", "Soba " + room.getRoomNumber() + " već postoji.");
+                DialogUtils.showError(NEISPRAVAN_BROJ_SOBE, "Soba " + room.getRoomNumber() + " već postoji.");
                 return;
             }
             roomService.addRoom(room, currentRole);
@@ -122,7 +125,7 @@ public class RoomController {
         }
         showRoomDialog(selected).ifPresent(updated -> {
             if (roomService.roomNumberExists(updated.getRoomNumber(), selected.getId())) {
-                DialogUtils.showError("Neispravan broj sobe", "Soba " + updated.getRoomNumber() + " već postoji.");
+                DialogUtils.showError(NEISPRAVAN_BROJ_SOBE, "Soba " + updated.getRoomNumber() + " već postoji.");
                 return;
             }
             roomService.updateRoom(selected, updated, currentRole);
@@ -164,7 +167,6 @@ public class RoomController {
 
         ComboBox<RoomType> floorBox = new ComboBox<>(FXCollections.observableArrayList(RoomType.values()));
         floorBox.setValue(existing != null ? existing.getType() : RoomType.SINGLE);
-        Label typeLabel = new Label();
         floorBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(RoomType t) {
@@ -196,24 +198,38 @@ public class RoomController {
         grid.addRow(4, new Label("Status:"), statusBox);
         dialog.getDialogPane().setContent(grid);
 
-        dialog.setResultConverter(buttonType -> {
-            if (buttonType != ButtonType.OK) {
-                return null;
-            }
-            RoomType type = floorBox.getValue();
-            String roomNumber = type.getFloor() + roomNumberField.getText().trim();
-            try {
-                Room.validateRoomNumber(roomNumber);
-                return new Room(existing != null ? existing.getId() : null, roomNumber, type,
-                        new BigDecimal(priceField.getText()), capacityBox.getValue(), statusBox.getValue());
-            } catch (NumberFormatException e) {
-                DialogUtils.showError("Neispravan unos", "Cijena mora biti broj.");
-                return null;
-            } catch (InvalidRoomException e) {
-                DialogUtils.showError("Neispravan broj sobe", e.getMessage());
-                return null;
-            }
-        });
+        dialog.setResultConverter(buttonType ->
+                buttonType == ButtonType.OK
+                        ? buildRoom(existing, floorBox, roomNumberField, capacityBox, priceField, statusBox)
+                        : null);
         return DialogUtils.showAndWait(dialog);
+    }
+
+    /**
+     * Gradi sobu iz podataka unesenih u dijalogu, uz provjeru broja sobe.
+     *
+     * @param existing soba koja se uređuje ili {@code null} za novu
+     * @param floorBox izbornik kata i vrste
+     * @param roomNumberField polje rednog broja sobe
+     * @param capacityBox izbornik kapaciteta
+     * @param priceField polje cijene
+     * @param statusBox izbornik statusa
+     * @return izgrađena soba ili {@code null} ako je unos neispravan
+     */
+    private Room buildRoom(Room existing, ComboBox<RoomType> floorBox, TextField roomNumberField,
+                           ComboBox<Capacity> capacityBox, TextField priceField, ComboBox<RoomStatus> statusBox) {
+        RoomType type = floorBox.getValue();
+        String roomNumber = type.getFloor() + roomNumberField.getText().trim();
+        try {
+            Room.validateRoomNumber(roomNumber);
+            return new Room(existing != null ? existing.getId() : null, roomNumber, type,
+                    new BigDecimal(priceField.getText()), capacityBox.getValue(), statusBox.getValue());
+        } catch (NumberFormatException _) {
+            DialogUtils.showError(NEISPRAVAN_UNOS, "Cijena mora biti broj.");
+            return null;
+        } catch (InvalidRoomException e) {
+            DialogUtils.showError(NEISPRAVAN_BROJ_SOBE, e.getMessage());
+            return null;
+        }
     }
 }

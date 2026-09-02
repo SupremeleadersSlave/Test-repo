@@ -80,7 +80,7 @@ public class UserController {
      * Ponovno učitava podatke o korisnicima iz servisa u tablicu.
      */
     public void reload() {
-        refreshTable(userService.sortedBy(Comparator.comparing(u -> u.getUsername())));
+        refreshTable(userService.sortedBy(Comparator.comparing(User::getUsername)));
     }
 
     private void refreshTable(List<User> users) {
@@ -179,8 +179,13 @@ public class UserController {
             if (buttonType != ButtonType.OK) {
                 return null;
             }
-            User user = new User(existing != null ? existing.getId() : null, firstNameField.getText(), lastNameField.getText(),
-                    emailField.getText(), phoneField.getText(), usernameField.getText(), null, roleBox.getValue());
+            User user = new User.Builder()
+                    .id(existing != null ? existing.getId() : null)
+                    .name(firstNameField.getText(), lastNameField.getText())
+                    .contact(emailField.getText(), phoneField.getText())
+                    .credentials(usernameField.getText(), null)
+                    .role(roleBox.getValue())
+                    .build();
             return new DialogResult(user, passwordField.getText());
         });
         return DialogUtils.showAndWait(dialog);

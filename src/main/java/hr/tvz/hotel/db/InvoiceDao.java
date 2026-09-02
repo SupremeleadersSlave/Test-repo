@@ -60,9 +60,11 @@ public class InvoiceDao {
     public Long insert(Invoice invoice) {
         PaymentMethod method = invoice.getPaymentMethod();
         String type = method instanceof CashPayment ? "CASH" : "CARD";
-        String cashReceived = method instanceof CashPayment cash ? cash.amountReceived().toString() : null;
-        String cardNumber = method instanceof CardPayment card ? card.maskedCardNumber() : null;
-        String authCode = method instanceof CardPayment card ? card.authorizationCode() : null;
+        String cashReceived = method instanceof CashPayment(var amountReceived) ? amountReceived.toString() : null;
+        String cardNumber = method instanceof CardPayment(var maskedCardNumber, var authorizationCode)
+                ? maskedCardNumber : null;
+        String authCode = method instanceof CardPayment(var maskedCardNumber, var authorizationCode)
+                ? authorizationCode : null;
         try {
             return database.executeInsert(
                     "INSERT INTO invoices (reservation_id, amount, payment_type, cash_amount_received, "

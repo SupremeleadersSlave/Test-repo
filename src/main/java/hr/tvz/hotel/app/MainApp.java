@@ -118,8 +118,11 @@ public class MainApp extends Application {
         }
         try {
             credentialsFile.loadCredentials().values().forEach(entry -> {
-                User user = new User(null, entry.username(), "(uvezeno)", null, null,
-                        entry.username(), entry.passwordHash(), entry.role());
+                User user = new User.Builder()
+                        .name(entry.username(), "(uvezeno)")
+                        .credentials(entry.username(), entry.passwordHash())
+                        .role(entry.role())
+                        .build();
                 userDao.insert(user);
                 LOGGER.info("KORISNIK PORTED: {}", entry.username());
             });

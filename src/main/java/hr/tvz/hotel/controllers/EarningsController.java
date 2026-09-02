@@ -12,6 +12,7 @@ import javafx.scene.control.TableView;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ import java.util.Map;
 public class EarningsController {
 
     private final InvoiceService invoiceService;
-    private final int year = LocalDate.now().getYear();
+    private final int year = LocalDate.now(ZoneId.systemDefault()).getYear();
 
     @FXML
     private TableView<MonthEarnings> tableView;

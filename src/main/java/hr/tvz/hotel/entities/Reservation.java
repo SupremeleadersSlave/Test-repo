@@ -34,12 +34,12 @@ public class Reservation implements Schedulable {
 
     @Override
     public LocalDate getStartDate() {
-        return checkInDate;
+        return getCheckInDate();
     }
 
     @Override
     public LocalDate getEndDate() {
-        return checkOutDate;
+        return getCheckOutDate();
     }
 
     /**
@@ -135,9 +135,6 @@ public class Reservation implements Schedulable {
         return "Reservation{id=" + id + ", soba=" + room + ", " + checkInDate + " - " + checkOutDate + ", status=" + status + "}";
     }
 
-    /**
-     * Builder za {@link Reservation}.
-     */
     /**
      * Vraća kopiju ove rezervacije s postavljenim id-em, npr. nakon
      * spremanja u bazu koja dodjeljuje id.

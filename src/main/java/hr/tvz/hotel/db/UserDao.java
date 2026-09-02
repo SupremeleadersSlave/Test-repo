@@ -113,15 +113,12 @@ public class UserDao {
     }
 
     private static User mapRow(ResultSet rs) throws SQLException {
-        return new User(
-                rs.getLong("id"),
-                rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getString("email"),
-                rs.getString("phone"),
-                rs.getString("username"),
-                rs.getString("password_hash"),
-                Role.valueOf(rs.getString("role"))
-        );
+        return new User.Builder()
+                .id(rs.getLong("id"))
+                .name(rs.getString("first_name"), rs.getString("last_name"))
+                .contact(rs.getString("email"), rs.getString("phone"))
+                .credentials(rs.getString("username"), rs.getString("password_hash"))
+                .role(Role.valueOf(rs.getString("role")))
+                .build();
     }
 }

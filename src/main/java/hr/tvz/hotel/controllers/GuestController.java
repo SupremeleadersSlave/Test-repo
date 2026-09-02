@@ -84,7 +84,7 @@ public class GuestController {
      * Ponovno učitava podatke o gostima iz usluge u tablicu.
      */
     public void reload() {
-        refreshTable(guestService.sortedBy(Comparator.comparing(g -> g.getLastName())));
+        refreshTable(guestService.sortedBy(Comparator.comparing(Guest::getLastName)));
     }
 
     private void refreshTable(List<Guest> guests) {

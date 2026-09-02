@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -144,6 +145,6 @@ public class GuestService {
     }
 
     private void logChange(Long entityId, String field, String oldValue, String newValue, Role changedBy) {
-        changeLog.append(new ChangeRecord("Guest", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now()));
+        changeLog.append(new ChangeRecord("Guest", entityId, field, oldValue, newValue, changedBy, LocalDateTime.now(ZoneId.systemDefault())));
     }
 }

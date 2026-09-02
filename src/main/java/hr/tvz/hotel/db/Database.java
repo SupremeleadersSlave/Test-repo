@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class Database {
     private static final Logger LOGGER = LoggerFactory.getLogger(Database.class);
     private static final String URL = "jdbc:h2:./data/hoteldb";
     private static final String USERNAME = "sa";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "hotel";
 
     private Connection connection;
 
@@ -125,7 +126,7 @@ public class Database {
      * @throws SQLException ako izvršavanje upita ne uspije
      */
     public long executeInsert(String sql, Object... params) throws SQLException {
-        try (PreparedStatement statement = connect().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connect().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             bindParameters(statement, params);
             statement.executeUpdate();
             try (ResultSet keys = statement.getGeneratedKeys()) {
