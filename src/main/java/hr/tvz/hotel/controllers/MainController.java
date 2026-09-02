@@ -40,6 +40,7 @@ public class MainController {
     private InvoiceController invoiceController;
     private UserController userController;
     private EarningsController earningsController;
+    private OccupancyController occupancyController;
     private HistoryController historyController;
 
     private DataRefresher dataRefresher;
@@ -78,6 +79,8 @@ public class MainController {
             addTab("Rezervacije", "/fxml/reservations.fxml", reservationController);
             invoiceController = new InvoiceController(context, currentRole);
             addTab("Računi", "/fxml/invoices.fxml", invoiceController);
+            occupancyController = new OccupancyController(context);
+            addTab("Popunjenost", "/fxml/occupancy.fxml", occupancyController);
             if (currentRole == Role.ADMIN) {
                 userController = new UserController(context, currentRole);
                 addTab("Korisnici", "/fxml/users.fxml", userController);
@@ -139,6 +142,7 @@ public class MainController {
         guestController.reload();
         reservationController.reload();
         invoiceController.reload();
+        occupancyController.reload();
         if (userController != null) {
             context.userService().refresh();
             userController.reload();

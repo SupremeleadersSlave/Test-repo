@@ -18,8 +18,12 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.YearMonth;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -104,6 +108,47 @@ public class ReservationService {
         return reservations.toSet().stream()
                 .map(r -> new Relation<>(r.getGuest(), r.getRoom(), "REZERVIRAO"))
                 .collect(Collectors.toSet());
+    }
+
+    /**
+     * Računa popunjenost po mjesecima za zadanu godinu: broj rezervacija
+     * i broj gostiju čije se razdoblje preklapa sa svakim mjesecom.
+     * Rezervacija koja se proteže kroz više mjeseci broji se u svakom
+     * mjesecu kojeg dodiruje.
+     *
+     * @param year godina za koju se računa popunjenost
+     * @return mapa mjeseca na popunjenost tog mjeseca, za svih 12 mjeseci
+     */
+    public Map<Month, Occupancy> occupancyByMonth(int year) {
+        Map<Month, Occupancy> result = new LinkedHashMap<>();
+        for (Month month : Month.values()) {
+            YearMonth ym = YearMonth.of(year, month);
+            Schedulable monthPeriod = new Schedulable() {
+                @Override
+                public LocalDate getStartDate() {
+                    return ym.atDay(1);
+                }
+
+                @Override
+                public LocalDate getEndDate() {
+                    return ym.atEndOfMonth();
+                }
+            };
+            List<Reservation> inMonth = reservations.filter(r ->
+                    r.getStatus() != ReservationStatus.CANCELLED && r.overlaps(monthPeriod));
+            long guests = inMonth.stream().map(Reservation::getGuest).distinct().count();
+            result.put(month, new Occupancy(inMonth.size(), (int) guests));
+        }
+        return result;
+    }
+
+    /**
+     * Popunjenost jednog mjeseca: broj rezervacija i broj gostiju.
+     *
+     * @param reservations broj rezervacija koje se preklapaju s mjesecom
+     * @param guests broj različitih gostiju u tom mjesecu
+     */
+    public record Occupancy(int reservations, int guests) {
     }
 
     /**
