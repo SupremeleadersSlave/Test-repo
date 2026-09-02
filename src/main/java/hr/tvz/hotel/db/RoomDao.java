@@ -2,6 +2,7 @@ package hr.tvz.hotel.db;
 
 import hr.tvz.hotel.entities.Capacity;
 import hr.tvz.hotel.entities.Room;
+import hr.tvz.hotel.entities.RoomStatus;
 import hr.tvz.hotel.entities.RoomType;
 import hr.tvz.hotel.exceptions.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -74,8 +75,8 @@ public class RoomDao {
     public Long insert(Room room) {
         try {
             return database.executeInsert(
-                    "INSERT INTO rooms (room_number, type, price_per_night, capacity, active) VALUES (?, ?, ?, ?, ?)",
-                    room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity().name(), room.isActive());
+                    "INSERT INTO rooms (room_number, type, price_per_night, capacity, status) VALUES (?, ?, ?, ?, ?)",
+                    room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity().name(), room.getStatus().name());
         } catch (SQLException e) {
             LOGGER.error("soba: spremanje palo", e);
             throw new IllegalStateException("Soba se ne sprema.", e);
@@ -90,8 +91,8 @@ public class RoomDao {
     public void update(Room room) {
         try {
             database.executeUpdate(
-                    "UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, capacity = ?, active = ? WHERE id = ?",
-                    room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity().name(), room.isActive(), room.getId());
+                    "UPDATE rooms SET room_number = ?, type = ?, price_per_night = ?, capacity = ?, status = ? WHERE id = ?",
+                    room.getRoomNumber(), room.getType().name(), room.getPricePerNight(), room.getCapacity().name(), room.getStatus().name(), room.getId());
         } catch (SQLException e) {
             LOGGER.error("soba {} update pao", room.getId(), e);
             throw new IllegalStateException("Soba se ne ažurira.", e);
@@ -119,7 +120,7 @@ public class RoomDao {
                 RoomType.valueOf(rs.getString("type")),
                 rs.getBigDecimal("price_per_night"),
                 Capacity.valueOf(rs.getString("capacity")),
-                rs.getBoolean("active")
+                RoomStatus.valueOf(rs.getString("status"))
         );
     }
 }

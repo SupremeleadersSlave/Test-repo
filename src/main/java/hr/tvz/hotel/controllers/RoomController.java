@@ -4,6 +4,7 @@ import hr.tvz.hotel.app.ServiceContext;
 import hr.tvz.hotel.entities.Capacity;
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.entities.Room;
+import hr.tvz.hotel.entities.RoomStatus;
 import hr.tvz.hotel.entities.RoomType;
 import hr.tvz.hotel.exceptions.InvalidRoomException;
 import hr.tvz.hotel.service.RoomService;
@@ -11,7 +12,6 @@ import hr.tvz.hotel.util.DialogUtils;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ButtonType;
@@ -50,7 +50,7 @@ public class RoomController {
     @FXML
     private TableColumn<Room, Capacity> capacityColumn;
     @FXML
-    private TableColumn<Room, Boolean> activeColumn;
+    private TableColumn<Room, RoomStatus> statusColumn;
     @FXML
     private TextField searchField;
     @FXML
@@ -77,7 +77,7 @@ public class RoomController {
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("pricePerNight"));
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
-        activeColumn.setCellValueFactory(new PropertyValueFactory<>("active"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         reload();
     }
 
@@ -183,8 +183,8 @@ public class RoomController {
         ComboBox<Capacity> capacityBox = new ComboBox<>(FXCollections.observableArrayList(Capacity.values()));
         capacityBox.setValue(existing != null ? existing.getCapacity() : Capacity.SINGLE);
         TextField priceField = new TextField(existing != null ? existing.getPricePerNight().toString() : "");
-        CheckBox activeBox = new CheckBox("Aktivna");
-        activeBox.setSelected(existing == null || existing.isActive());
+        ComboBox<RoomStatus> statusBox = new ComboBox<>(FXCollections.observableArrayList(RoomStatus.values()));
+        statusBox.setValue(existing != null ? existing.getStatus() : RoomStatus.AVAILABLE);
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -193,7 +193,7 @@ public class RoomController {
         grid.addRow(1, new Label("Broj sobe:"), roomNumberField);
         grid.addRow(2, new Label("Kapacitet:"), capacityBox);
         grid.addRow(3, new Label("Cijena/noć:"), priceField);
-        grid.addRow(4, activeBox);
+        grid.addRow(4, new Label("Status:"), statusBox);
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(buttonType -> {
@@ -205,7 +205,7 @@ public class RoomController {
             try {
                 Room.validateRoomNumber(roomNumber);
                 return new Room(existing != null ? existing.getId() : null, roomNumber, type,
-                        new BigDecimal(priceField.getText()), capacityBox.getValue(), activeBox.isSelected());
+                        new BigDecimal(priceField.getText()), capacityBox.getValue(), statusBox.getValue());
             } catch (NumberFormatException e) {
                 DialogUtils.showError("Neispravan unos", "Cijena mora biti broj.");
                 return null;

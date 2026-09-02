@@ -27,7 +27,7 @@
                 <TableColumn fx:id="typeColumn" prefWidth="100" text="Vrsta"/>
                 <TableColumn fx:id="priceColumn" prefWidth="100" text="Cijena/noć"/>
                 <TableColumn fx:id="capacityColumn" prefWidth="100" text="Kapacitet"/>
-                <TableColumn fx:id="activeColumn" prefWidth="80" text="Aktivna"/>
+                <TableColumn fx:id="statusColumn" prefWidth="110" text="Status"/>
             </columns>
         </TableView>
     </center>

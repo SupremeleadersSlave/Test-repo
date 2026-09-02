@@ -53,7 +53,7 @@ public class Database {
                     type VARCHAR(20) NOT NULL,
                     price_per_night DECIMAL(10,2) NOT NULL,
                     capacity VARCHAR(10) NOT NULL,
-                    active BOOLEAN NOT NULL
+                    status VARCHAR(15) NOT NULL
                 )""");
         executeUpdate("""
                 CREATE TABLE IF NOT EXISTS guests (

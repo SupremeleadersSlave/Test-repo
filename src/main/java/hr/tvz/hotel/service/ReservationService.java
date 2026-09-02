@@ -150,9 +150,11 @@ public class ReservationService {
     public Reservation createReservation(Guest guest, Room room, LocalDate checkIn, LocalDate checkOut, Role changedBy)
             throws ReservationNotAvailableException {
         if (!room.isAvailableFor(checkIn, checkOut)) {
-            LOGGER.warn("soba {} neaktivna ili lose datumi: {} - {}", room.getRoomNumber(), checkIn, checkOut);
+            LOGGER.warn("soba {} nije u ponudi ({}) ili lose datumi: {} - {}",
+                    room.getRoomNumber(), room.getStatus(), checkIn, checkOut);
             throw new ReservationNotAvailableException(
-                    "Soba " + room.getRoomNumber() + " nije u ponudi ili razdoblje " + checkIn + " - " + checkOut + " nije valjano.");
+                    "Soba " + room.getRoomNumber() + " (" + room.getStatus().getLabel() + ") nije dostupna za razdoblje "
+                            + checkIn + " - " + checkOut + ".");
         }
         Schedulable period = new Schedulable() {
             @Override

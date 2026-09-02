@@ -19,7 +19,7 @@ public class Room implements Reservable {
     private RoomType type;
     private BigDecimal pricePerNight;
     private Capacity capacity;
-    private boolean active;
+    private RoomStatus status;
 
     /**
      * Kreira novu sobu.
@@ -29,15 +29,15 @@ public class Room implements Reservable {
      * @param type          vrsta sobe
      * @param pricePerNight cijena po noćenju
      * @param capacity      kapacitet sobe
-     * @param active        označava je li soba u ponudi
+     * @param status        status raspoloživosti sobe
      */
-    public Room(Long id, String roomNumber, RoomType type, BigDecimal pricePerNight, Capacity capacity, boolean active) {
+    public Room(Long id, String roomNumber, RoomType type, BigDecimal pricePerNight, Capacity capacity, RoomStatus status) {
         this.id = id;
         this.roomNumber = roomNumber;
         this.type = type;
         this.pricePerNight = pricePerNight;
         this.capacity = capacity;
-        this.active = active;
+        this.status = status;
     }
 
     /**
@@ -45,7 +45,7 @@ public class Room implements Reservable {
      */
     @Override
     public boolean isAvailableFor(LocalDate checkIn, LocalDate checkOut) {
-        return active && checkIn != null && checkOut != null && checkOut.isAfter(checkIn);
+        return status.isBookable() && checkIn != null && checkOut != null && checkOut.isAfter(checkIn);
     }
 
     @Override
@@ -163,21 +163,21 @@ public class Room implements Reservable {
     }
 
     /**
-     * Provjerava je li soba trenutno u ponudi.
+     * Vraća status raspoloživosti sobe.
      *
-     * @return {@code true} ako je soba aktivna
+     * @return status sobe
      */
-    public boolean isActive() {
-        return active;
+    public RoomStatus getStatus() {
+        return status;
     }
 
     /**
-     * Postavlja status sobe.
+     * Postavlja status raspoloživosti sobe.
      *
-     * @param active nova vrijednost statusa sobe
+     * @param status novi status sobe
      */
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setStatus(RoomStatus status) {
+        this.status = status;
     }
 
     @Override
