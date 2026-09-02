@@ -39,19 +39,4 @@ public enum RoomType {
         return floor;
     }
 
-    /**
-     * Vraća vrstu sobe koja se nalazi na zadanom katu.
-     *
-     * @param floor broj kata
-     * @return vrsta sobe na tom katu
-     * @throws IllegalArgumentException ako nijedna vrsta ne odgovara katu
-     */
-    public static RoomType fromFloor(int floor) {
-        for (RoomType type : values()) {
-            if (type.floor == floor) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException("Nepoznat kat: " + floor);
-    }
 }

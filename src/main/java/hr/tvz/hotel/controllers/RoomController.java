@@ -183,6 +183,7 @@ public class RoomController {
                 existing != null ? existing.getRoomNumber().substring(1) : "");
         roomNumberField.setPromptText("01 - 20");
         ComboBox<Capacity> capacityBox = new ComboBox<>(FXCollections.observableArrayList(Capacity.values()));
+        DialogUtils.setDisplay(capacityBox, c -> c + " (" + c.getPersons() + " os.)");
         capacityBox.setValue(existing != null ? existing.getCapacity() : Capacity.SINGLE);
         TextField priceField = new TextField(existing != null ? existing.getPricePerNight().toString() : "");
         ComboBox<RoomStatus> statusBox = new ComboBox<>(FXCollections.observableArrayList(RoomStatus.values()));
