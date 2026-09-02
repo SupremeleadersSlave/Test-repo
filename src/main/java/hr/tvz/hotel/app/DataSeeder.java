@@ -39,11 +39,18 @@ public final class DataSeeder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataSeeder.class);
     private static final Role SEED_ROLE = Role.ADMIN;
+    private static final String DRZAVA = "Hrvatska";
+    private static final String ZAGREB = "Zagreb";
+    private static final String ZAGREB_PB = "10000";
 
     private final RoomService roomService;
     private final GuestService guestService;
     private final ReservationService reservationService;
     private final InvoiceService invoiceService;
+
+    private List<Guest> seedGuestsList;
+    private List<Room> seedRoomsList;
+    private int guestCursor;
 
     /**
      * Kreira novi seeder demo podataka.
@@ -93,72 +100,70 @@ public final class DataSeeder {
 
     private void seedGuests() {
         addGuest("Ivan", "Horvat", "ivan.horvat@email.hr", "0912345678", "HR1234567",
-                "Ilica 5", "Zagreb", "10000", "Hrvatska");
+                new Address("Ilica 5", ZAGREB, ZAGREB_PB, DRZAVA));
         addGuest("Ana", "Kovač", "ana.kovac@email.hr", "0913456789", "HR2345678",
-                "Vukovarska 12", "Split", "21000", "Hrvatska");
+                new Address("Vukovarska 12", "Split", "21000", DRZAVA));
         addGuest("Marko", "Babić", "marko.babic@email.hr", "0914567890", "HR3456789",
-                "Kralja Zvonimira 8", "Rijeka", "51000", "Hrvatska");
+                new Address("Kralja Zvonimira 8", "Rijeka", "51000", DRZAVA));
         addGuest("Petra", "Jurić", "petra.juric@email.hr", "0915678901", "HR4567890",
-                "Zrinjevac 3", "Osijek", "31000", "Hrvatska");
+                new Address("Zrinjevac 3", "Osijek", "31000", DRZAVA));
         addGuest("Luka", "Novak", "luka.novak@email.hr", "0916789012", "HR5678901",
-                "Tkalčićeva 20", "Zagreb", "10000", "Hrvatska");
+                new Address("Tkalčićeva 20", ZAGREB, ZAGREB_PB, DRZAVA));
         addGuest("Marija", "Marić", "marija.maric@email.hr", "0917890123", "HR6789012",
-                "Riva 1", "Zadar", "23000", "Hrvatska");
+                new Address("Riva 1", "Zadar", "23000", DRZAVA));
         addGuest("Josip", "Knežević", "josip.knezevic@email.hr", "0918901234", "HR7890123",
-                "Korzo 15", "Rijeka", "51000", "Hrvatska");
+                new Address("Korzo 15", "Rijeka", "51000", DRZAVA));
         addGuest("Ivana", "Vuković", "ivana.vukovic@email.hr", "0919012345", "HR8901234",
-                "Gundulićeva 7", "Dubrovnik", "20000", "Hrvatska");
+                new Address("Gundulićeva 7", "Dubrovnik", "20000", DRZAVA));
         addGuest("Tomislav", "Bošnjak", "tomislav.bosnjak@email.hr", "0910123456", "HR9012345",
-                "Kaptol 2", "Zagreb", "10000", "Hrvatska");
+                new Address("Kaptol 2", ZAGREB, ZAGREB_PB, DRZAVA));
         addGuest("Katarina", "Pavlović", "katarina.pavlovic@email.hr", "0911234560", "HR0123456",
-                "Cvjetni trg 4", "Split", "21000", "Hrvatska");
+                new Address("Cvjetni trg 4", "Split", "21000", DRZAVA));
     }
 
-    private void addGuest(String first, String last, String email, String phone, String document,
-                          String street, String city, String postal, String country) {
-        Address address = new Address(street, city, postal, country);
+    private void addGuest(String first, String last, String email, String phone, String document, Address address) {
         guestService.addGuest(new Guest(null, first, last, email, phone, document, address), SEED_ROLE);
     }
 
     private void seedReservationsAndInvoices() {
-        List<Guest> guests = guestService.findAll();
-        List<Room> rooms = roomService.findAll();
+        seedGuestsList = guestService.findAll();
+        seedRoomsList = roomService.findAll();
 
         // Prošlost (za povijest zarade i popunjenosti), sadašnjost i budućnost.
-        book(guests, rooms, "101", 0, LocalDate.now(ZoneId.systemDefault()).minusMonths(3).withDayOfMonth(4),
+        book("101", LocalDate.now(ZoneId.systemDefault()).minusMonths(3).withDayOfMonth(4),
                 6, ReservationStatus.CONFIRMED, true, "CASH");
-        book(guests, rooms, "201", 1, LocalDate.now(ZoneId.systemDefault()).minusMonths(3).withDayOfMonth(15),
+        book("201", LocalDate.now(ZoneId.systemDefault()).minusMonths(3).withDayOfMonth(15),
                 4, ReservationStatus.CONFIRMED, true, "CARD");
-        book(guests, rooms, "501", 2, LocalDate.now(ZoneId.systemDefault()).minusMonths(2).withDayOfMonth(2),
+        book("501", LocalDate.now(ZoneId.systemDefault()).minusMonths(2).withDayOfMonth(2),
                 3, ReservationStatus.CONFIRMED, true, "CARD");
-        book(guests, rooms, "301", 3, LocalDate.now(ZoneId.systemDefault()).minusMonths(2).withDayOfMonth(20),
+        book("301", LocalDate.now(ZoneId.systemDefault()).minusMonths(2).withDayOfMonth(20),
                 5, ReservationStatus.CONFIRMED, true, "CASH");
-        book(guests, rooms, "202", 4, LocalDate.now(ZoneId.systemDefault()).minusMonths(1).withDayOfMonth(8),
+        book("202", LocalDate.now(ZoneId.systemDefault()).minusMonths(1).withDayOfMonth(8),
                 2, ReservationStatus.CONFIRMED, true, "CARD");
-        book(guests, rooms, "401", 5, LocalDate.now(ZoneId.systemDefault()).minusMonths(1).withDayOfMonth(25),
+        book("401", LocalDate.now(ZoneId.systemDefault()).minusMonths(1).withDayOfMonth(25),
                 7, ReservationStatus.CONFIRMED, true, "CARD");
-        book(guests, rooms, "103", 6, LocalDate.now(ZoneId.systemDefault()).minusMonths(1).withDayOfMonth(12),
+        book("103", LocalDate.now(ZoneId.systemDefault()).minusMonths(1).withDayOfMonth(12),
                 3, ReservationStatus.CANCELLED, false, null);
-        book(guests, rooms, "502", 7, LocalDate.now(ZoneId.systemDefault()).withDayOfMonth(3),
+        book("502", LocalDate.now(ZoneId.systemDefault()).withDayOfMonth(3),
                 4, ReservationStatus.CONFIRMED, true, "CARD");
-        book(guests, rooms, "302", 8, LocalDate.now(ZoneId.systemDefault()).withDayOfMonth(10),
+        book("302", LocalDate.now(ZoneId.systemDefault()).withDayOfMonth(10),
                 2, ReservationStatus.CONFIRMED, true, "CASH");
-        book(guests, rooms, "201", 9, LocalDate.now(ZoneId.systemDefault()).plusDays(5),
+        book("201", LocalDate.now(ZoneId.systemDefault()).plusDays(5),
                 3, ReservationStatus.PENDING, false, null);
-        book(guests, rooms, "501", 0, LocalDate.now(ZoneId.systemDefault()).plusMonths(1).withDayOfMonth(6),
+        book("501", LocalDate.now(ZoneId.systemDefault()).plusMonths(1).withDayOfMonth(6),
                 5, ReservationStatus.PENDING, false, null);
-        book(guests, rooms, "401", 1, LocalDate.now(ZoneId.systemDefault()).plusMonths(1).withDayOfMonth(18),
+        book("401", LocalDate.now(ZoneId.systemDefault()).plusMonths(1).withDayOfMonth(18),
                 4, ReservationStatus.CONFIRMED, false, null);
-        book(guests, rooms, "202", 2, LocalDate.now(ZoneId.systemDefault()).plusMonths(2).withDayOfMonth(2),
+        book("202", LocalDate.now(ZoneId.systemDefault()).plusMonths(2).withDayOfMonth(2),
                 6, ReservationStatus.PENDING, false, null);
-        book(guests, rooms, "103", 3, LocalDate.now(ZoneId.systemDefault()).plusMonths(2).withDayOfMonth(22),
+        book("103", LocalDate.now(ZoneId.systemDefault()).plusMonths(2).withDayOfMonth(22),
                 3, ReservationStatus.CONFIRMED, false, null);
     }
 
-    private void book(List<Guest> guests, List<Room> rooms, String roomNumber, int guestIndex,
-                      LocalDate checkIn, int nights, ReservationStatus status, boolean withInvoice, String paymentType) {
-        Room room = findRoom(rooms, roomNumber);
-        Guest guest = guests.get(guestIndex % guests.size());
+    private void book(String roomNumber, LocalDate checkIn, int nights,
+                      ReservationStatus status, boolean withInvoice, String paymentType) {
+        Room room = findRoom(seedRoomsList, roomNumber);
+        Guest guest = seedGuestsList.get(guestCursor++ % seedGuestsList.size());
         try {
             Reservation reservation = reservationService.createReservation(
                     guest, room, checkIn, checkIn.plusDays(nights), SEED_ROLE);
