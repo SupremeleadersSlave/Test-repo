@@ -47,6 +47,7 @@ public class MainApp extends Application {
         LOGGER.info("APP POKRENUT");
 
         ServiceContext context = buildServiceContext();
+        new DataSeeder(context).seedIfEmpty();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
         loader.setController(new LoginController(context, primaryStage));
