@@ -9,7 +9,7 @@ import hr.tvz.hotel.entities.ReservationStatus;
 import hr.tvz.hotel.entities.Role;
 import hr.tvz.hotel.entities.Relation;
 import hr.tvz.hotel.entities.Room;
-import hr.tvz.hotel.entities.Schedulable;
+import hr.tvz.hotel.entities.DateRange;
 import hr.tvz.hotel.exceptions.EntityNotFoundException;
 import hr.tvz.hotel.exceptions.ReservationNotAvailableException;
 import hr.tvz.hotel.files.ChangeLog;
@@ -30,8 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  * Implementira poslovnu logiku upravljanja rezervacijama, uključujući
- * provjeru raspoloživosti sobe za zadano razdoblje pomoću sučelja
- * {@link Schedulable}.
+ * provjeru raspoloživosti sobe za zadano razdoblje.
  *
  * @version 1.0
  */
@@ -123,17 +122,7 @@ public class ReservationService {
         Map<Month, Occupancy> result = new LinkedHashMap<>();
         for (Month month : Month.values()) {
             YearMonth ym = YearMonth.of(year, month);
-            Schedulable monthPeriod = new Schedulable() {
-                @Override
-                public LocalDate getStartDate() {
-                    return ym.atDay(1);
-                }
-
-                @Override
-                public LocalDate getEndDate() {
-                    return ym.atEndOfMonth();
-                }
-            };
+            DateRange monthPeriod = new DateRange(ym.atDay(1), ym.atEndOfMonth());
             List<Reservation> inMonth = reservations.filter(r ->
                     r.getStatus() != ReservationStatus.CANCELLED && r.overlaps(monthPeriod));
             long guests = inMonth.stream().map(Reservation::getGuest).distinct().count();
@@ -201,17 +190,7 @@ public class ReservationService {
                     "Soba " + room.getRoomNumber() + " (" + room.getStatus().getLabel() + ") nije dostupna za razdoblje "
                             + checkIn + " - " + checkOut + ".");
         }
-        Schedulable period = new Schedulable() {
-            @Override
-            public LocalDate getStartDate() {
-                return checkIn;
-            }
-
-            @Override
-            public LocalDate getEndDate() {
-                return checkOut;
-            }
-        };
+        DateRange period = new DateRange(checkIn, checkOut);
         boolean overlapping = reservations.filter(r -> r.getRoom().equals(room) && r.getStatus() != ReservationStatus.CANCELLED)
                 .stream()
                 .anyMatch(r -> r.overlaps(period));
@@ -223,9 +202,7 @@ public class ReservationService {
         Reservation reservation = new Reservation.Builder()
                 .guest(guest).room(room).checkInDate(checkIn).checkOutDate(checkOut).build();
         Long id = reservationDao.insert(reservation);
-        Reservation saved = new Reservation.Builder()
-                .id(id).guest(guest).room(room).checkInDate(checkIn).checkOutDate(checkOut)
-                .status(reservation.getStatus()).totalPrice(reservation.getTotalPrice()).build();
+        Reservation saved = reservation.withId(id);
         reservations.add(saved);
         logChange(id, "sve", null, saved.toString(), changedBy);
         LOGGER.info("Nova Rezervacija: {}", saved);

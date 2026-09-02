@@ -138,6 +138,22 @@ public class Reservation implements Schedulable {
     /**
      * Builder za {@link Reservation}.
      */
+    /**
+     * Vraća kopiju ove rezervacije s postavljenim id-em, npr. nakon
+     * spremanja u bazu koja dodjeljuje id.
+     *
+     * @param id id dodijeljen rezervaciji
+     * @return nova rezervacija s istim podacima i zadanim id-em
+     */
+    public Reservation withId(Long id) {
+        return new Builder()
+                .id(id).guest(guest).room(room).checkInDate(checkInDate).checkOutDate(checkOutDate)
+                .status(status).totalPrice(totalPrice).build();
+    }
+
+    /**
+     * Gradi {@link Reservation} korak po korak (builder pattern).
+     */
     public static final class Builder {
 
         private Long id;

@@ -24,14 +24,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.util.StringConverter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Kontroler JavaFX ekrana za upravljanje računima: pretraga, izdavanje
@@ -137,7 +135,7 @@ public class InvoiceController {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         ComboBox<Reservation> reservationBox = new ComboBox<>(FXCollections.observableArrayList(reservationService.findAll()));
-        setDisplay(reservationBox, r -> r.getGuest().getFullName() + " - " + r.getRoom().getRoomNumber());
+        DialogUtils.setDisplay(reservationBox, r -> r.getGuest().getFullName() + " - " + r.getRoom().getRoomNumber());
         TextField amountField = new TextField();
         Button calcButton = new Button("Izračunaj");
         calcButton.setOnAction(e -> {
@@ -188,24 +186,4 @@ public class InvoiceController {
         return DialogUtils.showAndWait(dialog);
     }
 
-    /**
-     * Postavlja prikaz stavki padajućeg izbornika prema zadanoj funkciji.
-     *
-     * @param comboBox padajući izbornik za postavljanje prikaza
-     * @param display funkcija koja pretvara stavku u tekstualni prikaz
-     * @param <T> tip stavki padajućeg izbornika
-     */
-    private <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> display) {
-        comboBox.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(T item) {
-                return item == null ? "" : display.apply(item);
-            }
-
-            @Override
-            public T fromString(String string) {
-                return null;
-            }
-        });
-    }
 }

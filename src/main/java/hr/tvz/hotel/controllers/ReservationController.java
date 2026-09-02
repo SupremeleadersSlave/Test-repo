@@ -27,7 +27,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +36,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 
 /**
  * Kontroler JavaFX ekrana za upravljanje rezervacijama: pretraga,
@@ -193,9 +191,9 @@ public class ReservationController {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         ComboBox<Guest> guestBox = new ComboBox<>(FXCollections.observableArrayList(guestService.findAll()));
-        setDisplay(guestBox, Guest::getFullName);
+        DialogUtils.setDisplay(guestBox, Guest::getFullName);
         ComboBox<Room> roomBox = new ComboBox<>(FXCollections.observableArrayList(roomService.findAll()));
-        setDisplay(roomBox, r -> r.getRoomNumber() + " (" + r.getType() + ")");
+        DialogUtils.setDisplay(roomBox, r -> r.getRoomNumber() + " (" + r.getType() + ")");
         DatePicker checkInPicker = new DatePicker(LocalDate.now());
         DatePicker checkOutPicker = new DatePicker(LocalDate.now().plusDays(1));
 
@@ -217,24 +215,4 @@ public class ReservationController {
         return DialogUtils.showAndWait(dialog);
     }
 
-    /**
-     * Postavlja prikaz stavki padajućeg izbornika prema zadanoj funkciji.
-     *
-     * @param comboBox padajući izbornik za postavljanje prikaza
-     * @param display funkcija koja pretvara stavku u tekstualni prikaz
-     * @param <T> tip stavki padajućeg izbornika
-     */
-    private <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> display) {
-        comboBox.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(T item) {
-                return item == null ? "" : display.apply(item);
-            }
-
-            @Override
-            public T fromString(String string) {
-                return null;
-            }
-        });
-    }
 }

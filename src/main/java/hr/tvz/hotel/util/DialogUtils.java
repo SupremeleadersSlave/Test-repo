@@ -2,10 +2,13 @@ package hr.tvz.hotel.util;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
+import javafx.util.StringConverter;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 /**
  * Prikazuje JavaFX dijaloške okvire za potvrdu, obavijest i pogrešku.
@@ -89,5 +92,26 @@ public final class DialogUtils {
         alert.setTitle(title);
         alert.setHeaderText(null);
         showAndWait(alert);
+    }
+
+    /**
+     * Postavlja prikaz stavki padajućeg izbornika prema zadanoj funkciji.
+     *
+     * @param comboBox padajući izbornik za postavljanje prikaza
+     * @param display funkcija koja pretvara stavku u tekstualni prikaz
+     * @param <T> tip stavki padajućeg izbornika
+     */
+    public static <T> void setDisplay(ComboBox<T> comboBox, Function<T, String> display) {
+        comboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(T item) {
+                return item == null ? "" : display.apply(item);
+            }
+
+            @Override
+            public T fromString(String string) {
+                return null;
+            }
+        });
     }
 }
