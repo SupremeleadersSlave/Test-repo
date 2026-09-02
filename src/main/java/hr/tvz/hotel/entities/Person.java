@@ -139,18 +139,19 @@ public abstract class Person {
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Person person)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
+        Person person = (Person) o;
         return Objects.equals(id, person.id);
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(id);
     }
 

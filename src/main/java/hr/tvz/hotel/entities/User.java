@@ -1,5 +1,7 @@
 package hr.tvz.hotel.entities;
 
+import java.util.Objects;
+
 
 /**
  * Korisnik sustava, djelatnik hotela, prijavljuje se korisničkim
@@ -80,6 +82,24 @@ public class User extends Person {
         this.role = role;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId())
+                && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), username);
+    }
 
     /**
      * Gradi {@link User} korak po korak (builder pattern).
